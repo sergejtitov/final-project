@@ -17,12 +17,13 @@ public class Applicant {
     private String incomeCurrency;
     private String sex;
     private int experience;
+    private int maritalStatus;
     private int education;
-    private int numberOfChildren;
+    private int childrenQuantity;
     private String personalNumber;
-    private long userId;
+    private long applicationId;
 
-    public Applicant(long applicantId, String firstName, String secondName, String patronymic, int typeOfApplicant, Date birthdayDate, long income, String incomeCurrency, String sex, int experience, int education, int numberOfChildren, String personalNumber, long userId) {
+    public Applicant(long applicantId, String firstName, String secondName, String patronymic, int typeOfApplicant, Date birthdayDate, long income, String incomeCurrency, String sex, int experience, int maritalStatus, int education, int childrenQuantity, String personalNumber, long applicationId) {
         this.applicantId = applicantId;
         this.firstName = firstName;
         this.secondName = secondName;
@@ -33,10 +34,19 @@ public class Applicant {
         this.incomeCurrency = incomeCurrency;
         this.sex = sex;
         this.experience = experience;
+        this.maritalStatus = maritalStatus;
         this.education = education;
-        this.numberOfChildren = numberOfChildren;
+        this.childrenQuantity = childrenQuantity;
         this.personalNumber = personalNumber;
-        this.userId = userId;
+        this.applicationId = applicationId;
+    }
+
+    public int getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(int maritalStatus) {
+        this.maritalStatus = maritalStatus;
     }
 
     public Applicant() {
@@ -130,12 +140,12 @@ public class Applicant {
         this.education = education;
     }
 
-    public int getNumberOfChildren() {
-        return numberOfChildren;
+    public int getChildrenQuantity() {
+        return childrenQuantity;
     }
 
-    public void setNumberOfChildren(int numberOfChildren) {
-        this.numberOfChildren = numberOfChildren;
+    public void setChildrenQuantity(int childrenQuantity) {
+        this.childrenQuantity = childrenQuantity;
     }
 
     public String getPersonalNumber() {
@@ -146,13 +156,14 @@ public class Applicant {
         this.personalNumber = personalNumber;
     }
 
-    public long getUserId() {
-        return userId;
+    public long getApplicationId() {
+        return applicationId;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setApplicationId(long applicationId) {
+        this.applicationId = applicationId;
     }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
@@ -160,7 +171,7 @@ public class Applicant {
 
     @Override
     public int hashCode() {
-        return Objects.hash(applicantId, firstName, secondName, patronymic, typeOfApplicant,birthdayDate, income, incomeCurrency, sex, experience, education, numberOfChildren, personalNumber, userId);
+        return Objects.hash(applicantId, firstName, secondName, patronymic, typeOfApplicant,birthdayDate, income, incomeCurrency, sex, experience, maritalStatus, education, childrenQuantity, personalNumber, applicationId);
     }
     @Override
     public boolean equals(Object o) {
@@ -177,9 +188,10 @@ public class Applicant {
                 Objects.equals(incomeCurrency, applicant.incomeCurrency) &&
                 Objects.equals(sex, applicant.sex) &&
                 Objects.equals(experience, applicant.experience) &&
+                Objects.equals(maritalStatus, applicant.maritalStatus) &&
                 Objects.equals(education, applicant.education) &&
-                Objects.equals(numberOfChildren, applicant.numberOfChildren) &&
+                Objects.equals(childrenQuantity, applicant.childrenQuantity) &&
                 Objects.equals(personalNumber, applicant.personalNumber) &&
-                Objects.equals(userId, applicant.userId);
+                Objects.equals(applicationId, applicant.applicationId);
     }
 }

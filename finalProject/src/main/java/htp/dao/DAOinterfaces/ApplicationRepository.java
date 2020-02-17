@@ -4,12 +4,9 @@ import htp.entities.Application;
 
 import java.util.List;
 
-public interface ApplicationRepository {
-    int save (Application application);
-    Application findOne (String applicationId);
-    List<Application> findAll();
+public interface ApplicationRepository extends GenericDao <Application, Long> {
+    List<Application> findAll(int limit, int offset);
     List<Application> findSome (Long userId);
-    int update (Application application);
-    void delete (String applicationId);
+    List<Application> findSome (Long userId, int limit, int offset);
 }
 

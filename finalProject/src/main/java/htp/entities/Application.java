@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 public class Application {
-    private String applicationId;
+    private Long applicationId;
     private long userId;
     private Timestamp creationDate;
     private int loanType;
@@ -18,12 +18,11 @@ public class Application {
     private String decision;
     private String status;
     private double payment;
-    private long owner;
 
     public Application() {
     }
 
-    public Application(String applicationId, long userId, Timestamp creationDate, int loanType, long productCode, double loanAmount, String currency, double finalAmount, String decision, String status, double payment, long owner) {
+    public Application(Long applicationId, long userId, Timestamp creationDate, int loanType, long productCode, double loanAmount, String currency, double finalAmount, String decision, String status, double payment) {
         this.applicationId = applicationId;
         this.userId = userId;
         this.creationDate = creationDate;
@@ -35,14 +34,13 @@ public class Application {
         this.decision = decision;
         this.status = status;
         this.payment = payment;
-        this.owner = owner;
     }
 
-    public String getApplicationId() {
+    public Long getApplicationId() {
         return applicationId;
     }
 
-    public void setApplicationId(String applicationId) {
+    public void setApplicationId(Long applicationId) {
         this.applicationId = applicationId;
     }
 
@@ -126,13 +124,6 @@ public class Application {
         this.payment = payment;
     }
 
-    public long getOwner() {
-        return owner;
-    }
-
-    public void setOwner(long owner) {
-        this.owner = owner;
-    }
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
@@ -140,7 +131,7 @@ public class Application {
 
     @Override
     public int hashCode() {
-        return Objects.hash(applicationId, userId, creationDate, loanType, productCode, loanAmount, currency, finalAmount, decision, status, payment, owner);
+        return Objects.hash(applicationId, userId, creationDate, loanType, productCode, loanAmount, currency, finalAmount, decision, status, payment);
     }
 
     @Override
@@ -158,8 +149,7 @@ public class Application {
                 Objects.equals(finalAmount, application.finalAmount) &&
                 Objects.equals(decision, application.decision) &&
                 Objects.equals(status, application.status) &&
-                Objects.equals(payment, application.payment) &&
-                Objects.equals(owner, application.owner);
+                Objects.equals(payment, application.payment);
     }
 }
 

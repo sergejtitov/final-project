@@ -1,9 +1,8 @@
-package htp.dao;
+package htp.dao.SpringImpl;
 
 
 import htp.dao.DAOinterfaces.UserRepository;
 import htp.entities.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import javax.annotation.PostConstruct;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -38,17 +36,14 @@ public class UserRepSpringImp implements UserRepository {
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    @Autowired
     public UserRepSpringImp(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
-    }
-
-    @PostConstruct
-    private void setId(){
         final String getMaxId = "select max(user_id) m_value from m_user";
         userId = jdbcTemplate.queryForObject(getMaxId, this::getLongValue);
     }
+
+
     private long getId() {
         userId++;
         return userId;
@@ -192,8 +187,11 @@ public class UserRepSpringImp implements UserRepository {
     }
 
     @Override
-    public List<User> findAll() {
-        final String findAll = "select* from m_user";
-        return namedParameterJdbcTemplate.query(findAll, this::fillUser);
+    public List<User> findAll(int limit, int offset) {
+        final String findAll = "select* from m_user order by user_id limit :limit offset :offset";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("limit", limit);
+        params.addValue("offset", offset);
+        return namedParameterJdbcTemplate.query(findAll, params, this::fillUser);
     }
 }
