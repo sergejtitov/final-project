@@ -1,6 +1,6 @@
-package htp.dao.SpringImpl;
+package htp.dao.spring_impl;
 
-import htp.dao.DAOinterfaces.ApplicantRepository;
+import htp.dao.ApplicantRepository;
 import htp.entities.Applicant;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,8 +9,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
@@ -37,21 +35,24 @@ public class ApplicantRepSpringImpl implements ApplicantRepository {
     public static final String CHILDREN_QUANTITY = "children_quantity";
     public static final String APPLICATION_ID = "application_id";
     public static final String M_VALUE = "m_value";
+    public static final Long UNIQUE_APPLICANT = 1L;
+    public static final String LIMIT = "limit";
+    public static final String OFFSET = "offset";
 
-    public static long applicantID;
+    public static Long applicantID;
 
     private NamedParameterJdbcTemplate namedParameter;
 
-    public ApplicantRepSpringImpl(JdbcTemplate jdbc) {
-        namedParameter = new NamedParameterJdbcTemplate(jdbc);
+    public ApplicantRepSpringImpl(JdbcTemplate jdbc, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameter = namedParameterJdbcTemplate;
         final String getMaxId = "select max(applicant_id) m_value from m_applicant";
         applicantID = jdbc.queryForObject(getMaxId, this::getLongValue);
     }
 
-    private long getLongValue(ResultSet set, int i) throws SQLException {
+    private Long getLongValue(ResultSet set, int i) throws SQLException {
         return set.getLong(M_VALUE);
     }
-    private long getId() {
+    private Long getId() {
         applicantID++;
         return applicantID;
     }
@@ -60,27 +61,22 @@ public class ApplicantRepSpringImpl implements ApplicantRepository {
     public List<Applicant> findAll(int limit, int offset) {
         final String getAll = "select * from m_applicant order by applicant_id limit :limit offset :offset";
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("limit", limit);
-        params.addValue("offset", offset);
+        params.addValue(LIMIT, limit);
+        params.addValue(OFFSET, offset);
         return namedParameter.query(getAll, params, this::fillApplicant);
     }
 
     @Override
-    public List<Applicant> findByApplication(Long application_id) {
-        try {
-            final String getByApplication = "select * from m_applicant where application_id = :application_id";
-            MapSqlParameterSource param = new MapSqlParameterSource();
-            param.addValue("application_id", application_id);
-            return namedParameter.query(getByApplication, param, this::fillApplicant);
-        } catch (Exception e){
-            System.out.println("Such Application doesn't exist");
-            return null;
-        }
+    public List<Applicant> findApplicantByApplication(Long application_id) {
+        final String getByApplication = "select * from m_applicant where application_id = :application_id";
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        param.addValue(APPLICATION_ID, application_id);
+        return namedParameter.query(getByApplication, param, this::fillApplicant);
     }
 
     @Override
-    @Transactional  (rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
-    public Long save(Applicant item) {
+    @Transactional  (rollbackFor = Exception.class)
+    public Applicant save(Applicant item) {
         final String createQuery = "INSERT INTO m_applicant (applicant_id, first_name, second_name, patronymic, " +
                 "type_of_applicant, date_of_birthday, income, income_currency, sex, experience, marital_status, education, children_quantity, personal_number, application_id) " +
                 "VALUES (:applicant_id, :first_name, :second_name, :patronymic, :type_of_applicant, :date_of_birthday," +
@@ -88,54 +84,54 @@ public class ApplicantRepSpringImpl implements ApplicantRepository {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("applicant_id", getId());
-        params.addValue("first_name", item.getFirstName());
-        params.addValue("second_name", item.getSecondName());
-        params.addValue("patronymic", item.getPatronymic());
-        params.addValue("type_of_applicant", item.getTypeOfApplicant());
-        params.addValue("date_of_birthday", item.getBirthdayDate());
-        params.addValue("income", item.getIncome());
-        params.addValue("income_currency", item.getIncomeCurrency());
-        params.addValue("sex", item.getSex());
-        params.addValue("experience", item.getExperience());
-        params.addValue("marital_status", item.getMaritalStatus());
-        params.addValue("education", item.getEducation());
-        params.addValue("children_quantity", item.getChildrenQuantity());
-        params.addValue("personal_number", item.getPersonalNumber());
-        params.addValue("application_id", item.getApplicationId());
+        params.addValue(APPLICANT_ID, getId());
+        params.addValue(FIRST_NAME, item.getFirstName());
+        params.addValue(SECOND_NAME, item.getSecondName());
+        params.addValue(PATRONYMIC, item.getPatronymic());
+        params.addValue(TYPE_OF_APPLICANT, item.getTypeOfApplicant());
+        params.addValue(DATE_OF_BIRTHDAY, item.getBirthdayDate());
+        params.addValue(INCOME, item.getIncome());
+        params.addValue(INCOME_CURRENCY, item.getIncomeCurrency());
+        params.addValue(SEX, item.getSex());
+        params.addValue(EXPERIENCE, item.getExperience());
+        params.addValue(MARITAL_STATUS, item.getMaritalStatus());
+        params.addValue(EDUCATION, item.getEducation());
+        params.addValue(CHILDREN_QUANTITY, item.getChildrenQuantity());
+        params.addValue(PERSONAL_NUMBER, item.getPersonalNumber());
+        params.addValue(APPLICATION_ID, item.getApplicationId());
 
-        namedParameter.update(createQuery, params, keyHolder, new String[]{"applicant_id"});
+        namedParameter.update(createQuery, params, keyHolder, new String[]{APPLICANT_ID});
 
-        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+        return findById(Objects.requireNonNull(keyHolder.getKey()).longValue());
     }
 
     @Override
-    @Transactional  (rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+    @Transactional  (rollbackFor = Exception.class)
     public Applicant update(Applicant item) {
         final String updateAppl = "update m_applicant set first_name = :first_name, second_name = :second_name, patronymic = :patronymic, type_of_applicant = :type_of_applicant," +
                 "date_of_birthday = :date_of_birthday, income = :income, income_currency = :income_currency, sex = :sex, experience = :experience, marital_status = :marital_status," +
                 "education = :education, children_quantity = :children_quantity, personal_number = :personal_number where applicant_id = :applicant_id";
         if (idExists(item.getApplicantId())){
             MapSqlParameterSource params = new MapSqlParameterSource();
-            params.addValue("first_name", item.getFirstName());
-            params.addValue("second_name", item.getSecondName());
-            params.addValue("patronymic", item.getPatronymic());
-            params.addValue("type_of_applicant", item.getTypeOfApplicant());
-            params.addValue("date_of_birthday", item.getBirthdayDate());
-            params.addValue("income", item.getIncome());
-            params.addValue("income_currency", item.getIncomeCurrency());
-            params.addValue("sex", item.getSex());
-            params.addValue("experience", item.getExperience());
-            params.addValue("marital_status", item.getMaritalStatus());
-            params.addValue("education", item.getEducation());
-            params.addValue("children_quantity", item.getChildrenQuantity());
-            params.addValue("personal_number", item.getPersonalNumber());
-            params.addValue("applicant_id", item.getApplicantId());
+            params.addValue(FIRST_NAME, item.getFirstName());
+            params.addValue(SECOND_NAME, item.getSecondName());
+            params.addValue(PATRONYMIC, item.getPatronymic());
+            params.addValue(TYPE_OF_APPLICANT, item.getTypeOfApplicant());
+            params.addValue(DATE_OF_BIRTHDAY, item.getBirthdayDate());
+            params.addValue(INCOME, item.getIncome());
+            params.addValue(INCOME_CURRENCY, item.getIncomeCurrency());
+            params.addValue(SEX, item.getSex());
+            params.addValue(EXPERIENCE, item.getExperience());
+            params.addValue(MARITAL_STATUS, item.getMaritalStatus());
+            params.addValue(EDUCATION, item.getEducation());
+            params.addValue(CHILDREN_QUANTITY, item.getChildrenQuantity());
+            params.addValue(PERSONAL_NUMBER, item.getPersonalNumber());
+            params.addValue(APPLICANT_ID, item.getApplicantId());
             namedParameter.update(updateAppl,params);
             return findById(item.getApplicantId());
         } else {
             System.out.println("Such Applicant doesn't exists");
-            return null;
+            return new Applicant();
         }
     }
 
@@ -144,8 +140,8 @@ public class ApplicantRepSpringImpl implements ApplicantRepository {
     public void delete(Long id) {
         final String deleteApplicant = "delete from m_applicant where applicant_id = :applicant_id";
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("applicant_id", id);
-        if (!idExists(id)) {
+        params.addValue(APPLICANT_ID, id);
+        if (idNotExists(id)) {
             System.out.println("Such ID doesn't exists");
         } else {
             namedParameter.update(deleteApplicant, params);
@@ -157,13 +153,8 @@ public class ApplicantRepSpringImpl implements ApplicantRepository {
     public Applicant findById(Long id) {
         final String getApplicant = "select * from m_applicant where applicant_id = :applicant_id";
         MapSqlParameterSource param = new MapSqlParameterSource();
-        param.addValue("applicant_id", id);
-        try {
-            return namedParameter.queryForObject(getApplicant,param,this::fillApplicant);
-        } catch (Exception e) {
-            System.out.println("Such Applicant doesn't exist");
-            return null;
-        }
+        param.addValue(APPLICANT_ID, id);
+        return namedParameter.queryForObject(getApplicant,param,this::fillApplicant);
     }
 
 
@@ -179,7 +170,7 @@ public class ApplicantRepSpringImpl implements ApplicantRepository {
         applicant.setIncomeCurrency(set.getString(INCOME_CURRENCY));
         applicant.setSex(set.getString(SEX));
         applicant.setExperience(set.getInt(EXPERIENCE));
-        applicant.setExperience(set.getInt(MARITAL_STATUS));
+        applicant.setMaritalStatus(set.getInt(MARITAL_STATUS));
         applicant.setEducation(set.getInt(EDUCATION));
         applicant.setChildrenQuantity(set.getInt(CHILDREN_QUANTITY));
         applicant.setPersonalNumber(set.getString(PERSONAL_NUMBER));
@@ -187,14 +178,17 @@ public class ApplicantRepSpringImpl implements ApplicantRepository {
         return applicant;
     }
     private boolean idExists (Long id){
-        final String getId = "select count(*) m_value from m_applicant where applicant_id = :applicant_id";
         try {
+            final String getId = "select count(*) m_value from m_applicant where applicant_id = :applicant_id";
             MapSqlParameterSource param = new MapSqlParameterSource();
-            param.addValue("applicant_id", id);
-            long numberId = namedParameter.queryForObject(getId, param,this::getLongValue);
-            return numberId >0;
+            param.addValue(APPLICANT_ID, id);
+            Long numberId = namedParameter.queryForObject(getId, param,this::getLongValue);
+            return Objects.equals(numberId, UNIQUE_APPLICANT);
         } catch (NullPointerException e){
             return true;
         }
+    }
+    private boolean idNotExists (Long id){
+        return !idExists(id);
     }
 }

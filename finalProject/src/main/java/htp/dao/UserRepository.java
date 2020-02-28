@@ -1,4 +1,4 @@
-package htp.dao.DAOinterfaces;
+package htp.dao;
 
 import htp.entities.User;
 

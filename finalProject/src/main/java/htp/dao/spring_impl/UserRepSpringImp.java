@@ -1,7 +1,7 @@
-package htp.dao.SpringImpl;
+package htp.dao.spring_impl;
 
 
-import htp.dao.DAOinterfaces.UserRepository;
+import htp.dao.UserRepository;
 import htp.entities.User;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,8 +10,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
@@ -31,20 +29,21 @@ public class UserRepSpringImp implements UserRepository {
     public static final String ROLE = "role";
     public static final String IS_DELETED = "isDeleted";
     public static final String M_VALUE = "m_value";
-    public static long userId;
+    public static final String LIMIT = "limit";
+    public static final String OFFSET = "offset";
+    public static final Long UNIQUE_USER = 1L;
+    public static Long userId;
 
-    private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public UserRepSpringImp(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
+    public UserRepSpringImp(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
         final String getMaxId = "select max(user_id) m_value from m_user";
         userId = jdbcTemplate.queryForObject(getMaxId, this::getLongValue);
     }
 
 
-    private long getId() {
+    private Long getId() {
         userId++;
         return userId;
     }
@@ -62,56 +61,59 @@ public class UserRepSpringImp implements UserRepository {
         return user;
     }
 
-    private long getLongValue(ResultSet set, int i) throws SQLException {
+    private Long getLongValue(ResultSet set, int i) throws SQLException {
         return set.getLong(M_VALUE);
     }
 
     private boolean loginExist(String login) {
-        final String getLogin = "select count(*) m_value from m_user where login = :login";
         try {
+            final String getLogin = "select count(*) m_value from m_user where login = :login";
             MapSqlParameterSource params = new MapSqlParameterSource();
-            params.addValue("login", login);
-            long numberLogins = namedParameterJdbcTemplate.queryForObject(getLogin, params, this::getLongValue);
-            return numberLogins > 0;
+            params.addValue(LOGIN, login);
+            Long numberLogins = namedParameterJdbcTemplate.queryForObject(getLogin, params, this::getLongValue);
+            return Objects.equals(numberLogins, UNIQUE_USER);
         } catch (NullPointerException e) {
             return true;
         }
     }
     private boolean idExists (Long id){
-        final String getId = "select count(*) m_value from m_user where user_id = :user_id";
         try {
+            final String getId = "select count(*) m_value from m_user where user_id = :user_id";
             MapSqlParameterSource param = new MapSqlParameterSource();
-            param.addValue("user_id", id);
-            long numberId = namedParameterJdbcTemplate.queryForObject(getId, param,this::getLongValue);
-            return numberId >0;
+            param.addValue(USER_ID, id);
+            Long numberId = namedParameterJdbcTemplate.queryForObject(getId, param,this::getLongValue);
+            return Objects.equals(numberId, UNIQUE_USER);
         } catch (NullPointerException e){
             return true;
         }
     }
+    private boolean idNotExists (Long id){
+        return !idExists(id);
+    }
 
     @Override
-    @Transactional  (rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
-    public Long save(User item) {
+    @Transactional  (rollbackFor = Exception.class)
+    public User save(User item) {
         if (loginExist(item.getLogin())) {
             System.out.println("Such login exists");
-            return 0L;
+            return new User();
         } else {
             final String createQuery = "INSERT INTO m_user (user_id, login, password, created, changed, role, isdeleted) " +
                     "VALUES (:user_id, :login, :password, :created, :changed, :role, :isdeleted);";
             KeyHolder keyHolder = new GeneratedKeyHolder();
 
             MapSqlParameterSource params = new MapSqlParameterSource();
-            params.addValue("user_id", getId());
-            params.addValue("login", item.getLogin());
-            params.addValue("password", item.getPassword());
-            params.addValue("created", item.getCreated());
-            params.addValue("changed", item.getChanged());
-            params.addValue("role", item.getRole());
-            params.addValue("isdeleted", item.isDeleted());
+            params.addValue(USER_ID, getId());
+            params.addValue(LOGIN, item.getLogin());
+            params.addValue(PASSWORD, item.getPassword());
+            params.addValue(CREATED, item.getCreated());
+            params.addValue(CHANGED, item.getChanged());
+            params.addValue(ROLE, item.getRole());
+            params.addValue(IS_DELETED, item.isDeleted());
 
-            namedParameterJdbcTemplate.update(createQuery, params, keyHolder, new String[]{"user_id"});
+            namedParameterJdbcTemplate.update(createQuery, params, keyHolder, new String[]{USER_ID});
 
-            return Objects.requireNonNull(keyHolder.getKey()).longValue();
+            return findById(Objects.requireNonNull(keyHolder.getKey()).longValue());
         }
     }
 
@@ -121,15 +123,15 @@ public class UserRepSpringImp implements UserRepository {
         final String updateUser = "update m_user set login = :login, password = :password, changed = :changed where user_id = :user_id";
         if (idExists(item.getUserId())){
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("login", item.getLogin());
-        params.addValue("password", item.getPassword());
-        params.addValue("changed", item.getChanged());
-        params.addValue("user_id", item.getUserId());
+        params.addValue(LOGIN, item.getLogin());
+        params.addValue(PASSWORD, item.getPassword());
+        params.addValue(CHANGED, item.getChanged());
+        params.addValue(USER_ID, item.getUserId());
         namedParameterJdbcTemplate.update(updateUser,params);
         return findById(item.getUserId());
         } else {
             System.out.println("Such User doesn't exists");
-            return null;
+            return new User();
         }
     }
 
@@ -138,8 +140,8 @@ public class UserRepSpringImp implements UserRepository {
     public void delete(Long id) {
         final String deleteUser = "delete from m_user where user_id = :user_id";
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("user_id", id);
-        if (!idExists(id)) {
+        params.addValue(USER_ID, id);
+        if (idNotExists(id)) {
             System.out.println("Such ID doesn't exists");
         } else {
             namedParameterJdbcTemplate.update(deleteUser, params);
@@ -151,8 +153,8 @@ public class UserRepSpringImp implements UserRepository {
         if (idExists(id)) {
             final String updateUser = "update m_user set isdeleted = :isdeleted where user_id = :user_id";
             MapSqlParameterSource params = new MapSqlParameterSource();
-            params.addValue("isdeleted", true);
-            params.addValue("user_id", id);
+            params.addValue(IS_DELETED, true);
+            params.addValue(USER_ID, id);
             namedParameterJdbcTemplate.update(updateUser, params);
             } else {
             System.out.println("Such User doesn't exists");
@@ -163,10 +165,10 @@ public class UserRepSpringImp implements UserRepository {
     public User findById(Long id) {
         final String findById = "select * from m_user where m_user.user_id = :user_id";
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("user_id", id);
-        if (!idExists(id)){
-            System.out.println("Such ID doesn't exists");
-            return null;
+        params.addValue(USER_ID, id);
+        if (idNotExists(id)){
+            System.out.println("Such ID doesn't exist");
+            return new User();
         } else {
             return namedParameterJdbcTemplate.queryForObject(findById, params, this::fillUser);
         }
@@ -176,22 +178,21 @@ public class UserRepSpringImp implements UserRepository {
     public User findByLogin(String login) {
         final String findById = "select * from m_user where m_user.login = :login";
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("login", login);
-        try {
+        params.addValue(LOGIN, login);
+        if (loginExist(login)){
+            System.out.println("Such Login exists");
+            return new User();
+        } else {
             return namedParameterJdbcTemplate.queryForObject(findById, params, this::fillUser);
-        } catch (Exception e){
-            System.out.println("User with such login doesn't exist");
-            return null;
         }
-
     }
 
     @Override
     public List<User> findAll(int limit, int offset) {
         final String findAll = "select* from m_user order by user_id limit :limit offset :offset";
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("limit", limit);
-        params.addValue("offset", offset);
+        params.addValue(LIMIT, limit);
+        params.addValue(OFFSET, offset);
         return namedParameterJdbcTemplate.query(findAll, params, this::fillUser);
     }
 }

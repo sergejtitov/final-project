@@ -1,22 +1,22 @@
-package htp.config.aspects;
+package htp.aspects;
 
 import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 @Aspect
 @Component
 public class CallsCounter {
-    private long counter;
+    private static AtomicLong counter = new AtomicLong(0);
 
-    @AfterReturning("execution(* htp.dao.DAOinterfaces.*.*(..))")
+    @AfterReturning("execution(* htp.dao.*.*(..))")
     private void countCalls() {
-        counter++;
+        counter.incrementAndGet();
     }
 
-    public long getCounter() {
+    public AtomicLong getCounter() {
         return counter;
     }
 }

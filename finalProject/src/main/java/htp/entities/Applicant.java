@@ -7,23 +7,23 @@ import java.util.Date;
 import java.util.Objects;
 
 public class Applicant {
-    private long applicantId;
+    private Long applicantId;
     private String firstName;
     private String secondName;
     private String patronymic;
-    private int typeOfApplicant;
+    private Integer typeOfApplicant;
     private Date birthdayDate;
-    private long income;
+    private Long income;
     private String incomeCurrency;
     private String sex;
-    private int experience;
-    private int maritalStatus;
-    private int education;
-    private int childrenQuantity;
+    private Integer experience;
+    private Integer maritalStatus;
+    private Integer education;
+    private Integer childrenQuantity;
     private String personalNumber;
-    private long applicationId;
+    private Long applicationId;
 
-    public Applicant(long applicantId, String firstName, String secondName, String patronymic, int typeOfApplicant, Date birthdayDate, long income, String incomeCurrency, String sex, int experience, int maritalStatus, int education, int childrenQuantity, String personalNumber, long applicationId) {
+    public Applicant(Long applicantId, String firstName, String secondName, String patronymic, Integer typeOfApplicant, Date birthdayDate, Long income, String incomeCurrency, String sex, Integer experience, Integer maritalStatus, Integer education, Integer childrenQuantity, String personalNumber, Long applicationId) {
         this.applicantId = applicantId;
         this.firstName = firstName;
         this.secondName = secondName;
@@ -41,22 +41,22 @@ public class Applicant {
         this.applicationId = applicationId;
     }
 
-    public int getMaritalStatus() {
+    public Integer getMaritalStatus() {
         return maritalStatus;
     }
 
-    public void setMaritalStatus(int maritalStatus) {
+    public void setMaritalStatus(Integer maritalStatus) {
         this.maritalStatus = maritalStatus;
     }
 
     public Applicant() {
     }
 
-    public long getApplicantId() {
+    public Long getApplicantId() {
         return applicantId;
     }
 
-    public void setApplicantId(long applicantId) {
+    public void setApplicantId(Long applicantId) {
         this.applicantId = applicantId;
     }
 
@@ -72,11 +72,11 @@ public class Applicant {
         return secondName;
     }
 
-    public int getTypeOfApplicant() {
+    public Integer getTypeOfApplicant() {
         return typeOfApplicant;
     }
 
-    public void setTypeOfApplicant(int typeOfApplicant) {
+    public void setTypeOfApplicant(Integer typeOfApplicant) {
         this.typeOfApplicant = typeOfApplicant;
     }
 
@@ -100,11 +100,11 @@ public class Applicant {
         this.birthdayDate = birthdayDate;
     }
 
-    public long getIncome() {
+    public Long getIncome() {
         return income;
     }
 
-    public void setIncome(long income) {
+    public void setIncome(Long income) {
         this.income = income;
     }
 
@@ -124,27 +124,27 @@ public class Applicant {
         this.sex = sex;
     }
 
-    public int getExperience() {
+    public Integer getExperience() {
         return experience;
     }
 
-    public void setExperience(int experience) {
+    public void setExperience(Integer experience) {
         this.experience = experience;
     }
 
-    public int getEducation() {
+    public Integer getEducation() {
         return education;
     }
 
-    public void setEducation(int education) {
+    public void setEducation(Integer education) {
         this.education = education;
     }
 
-    public int getChildrenQuantity() {
+    public Integer getChildrenQuantity() {
         return childrenQuantity;
     }
 
-    public void setChildrenQuantity(int childrenQuantity) {
+    public void setChildrenQuantity(Integer childrenQuantity) {
         this.childrenQuantity = childrenQuantity;
     }
 
@@ -156,11 +156,11 @@ public class Applicant {
         this.personalNumber = personalNumber;
     }
 
-    public long getApplicationId() {
+    public Long getApplicationId() {
         return applicationId;
     }
 
-    public void setApplicationId(long applicationId) {
+    public void setApplicationId(Long applicationId) {
         this.applicationId = applicationId;
     }
 

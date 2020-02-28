@@ -1,6 +1,6 @@
-package htp.dao.SpringImpl;
+package htp.dao.spring_impl;
 
-import htp.dao.DAOinterfaces.PhoneRepository;
+import htp.dao.PhoneRepository;
 import htp.entities.Phone;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,8 +9,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
@@ -26,68 +24,62 @@ public class PhoneRepSpringImpl implements PhoneRepository {
     public static final String PHONE_NUMBER = "phone_number";
     public static final String PHONE_TYPE = "phone_type";
     public static final String M_VALUE = "m_value";
+    public static final Long UNIQUE_ID = 1L;
 
-    public static long phoneID;
+    public static Long phoneID;
 
-    private JdbcTemplate jdbc;
     private NamedParameterJdbcTemplate namedParameter;
 
-    public PhoneRepSpringImpl(JdbcTemplate jdbc) {
-        this.jdbc = jdbc;
-        namedParameter = new NamedParameterJdbcTemplate(jdbc);
+    public PhoneRepSpringImpl(JdbcTemplate jdbc, NamedParameterJdbcTemplate namedParameter) {
+        this.namedParameter = namedParameter;
         final String getMaxId = "select max(phone_id) m_value from m_phone";
         phoneID = jdbc.queryForObject(getMaxId, this::getLongValue);
     }
 
-    private long getId() {
+    private Long getId() {
         phoneID++;
         return phoneID;
     }
 
     @Override
-    public List<Phone> findSome(Long applicantId) {
-        try {
-            final String getAddress = "select * from m_phone where applicant_id = :applicant_id";
-            MapSqlParameterSource param = new MapSqlParameterSource();
-            param.addValue("applicant_id", applicantId);
-            return namedParameter.query(getAddress, param, this::fillPhone);
-        } catch (Exception e){
-            System.out.println("Such Applicant doesn't exist");
-            return null;
-        }
+    public List<Phone> findPhonesByApplicantId(Long applicantId) {
+        final String getAddress = "select * from m_phone where applicant_id = :applicant_id";
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        param.addValue(APPLICANT_ID, applicantId);
+        return namedParameter.query(getAddress, param, this::fillPhone);
     }
 
     @Override
-    @Transactional  (rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
-    public Long save(Phone item) {
+    @Transactional  (rollbackFor = Exception.class)
+    public Phone save(Phone item) {
         final String createQuery = "INSERT INTO m_phone (phone_id, applicant_id, phone_number, phone_type) " +
                 "VALUES (:phone_id, :applicant_id, :phone_number, :phone_type);";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("phone_id", getId());
-        params.addValue("applicant_id", item.getApplicantId());
-        params.addValue("phone_number", item.getPhoneNumber());
-        params.addValue("phone_type", item.getPhoneType());
+        params.addValue(PHONE_ID, getId());
+        params.addValue(APPLICANT_ID, item.getApplicantId());
+        params.addValue(PHONE_NUMBER, item.getPhoneNumber());
+        params.addValue(PHONE_TYPE, item.getPhoneType());
 
-        namedParameter.update(createQuery, params, keyHolder, new String[]{"phone_id"});
+        namedParameter.update(createQuery, params, keyHolder, new String[]{PHONE_ID});
 
-        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+        return findById(Objects.requireNonNull(keyHolder.getKey()).longValue());
     }
 
     @Override
-    @Transactional  (rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+    @Transactional  (rollbackFor = Exception.class)
     public Phone update(Phone item) {
         final String updatePhone = "update m_phone set phone_number = :phone_number, phone_type = :phone_type where phone_id = :phone_id";
         if (idExists(item.getPhoneId())){
             MapSqlParameterSource params = new MapSqlParameterSource();
-            params.addValue("phone_number", item.getPhoneNumber());
-            params.addValue("phone_type", item.getPhoneNumber());
+            params.addValue(PHONE_NUMBER, item.getPhoneNumber());
+            params.addValue(PHONE_TYPE, item.getPhoneNumber());
             namedParameter.update(updatePhone,params);
             return findById(item.getPhoneId());
         } else {
             System.out.println("Such Phone doesn't exists");
-            return null;
+            return new Phone();
         }
     }
 
@@ -96,8 +88,8 @@ public class PhoneRepSpringImpl implements PhoneRepository {
     public void delete(Long id) {
         final String deletePhone = "delete from m_phone where phone_id = :phone_id";
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("phone_id", id);
-        if (!idExists(id)) {
+        params.addValue(PHONE_ID, id);
+        if (idNotExists(id)) {
             System.out.println("Such ID doesn't exists");
         } else {
             namedParameter.update(deletePhone, params);
@@ -106,31 +98,25 @@ public class PhoneRepSpringImpl implements PhoneRepository {
 
     @Override
     public Phone findById(Long id) {
-        try {
-            final String getAddress = "select * from m_phone where phone_id = :phone_id";
-            MapSqlParameterSource param = new MapSqlParameterSource();
-            param.addValue("phone_id", id);
-            return namedParameter.queryForObject(getAddress, param, this::fillPhone);
-        } catch (Exception e){
-            System.out.println("Such Phone doesn't exist");
-            return null;
-        }
+        final String getAddress = "select * from m_phone where phone_id = :phone_id";
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        param.addValue(PHONE_ID, id);
+        return namedParameter.queryForObject(getAddress, param, this::fillPhone);
     }
 
-    private long getLongValue(ResultSet set, int i) throws SQLException {
+    private Long getLongValue(ResultSet set, int i) throws SQLException {
         return set.getLong(M_VALUE);
     }
 
     private boolean idExists (Long id){
         final String getId = "select count(*) m_value from m_phone where phone_id = :phone_id";
-        try {
             MapSqlParameterSource param = new MapSqlParameterSource();
-            param.addValue("phone_id", id);
-            long numberId = namedParameter.queryForObject(getId, param,this::getLongValue);
-            return numberId >0;
-        } catch (NullPointerException e){
-            return true;
-        }
+            param.addValue(PHONE_ID, id);
+            Long numberId = namedParameter.queryForObject(getId, param,this::getLongValue);
+            return Objects.equals(numberId, UNIQUE_ID);
+    }
+    private boolean idNotExists (Long id){
+        return !idExists(id);
     }
 
     private Phone fillPhone(ResultSet set, int i) throws SQLException {

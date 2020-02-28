@@ -1,6 +1,6 @@
-package htp.dao.SpringImpl;
+package htp.dao.spring_impl;
 
-import htp.dao.DAOinterfaces.CreditInfoRepository;
+import htp.dao.CreditInfoRepository;
 import htp.entities.CreditInfo;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,73 +27,69 @@ public class CreditInfoRepSpringImpl implements CreditInfoRepository {
     public static final String PAYMENT = "payment";
     public static final String APPLICANT_ID = "applicant_id";
     public static final String M_VALUE = "m_value";
-    public static long infoId;
+    public static final Long UNIQUE_CREDIT_INFO = 1L;
+    public static Long infoId;
 
-    private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public CreditInfoRepSpringImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
+    public CreditInfoRepSpringImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
         final String getMaxId = "select max(info_id) m_value from m_credit_info";
         infoId = jdbcTemplate.queryForObject(getMaxId, this::getLongValue);
     }
 
-    private long getId() {
+    private Long getId() {
         infoId++;
         return infoId;
     }
 
     @Override
-    public List<CreditInfo> findSome(Long applicantId) {
-        try {
+    public List<CreditInfo> findCreditInfosByApplicantId(Long applicantId) {
             final String getInfo = "select * from m_credit_info where info_id = :info_id";
             MapSqlParameterSource param = new MapSqlParameterSource();
-            param.addValue("info_id", applicantId);
+            param.addValue(INFO_ID, applicantId);
             return namedParameterJdbcTemplate.query(getInfo, param, this::fillCreditInfo);
-        } catch (Exception e){
-            System.out.println("Such Applicant doesn't exist");
-            return null;
-        }
     }
 
     @Override
-    public Long save(CreditInfo item) {
+    @Transactional
+    public CreditInfo save(CreditInfo item) {
         final String createQuery = "INSERT INTO m_credit_info (info_id, loan_amount, interest_rate, balance_amount, balance_term, payment, applicant_id) " +
                 "VALUES (:info_id, :loan_amount, :interest_rate, :balance_amount, :balance_term, :payment, :applicant_id);";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("info_id", getId());
-        params.addValue("loan_amount", item.getLoanAmount());
-        params.addValue("interest_rate", item.getInterestRate());
-        params.addValue("balance_amount", item.getBalanceAmount());
-        params.addValue("balance_term", item.getBalanceTerm());
-        params.addValue("payment", item.getPayment());
-        params.addValue("applicant_id", item.getApplicantId());
+        params.addValue(INFO_ID, getId());
+        params.addValue(LOAN_AMOUNT, item.getLoanAmount());
+        params.addValue(INTEREST_RATE, item.getInterestRate());
+        params.addValue(BALANCE_AMOUNT, item.getBalanceAmount());
+        params.addValue(BALANCE_TERM, item.getBalanceTerm());
+        params.addValue(PAYMENT, item.getPayment());
+        params.addValue(APPLICANT_ID, item.getApplicantId());
 
-        namedParameterJdbcTemplate.update(createQuery, params, keyHolder, new String[]{"info_id"});
+        namedParameterJdbcTemplate.update(createQuery, params, keyHolder, new String[]{INFO_ID});
 
-        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+        return findById(Objects.requireNonNull(keyHolder.getKey()).longValue());
     }
 
     @Override
+    @Transactional
     public CreditInfo update(CreditInfo item) {
         final String updateInfo = "update m_credit_info set loan_amount = :loan_amount, interest_rate = :interest_rate, balance_amount = :balance_amount," +
                 "balance_term = :balance_term, payment = :payment where info_id = :info_id";
         if (idExists(item.getInfoId())){
             MapSqlParameterSource params = new MapSqlParameterSource();
-            params.addValue("loan_amount", item.getLoanAmount());
-            params.addValue("interest_rate", item.getInterestRate());
-            params.addValue("balance_amount", item.getBalanceAmount());
-            params.addValue("balance_term", item.getBalanceTerm());
-            params.addValue("payment", item.getPayment());
-            params.addValue("info_id", item.getInfoId());
+            params.addValue(LOAN_AMOUNT, item.getLoanAmount());
+            params.addValue(INTEREST_RATE, item.getInterestRate());
+            params.addValue(BALANCE_AMOUNT, item.getBalanceAmount());
+            params.addValue(BALANCE_TERM, item.getBalanceTerm());
+            params.addValue(PAYMENT, item.getPayment());
+            params.addValue(INFO_ID, item.getInfoId());
             namedParameterJdbcTemplate.update(updateInfo,params);
             return findById(item.getInfoId());
         } else {
             System.out.println("Such Loan doesn't exists");
-            return null;
+            return new CreditInfo();
         }
     }
 
@@ -102,8 +98,8 @@ public class CreditInfoRepSpringImpl implements CreditInfoRepository {
     public void delete(Long id) {
         final String deleteInfo = "delete from m_credit_info where info_id = :info_id";
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("info_id", id);
-        if (!idExists(id)) {
+        params.addValue(INFO_ID, id);
+        if (idNotExists(id)) {
             System.out.println("Such ID doesn't exists");
         } else {
             namedParameterJdbcTemplate.update(deleteInfo, params);
@@ -114,28 +110,33 @@ public class CreditInfoRepSpringImpl implements CreditInfoRepository {
     public CreditInfo findById(Long id) {
         final String findById = "select * from m_credit_info where info_id = :info_id";
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("info_id", id);
-        if (!idExists(id)){
+        params.addValue(INFO_ID, id);
+        if (idNotExists(id)){
             System.out.println("Such ID doesn't exists");
-            return null;
+            return new CreditInfo();
         } else {
             return namedParameterJdbcTemplate.queryForObject(findById, params, this::fillCreditInfo);
         }
     }
 
-    private long getLongValue(ResultSet set, int i) throws SQLException {
+    private Long getLongValue(ResultSet set, int i) throws SQLException {
         return set.getLong(M_VALUE);
     }
+
     private boolean idExists (Long id){
-        final String getId = "select count(*) m_value from m_credit_info where info_id = :info_id";
         try {
+            final String getId = "select count(*) m_value from m_credit_info where info_id = :info_id";
             MapSqlParameterSource param = new MapSqlParameterSource();
-            param.addValue("info_id", id);
-            long numberId = namedParameterJdbcTemplate.queryForObject(getId, param,this::getLongValue);
-            return numberId >0;
+            param.addValue(INFO_ID, id);
+            Long numberId = namedParameterJdbcTemplate.queryForObject(getId, param,this::getLongValue);
+            return Objects.equals(numberId, UNIQUE_CREDIT_INFO);
         } catch (NullPointerException e){
             return true;
         }
+    }
+
+    private boolean idNotExists(Long id){
+        return !idExists(id);
     }
 
     private CreditInfo fillCreditInfo(ResultSet set, int i) throws SQLException {

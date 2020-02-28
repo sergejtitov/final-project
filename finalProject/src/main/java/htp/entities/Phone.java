@@ -6,12 +6,12 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.Objects;
 
 public class Phone {
-    private long phoneId;
-    private long applicantId;
+    private Long phoneId;
+    private Long applicantId;
     private String phoneType;
     private String phoneNumber;
 
-    public Phone(long phoneId, long applicantId, String phoneType, String phoneNumber) {
+    public Phone(Long phoneId, Long applicantId, String phoneType, String phoneNumber) {
         this.phoneId = phoneId;
         this.applicantId = applicantId;
         this.phoneType = phoneType;
@@ -21,19 +21,19 @@ public class Phone {
     public Phone() {
     }
 
-    public long getPhoneId() {
+    public Long getPhoneId() {
         return phoneId;
     }
 
-    public void setPhoneId(long phoneId) {
+    public void setPhoneId(Long phoneId) {
         this.phoneId = phoneId;
     }
 
-    public long getApplicantId() {
+    public Long getApplicantId() {
         return applicantId;
     }
 
-    public void setApplicantId(long applicantId) {
+    public void setApplicantId(Long applicantId) {
         this.applicantId = applicantId;
     }
 

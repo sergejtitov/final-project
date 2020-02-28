@@ -1,13 +1,13 @@
 package htp.entities;
 
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.sql.Timestamp;
 import java.util.Objects;
 
 public class User {
- private long userId;
+ private Long userId;
  private String login;
  private String password;
  private Timestamp created;
@@ -15,7 +15,7 @@ public class User {
  private String role;
  private boolean isDeleted;
 
-    public User(long userId, String login, String password, Timestamp created, Timestamp changed, String role, boolean isDeleted) {
+    public User(Long userId, String login, String password, Timestamp created, Timestamp changed, String role, boolean isDeleted) {
         this.userId = userId;
         this.login = login;
         this.password = password;
@@ -28,11 +28,11 @@ public class User {
     public User() {
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

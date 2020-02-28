@@ -6,12 +6,12 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.Objects;
 
 public class Address {
-    private long addressId;
-    private long applicantId;
+    private Long addressId;
+    private Long applicantId;
     private String address;
     private String addressType;
 
-    public Address(long addressId, long applicantId, String address, String addressType) {
+    public Address(Long addressId, Long applicantId, String address, String addressType) {
         this.addressId = addressId;
         this.applicantId = applicantId;
         this.address = address;
@@ -21,19 +21,19 @@ public class Address {
     public Address() {
     }
 
-    public long getAddressId() {
+    public Long getAddressId() {
         return addressId;
     }
 
-    public void setAddressId(long addressId) {
+    public void setAddressId(Long addressId) {
         this.addressId = addressId;
     }
 
-    public long getApplicantId() {
+    public Long getApplicantId() {
         return applicantId;
     }
 
-    public void setApplicantId(long applicantId) {
+    public void setApplicantId(Long applicantId) {
         this.applicantId = applicantId;
     }
 
@@ -66,10 +66,10 @@ public class Address {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o==null || getClass()!=o.getClass()) return false;
-        Address address = (Address) o;
-        return Objects.equals(addressId, address.addressId)&&
-                Objects.equals(applicantId, address.applicantId)&&
-                Objects.equals(address, address.address)&&
-                Objects.equals(addressType, address.addressType);
+        Address address1 = (Address) o;
+        return Objects.equals(addressId, address1.addressId)&&
+                Objects.equals(applicantId, address1.applicantId)&&
+                Objects.equals(address, address1.address)&&
+                Objects.equals(addressType, address1.addressType);
     }
 }

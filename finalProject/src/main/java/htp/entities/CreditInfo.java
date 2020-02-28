@@ -6,18 +6,18 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.Objects;
 
 public class CreditInfo {
-    private long infoId;
-    private double loanAmount;
-    private double interestRate;
-    private double balanceAmount;
-    private int balanceTerm;
-    private double payment;
-    private long applicantId;
+    private Long infoId;
+    private Double loanAmount;
+    private Double interestRate;
+    private Double balanceAmount;
+    private Integer balanceTerm;
+    private Double payment;
+    private Long applicantId;
 
     public CreditInfo() {
     }
 
-    public CreditInfo(long infoId, double loanAmount, double interestRate, double balanceAmount, int balanceTerm, double payment, long applicantId) {
+    public CreditInfo(Long infoId, Double loanAmount, Double interestRate, Double balanceAmount, Integer balanceTerm, Double payment, Long applicantId) {
         this.infoId = infoId;
         this.loanAmount = loanAmount;
         this.interestRate = interestRate;
@@ -27,59 +27,59 @@ public class CreditInfo {
         this.applicantId = applicantId;
     }
 
-    public long getInfoId() {
+    public Long getInfoId() {
         return infoId;
     }
 
-    public void setInfoId(long infoId) {
+    public void setInfoId(Long infoId) {
         this.infoId = infoId;
     }
 
-    public double getLoanAmount() {
+    public Double getLoanAmount() {
         return loanAmount;
     }
 
-    public void setLoanAmount(double loanAmount) {
+    public void setLoanAmount(Double loanAmount) {
         this.loanAmount = loanAmount;
     }
 
-    public double getInterestRate() {
+    public Double getInterestRate() {
         return interestRate;
     }
 
-    public void setInterestRate(double interestRate) {
+    public void setInterestRate(Double interestRate) {
         this.interestRate = interestRate;
     }
 
-    public double getBalanceAmount() {
+    public Double getBalanceAmount() {
         return balanceAmount;
     }
 
-    public void setBalanceAmount(double balanceAmount) {
+    public void setBalanceAmount(Double balanceAmount) {
         this.balanceAmount = balanceAmount;
     }
 
-    public int getBalanceTerm() {
+    public Integer getBalanceTerm() {
         return balanceTerm;
     }
 
-    public void setBalanceTerm(int balanceTerm) {
+    public void setBalanceTerm(Integer balanceTerm) {
         this.balanceTerm = balanceTerm;
     }
 
-    public double getPayment() {
+    public Double getPayment() {
         return payment;
     }
 
-    public void setPayment(double payment) {
+    public void setPayment(Double payment) {
         this.payment = payment;
     }
 
-    public long getApplicantId() {
+    public Long getApplicantId() {
         return applicantId;
     }
 
-    public void setApplicantId(long applicantId) {
+    public void setApplicantId(Long applicantId) {
         this.applicantId = applicantId;
     }
     @Override

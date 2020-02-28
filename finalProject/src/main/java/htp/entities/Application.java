@@ -1,5 +1,6 @@
 package htp.entities;
 
+import htp.entities.dictionaries.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -8,21 +9,21 @@ import java.util.Objects;
 
 public class Application {
     private Long applicationId;
-    private long userId;
+    private Long userId;
     private Timestamp creationDate;
-    private int loanType;
-    private long productCode;
-    private double loanAmount;
-    private String currency;
-    private double finalAmount;
-    private String decision;
-    private String status;
-    private double payment;
+    private LoanType loanType;
+    private ProductCode productCode;
+    private Double loanAmount;
+    private MyCurrency currency;
+    private Double finalAmount;
+    private Decision decision;
+    private Status status;
+    private Double payment;
 
     public Application() {
     }
 
-    public Application(Long applicationId, long userId, Timestamp creationDate, int loanType, long productCode, double loanAmount, String currency, double finalAmount, String decision, String status, double payment) {
+    public Application(Long applicationId, Long userId, Timestamp creationDate, LoanType loanType, ProductCode productCode, Double loanAmount, MyCurrency currency, Double finalAmount, Decision decision, Status status, Double payment) {
         this.applicationId = applicationId;
         this.userId = userId;
         this.creationDate = creationDate;
@@ -44,11 +45,11 @@ public class Application {
         this.applicationId = applicationId;
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -60,67 +61,67 @@ public class Application {
         this.creationDate = creationDate;
     }
 
-    public int getLoanType() {
+    public LoanType getLoanType() {
         return loanType;
     }
 
-    public void setLoanType(int loanType) {
+    public void setLoanType(LoanType loanType) {
         this.loanType = loanType;
     }
 
-    public long getProductCode() {
+    public ProductCode getProductCode() {
         return productCode;
     }
 
-    public void setProductCode(long productCode) {
+    public void setProductCode(ProductCode productCode) {
         this.productCode = productCode;
     }
 
-    public double getLoanAmount() {
+    public Double getLoanAmount() {
         return loanAmount;
     }
 
-    public void setLoanAmount(double loanAmount) {
+    public void setLoanAmount(Double loanAmount) {
         this.loanAmount = loanAmount;
     }
 
-    public String getCurrency() {
+    public MyCurrency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(MyCurrency currency) {
         this.currency = currency;
     }
 
-    public double getFinalAmount() {
+    public Double getFinalAmount() {
         return finalAmount;
     }
 
-    public void setFinalAmount(double finalAmount) {
+    public void setFinalAmount(Double finalAmount) {
         this.finalAmount = finalAmount;
     }
 
-    public String getDecision() {
+    public Decision getDecision() {
         return decision;
     }
 
-    public void setDecision(String decision) {
+    public void setDecision(Decision decision) {
         this.decision = decision;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public double getPayment() {
+    public Double getPayment() {
         return payment;
     }
 
-    public void setPayment(double payment) {
+    public void setPayment(Double payment) {
         this.payment = payment;
     }
 

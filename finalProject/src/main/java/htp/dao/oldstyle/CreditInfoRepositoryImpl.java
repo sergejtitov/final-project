@@ -1,6 +1,6 @@
 //package htp.dao.oldstyle;
 //
-//import htp.dao.DAOinterfaces.CreditInfoRepository;
+//import htp.dao.CreditInfoRepository;
 //import htp.entities.Address;
 //import htp.entities.CreditInfo;
 //import htp.exceptions.NoSuchEntityException;

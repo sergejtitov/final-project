@@ -1,4 +1,4 @@
-package htp.Controller;
+package htp.controller;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
