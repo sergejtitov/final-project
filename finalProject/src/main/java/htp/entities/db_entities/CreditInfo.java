@@ -1,4 +1,4 @@
-package htp.entities;
+package htp.entities.db_entities;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

@@ -1,7 +1,7 @@
 //package htp.dao.oldstyle;
 //
 //import htp.dao.AddressRepository;
-//import htp.entities.Address;
+//import htp.entities.dbentities.Address;
 //import htp.exceptions.NoSuchEntityException;
 //import org.apache.commons.dbcp2.BasicDataSource;
 //

@@ -1,4 +1,4 @@
-package htp.entities;
+package htp.entities.db_entities;
 
 import htp.entities.dictionaries.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;

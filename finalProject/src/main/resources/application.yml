@@ -1,0 +1,9 @@
+database:
+  url : jdbc:postgresql://localhost:5432/Final_ProjectDB
+  login : User_FP
+  password : 5432
+  initialSize : 10
+  maxActive : 7
+
+server:
+  port : 8082

@@ -1,6 +1,6 @@
 package htp.dao;
 
-import htp.entities.Phone;
+import htp.entities.db_entities.Phone;
 
 import java.util.List;
 

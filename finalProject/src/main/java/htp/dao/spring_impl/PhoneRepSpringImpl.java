@@ -1,7 +1,7 @@
 package htp.dao.spring_impl;
 
 import htp.dao.PhoneRepository;
-import htp.entities.Phone;
+import htp.entities.db_entities.Phone;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;

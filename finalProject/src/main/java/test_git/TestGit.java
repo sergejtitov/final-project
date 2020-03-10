@@ -1,32 +1,14 @@
 package test_git;
 
-import htp.config.AppConfig;
-import htp.aspects.CallsCounter;
-import htp.dao.spring_impl.AddressRepSpringImpl;
-import htp.dao.spring_impl.ApplicantRepSpringImpl;
-import htp.dao.spring_impl.ApplicationRepSpringImpl;
+
 import htp.dao.UserRepository;
-import htp.entities.Address;
-import htp.entities.Applicant;
-import htp.entities.Application;
-import htp.entities.User;
-import htp.entities.dictionaries.*;
-import org.springframework.context.ConfigurableApplicationContext;
+import htp.entities.db_entities.User;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.Timestamp;
-import java.util.List;
-
 
 public class TestGit {
-    public static void main(String[] args){
-
-        //testAddress();
-        //testUserImpl();
-        testApplicationImpl();
-        //testApplicantImpl();
-    }
-
 /*    private static void testUserImpl(){
         ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
         UserRepository userDao = (UserRepository) ctx.getBean("userRepSpringImp");
@@ -44,7 +26,8 @@ public class TestGit {
         System.out.println(callsCounter.getCounter());
     }
 */
-    private static void testApplicationImpl(){
+
+   /* private static void testApplicationImpl(){
         ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
         ApplicationRepSpringImpl applicationDAO = (ApplicationRepSpringImpl) ctx.getBean("applicationRepSpringImpl");
         CallsCounter callsCounter = (CallsCounter) ctx.getBean("callsCounter");
@@ -61,7 +44,7 @@ public class TestGit {
             System.out.println(application);
         }
         System.out.println(callsCounter.getCounter());
-    }
+    }*/
 /*
     public static void testApplicantImpl(){
         ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
@@ -80,12 +63,20 @@ public class TestGit {
         applicantDAO.delete(8L);
         System.out.println(callsCounter.getCounter());
     }*/
+public static void main(String[] args){
 
-    public static void testAddress(){
+    //testAddress();
+    //testUserImpl();
+    //testApplicationImpl();
+    //testApplicantImpl();
+
+}
+
+    /*public static void testAddress(){
         ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
         CallsCounter callsCounter = (CallsCounter) ctx.getBean("callsCounter");
         AddressRepSpringImpl addressDAO = (AddressRepSpringImpl) ctx.getBean("addressRepSpringImpl");
         System.out.println(addressDAO.save(new Address(4L, 5L, "Bakery street ", "work")));
         System.out.println(callsCounter.getCounter());
-    }
+    }*/
 }

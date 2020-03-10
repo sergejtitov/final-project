@@ -2,7 +2,8 @@ package htp.dao.spring_impl;
 
 
 import htp.dao.UserRepository;
-import htp.entities.User;
+import htp.entities.db_entities.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -27,7 +28,7 @@ public class UserRepSpringImp implements UserRepository {
     public static final String CREATED = "created";
     public static final String CHANGED = "changed";
     public static final String ROLE = "role";
-    public static final String IS_DELETED = "isDeleted";
+    public static final String IS_DELETED = "isdeleted";
     public static final String M_VALUE = "m_value";
     public static final String LIMIT = "limit";
     public static final String OFFSET = "offset";
@@ -36,6 +37,7 @@ public class UserRepSpringImp implements UserRepository {
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    @Autowired
     public UserRepSpringImp(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
         final String getMaxId = "select max(user_id) m_value from m_user";
@@ -57,7 +59,7 @@ public class UserRepSpringImp implements UserRepository {
         user.setCreated(set.getTimestamp(CREATED));
         user.setChanged(set.getTimestamp(CHANGED));
         user.setRole(set.getString(ROLE));
-        user.setDeleted(set.getBoolean(IS_DELETED));
+        user.setIsdeleted(set.getBoolean(IS_DELETED));
         return user;
     }
 
@@ -109,7 +111,7 @@ public class UserRepSpringImp implements UserRepository {
             params.addValue(CREATED, item.getCreated());
             params.addValue(CHANGED, item.getChanged());
             params.addValue(ROLE, item.getRole());
-            params.addValue(IS_DELETED, item.isDeleted());
+            params.addValue(IS_DELETED, false);
 
             namedParameterJdbcTemplate.update(createQuery, params, keyHolder, new String[]{USER_ID});
 

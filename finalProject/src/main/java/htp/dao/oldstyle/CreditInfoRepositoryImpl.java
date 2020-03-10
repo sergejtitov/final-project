@@ -1,8 +1,8 @@
 //package htp.dao.oldstyle;
 //
 //import htp.dao.CreditInfoRepository;
-//import htp.entities.Address;
-//import htp.entities.CreditInfo;
+//import htp.entities.dbentities.Address;
+//import htp.entities.dbentities.CreditInfo;
 //import htp.exceptions.NoSuchEntityException;
 //import org.apache.commons.dbcp2.BasicDataSource;
 //

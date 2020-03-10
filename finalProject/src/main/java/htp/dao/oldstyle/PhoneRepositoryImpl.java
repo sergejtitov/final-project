@@ -1,7 +1,7 @@
 //package htp.dao.oldstyle;
 //
 //import htp.dao.PhoneRepository;
-//import htp.entities.Phone;
+//import htp.entities.dbentities.Phone;
 //import htp.exceptions.NoSuchEntityException;
 //import org.apache.commons.dbcp2.BasicDataSource;
 //

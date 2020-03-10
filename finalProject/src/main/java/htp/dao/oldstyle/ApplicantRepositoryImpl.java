@@ -3,7 +3,7 @@
 //
 //
 //import htp.dao.ApplicantRepository;
-//import htp.entities.Applicant;
+//import htp.entities.dbentities.Applicant;
 //import htp.exceptions.NoSuchEntityException;
 //import org.apache.commons.dbcp2.BasicDataSource;
 //

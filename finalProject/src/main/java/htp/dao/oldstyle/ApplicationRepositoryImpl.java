@@ -2,7 +2,7 @@
 //
 //
 //import htp.dao.ApplicationRepository;
-//import htp.entities.Application;
+//import htp.entities.dbentities.Application;
 //import htp.exceptions.NoSuchEntityException;
 //import org.apache.commons.dbcp2.BasicDataSource;
 //
