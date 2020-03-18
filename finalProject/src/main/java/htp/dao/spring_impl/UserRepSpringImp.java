@@ -58,7 +58,7 @@ public class UserRepSpringImp implements UserRepository {
         user.setPassword(set.getString(PASSWORD));
         user.setCreated(set.getTimestamp(CREATED));
         user.setChanged(set.getTimestamp(CHANGED));
-        user.setRole(set.getString(ROLE));
+        //user.setRole(set.getString(ROLE));
         user.setIsdeleted(set.getBoolean(IS_DELETED));
         return user;
     }
@@ -101,7 +101,7 @@ public class UserRepSpringImp implements UserRepository {
             return new User();
         } else {
             final String createQuery = "INSERT INTO m_user (user_id, login, password, created, changed, role, isdeleted) " +
-                    "VALUES (:user_id, :login, :password, :created, :changed, :role, :isdeleted);";
+                    "VALUES (:user_id, :login, :password, :created, :changed,/* :role,*/ :isdeleted);";
             KeyHolder keyHolder = new GeneratedKeyHolder();
 
             MapSqlParameterSource params = new MapSqlParameterSource();
@@ -110,7 +110,7 @@ public class UserRepSpringImp implements UserRepository {
             params.addValue(PASSWORD, item.getPassword());
             params.addValue(CREATED, item.getCreated());
             params.addValue(CHANGED, item.getChanged());
-            params.addValue(ROLE, item.getRole());
+            //params.addValue(ROLE, item.getRole());
             params.addValue(IS_DELETED, false);
 
             namedParameterJdbcTemplate.update(createQuery, params, keyHolder, new String[]{USER_ID});

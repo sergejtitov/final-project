@@ -2,6 +2,7 @@ package htp.controller;
 
 import htp.dao.UserRepository;
 import htp.dao.spring_impl.UserRepSpringImp;
+import htp.entities.db_entities.Roles;
 import htp.entities.db_entities.User;
 import htp.entities.front_entities.UserF;
 import htp.entities.front_entities.UserFAdmin;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @RestController
@@ -69,7 +72,8 @@ public class UserController {
         user.setPassword(request.getPassword());
         user.setCreated(new Timestamp(System.currentTimeMillis()));
         user.setChanged(user.getCreated());
-        user.setRole(request.getRole());
+        Set<Roles> role = new HashSet<>();
+        user.setRoles(role);
         user.setIsdeleted(false);
         User savedUser = userDao.save(user);
         return new ResponseEntity<>(savedUser, HttpStatus.OK);
