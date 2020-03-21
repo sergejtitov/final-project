@@ -72,7 +72,10 @@ public class UserHibernateImpl implements UserRepository {
 
     @Override
     public void delete(Long id) {
-    entityManager.remove(findById(id));
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        entityManager.remove(findById(id));
+        transaction.commit();
     }
 
     @Override

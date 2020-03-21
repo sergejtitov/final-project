@@ -4,10 +4,10 @@ package htp.services;
 import htp.dao.RolesRepository;
 import htp.dao.UserRepository;
 import htp.dao.hibernate_Impl.UserHibernateImpl;
-import htp.dao.spring_impl.UserRepSpringImp;
+import htp.entities.db_entities.Roles;
 import htp.entities.db_entities.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import htp.exceptions.NoSuchEntityException;
+
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service(value = "userDetailsService")
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService  {
 
     private UserRepository userDao;
     private RolesRepository rolesDao;
@@ -34,24 +34,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userDao.findByLogin(username);
-        if (user == null) {
+        List<Roles> roles = rolesDao.findRolesByUserId(user.getUserId());
+        if (user.getUserId() == null) {
             throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
         }
-        return user;
-        /*try {
-            User user = userDao.findByLogin(username);
-            if (user.getUserId() == null) {
-                throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
-            } else {
-                return new org.springframework.security.core.userdetails.User(
-                        user.getLogin(),
-                        user.getPassword(),
-                        AuthorityUtils.commaSeparatedStringToAuthorityList(user.getPassword())
-                );
-            }
-        } catch (Exception e) {
-            throw new UsernameNotFoundException("User with this login not found");
-        }*/
+        return new org.springframework.security.core.userdetails.User(user.getLogin(),user.getPassword(), user.isEnabled(), user.isAccountNonExpired(),user.isCredentialsNonExpired(),user.isAccountNonLocked(),AuthorityUtils.commaSeparatedStringToAuthorityList(roles.get(0).getName()));
+
     }
 
     public User findUserById(Long userId){
@@ -72,12 +60,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return userDao.save(entity);
     }
 
-    public boolean deleteUser (Long userId){
-        if( userDao.findById(userId)!= null){
-            userDao.delete(userId);
-            return true;
+    public User updateUser(User entity){
+        entity.setPassword(cryptPassword.encode(entity.getPassword()));
+        return userDao.update(entity);
+    }
+
+    public void deleteUser (Long userId){
+        if( userDao.findById(userId).getUserId() == null){
+            throw new NoSuchEntityException("No such user!");
         }
-        return false;
+        userDao.delete(userId);
+    }
+
+    public void fakeDelete(Long userId){
+        userDao.fakeDelete(userId);
     }
 }
 

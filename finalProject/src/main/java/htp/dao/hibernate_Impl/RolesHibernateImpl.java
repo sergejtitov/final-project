@@ -2,15 +2,21 @@ package htp.dao.hibernate_Impl;
 
 import htp.dao.RolesRepository;
 import htp.entities.db_entities.Roles;
+import htp.entities.db_entities.User;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import java.util.List;
+import java.util.Set;
 
 @Repository
 @Qualifier("hibernateRoleDao")
 public class RolesHibernateImpl implements RolesRepository {
+    public static final String USER_ID = "user_id";
 
     private EntityManager entityManager;
 
@@ -44,5 +50,12 @@ public class RolesHibernateImpl implements RolesRepository {
     @Override
     public Roles findById(Long id) {
         return entityManager.find(Roles.class, id);
+    }
+
+    @Override
+    public List<Roles> findRolesByUserId(Long id) {
+        Query nativeQuery = entityManager.createNativeQuery("select * from m_roles  where user_id = :user_id", Roles.class);
+        nativeQuery.setParameter(USER_ID, id);
+        return nativeQuery.getResultList();
     }
 }

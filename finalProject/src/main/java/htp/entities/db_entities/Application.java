@@ -1,133 +1,73 @@
 package htp.entities.db_entities;
 
-import htp.entities.dictionaries.*;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import htp.entities.dictionaries.Decision;
+import htp.entities.dictionaries.MyCurrency;
+import htp.entities.dictionaries.Status;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
+import java.util.Set;
 
+import static javax.persistence.EnumType.STRING;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@ToString(exclude = {"applicants"})
+@Entity
+@Table(name = "m_application")
 public class Application {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "application_id")
     private Long applicationId;
+
+    @Column(name = "user_id")
     private Long userId;
+
+    @Column(name = "creation_date")
     private Timestamp creationDate;
-    private LoanType loanType;
-    private ProductCode productCode;
+
+    @Column(name = "loan_type")
+    private Integer loanType;
+
+    @Column(name = "product_code")
+    private Integer productCode;
+
+    @Column(name = "loan_amount")
     private Double loanAmount;
+
+    @Enumerated(STRING)
+    @Column
     private MyCurrency currency;
+
+    @Column(name = "final_amount")
     private Double finalAmount;
+
+    @Enumerated(STRING)
+    @Column
     private Decision decision;
+
+    @Enumerated(STRING)
+    @Column
     private Status status;
+
+    @Column
     private Double payment;
 
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "application")
+    private Set<Applicant> applicants;
+
     public Application() {
-    }
-
-    public Application(Long applicationId, Long userId, Timestamp creationDate, LoanType loanType, ProductCode productCode, Double loanAmount, MyCurrency currency, Double finalAmount, Decision decision, Status status, Double payment) {
-        this.applicationId = applicationId;
-        this.userId = userId;
-        this.creationDate = creationDate;
-        this.loanType = loanType;
-        this.productCode = productCode;
-        this.loanAmount = loanAmount;
-        this.currency = currency;
-        this.finalAmount = finalAmount;
-        this.decision = decision;
-        this.status = status;
-        this.payment = payment;
-    }
-
-    public Long getApplicationId() {
-        return applicationId;
-    }
-
-    public void setApplicationId(Long applicationId) {
-        this.applicationId = applicationId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Timestamp getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(Timestamp creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public LoanType getLoanType() {
-        return loanType;
-    }
-
-    public void setLoanType(LoanType loanType) {
-        this.loanType = loanType;
-    }
-
-    public ProductCode getProductCode() {
-        return productCode;
-    }
-
-    public void setProductCode(ProductCode productCode) {
-        this.productCode = productCode;
-    }
-
-    public Double getLoanAmount() {
-        return loanAmount;
-    }
-
-    public void setLoanAmount(Double loanAmount) {
-        this.loanAmount = loanAmount;
-    }
-
-    public MyCurrency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(MyCurrency currency) {
-        this.currency = currency;
-    }
-
-    public Double getFinalAmount() {
-        return finalAmount;
-    }
-
-    public void setFinalAmount(Double finalAmount) {
-        this.finalAmount = finalAmount;
-    }
-
-    public Decision getDecision() {
-        return decision;
-    }
-
-    public void setDecision(Decision decision) {
-        this.decision = decision;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public Double getPayment() {
-        return payment;
-    }
-
-    public void setPayment(Double payment) {
-        this.payment = payment;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
 
     @Override

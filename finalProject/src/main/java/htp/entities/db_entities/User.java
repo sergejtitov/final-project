@@ -58,6 +58,17 @@ public class User implements UserDetails {
     public User() {
     }
 
+    public void setRoles(Set<Roles> roles) {
+        if (this.roles==null){
+            this.roles = roles;
+        } else {
+            this.roles.clear();
+            if (roles != null) {
+                this.roles.addAll(roles);
+            }
+        }
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();

@@ -17,11 +17,7 @@ import javax.validation.constraints.Size;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
 @Builder
-@EqualsAndHashCode
-@ToString
 public class UserF {
 
     @Email

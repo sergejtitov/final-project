@@ -1,9 +1,11 @@
 
 package htp.config;
 
+import htp.services.AuthProviderImpl;
 import htp.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,13 +22,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@ComponentScan("htp")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    private AuthProviderImpl authProvider;
 
     private UserDetailsService userDetailsService;
 
-    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService) {
+    public WebSecurityConfig(AuthProviderImpl authProvider, UserDetailsService userDetailsService) {
+        this.authProvider = authProvider;
         this.userDetailsService = userDetailsService;
     }
+
 
     @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -52,22 +58,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/registration").not().fullyAuthenticated()
-                .antMatchers("/admin").hasRole("ADMIN")
-                .antMatchers("/users").hasRole("USER")
+                .antMatchers("/admin","/admin/**").permitAll()     //  hasRole("ADMIN")
+                .antMatchers("/users","/users/**").permitAll()//hasRole("USER")
                 .antMatchers("/v2/api-docs", "/configuration/ui/**", "/swagger-resources/**", "/configuration/security/**", "/swagger-ui.html", "/webjars/**").permitAll()
                 .antMatchers("/actuator/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/swagger-ui.html#").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
+                .anyRequest().authenticated();
+                /*.and()
                 .formLogin()
                 .loginPage("/login")
+                .loginProcessingUrl("/login/process")
+                .usernameParameter("login")
                 .defaultSuccessUrl("/")
                 .permitAll()
                 .and()
-                .logout()
-                .permitAll()
-                .logoutSuccessUrl("/");
+                .logout();
+*/
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authProvider);
     }
 
     @Override

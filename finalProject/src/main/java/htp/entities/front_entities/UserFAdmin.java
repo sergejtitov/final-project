@@ -29,5 +29,5 @@ public class UserFAdmin {
     @Size(min = 8, max = 100)
     private String password;
 
-    private List<Roles> role;
+    private List<String> role;
 }
