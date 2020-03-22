@@ -1,8 +1,16 @@
 package htp.utils;
 
-
-import htp.entities.db_entities.*;
-import htp.entities.front_entities.*;
+import htp.entities.db_entities.Application;
+import htp.entities.db_entities.Roles;
+import htp.entities.db_entities.User;
+import htp.entities.db_entities.Applicant;
+import htp.entities.db_entities.Phone;
+import htp.entities.db_entities.Address;
+import htp.entities.front_entities.AddressFront;
+import htp.entities.front_entities.ApplicationFront;
+import htp.entities.front_entities.ApplicantFront;
+import htp.entities.front_entities.PhoneFront;
+import htp.entities.front_entities.UserF;
 
 import java.sql.Timestamp;
 import java.util.HashSet;

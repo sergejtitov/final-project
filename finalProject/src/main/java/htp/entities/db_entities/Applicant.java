@@ -1,46 +1,100 @@
 package htp.entities.db_entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import htp.entities.dictionaries.Gender;
 import htp.entities.dictionaries.MyCurrency;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import lombok.ToString;
+
 
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.GenerationType;
+import javax.persistence.Column;
+import javax.persistence.ManyToOne;
+import javax.persistence.Enumerated;
+import javax.persistence.OneToMany;
+import javax.persistence.FetchType;
+import javax.persistence.CascadeType;
+import javax.persistence.JoinColumn;
+import static javax.persistence.EnumType.STRING;
+
 @Data
 @AllArgsConstructor
+@ToString(exclude = {"application","phones","addresses"})
+@Entity
+@Table(name = "m_applicant")
 public class Applicant {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "applicant_id")
     private Long applicantId;
+
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "second_name")
     private String secondName;
+
+    @Column
     private String patronymic;
+
+    @Column(name = "type_of_applicant")
     private Integer typeOfApplicant;
+
+    @Column(name = "date_of_birthday")
     private Timestamp birthdayDate;
+
+    @Column
     private Long income;
+
+    @Enumerated(STRING)
+    @Column(name = "income_currency")
     private MyCurrency incomeCurrency;
+
+    @Enumerated(STRING)
+    @Column
     private Gender sex;
+
+    @Column
     private Integer experience;
+
+    @Column(name = "marital_status")
     private Integer maritalStatus;
+
+    @Column
     private Integer education;
+
+    @Column(name = "children_quantity")
     private Integer childrenQuantity;
+
+    @Column(name = "personal_number")
     private String personalNumber;
+
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "applicant")
     private Set<Phone> phones;
+
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "applicant")
     private Set<Address> addresses;
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "application_id")
     private Application application;
 
 
 
     public Applicant() {
-    }
-
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
 
     @Override

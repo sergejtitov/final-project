@@ -57,8 +57,8 @@ public class ApplicationRepSpringImpl implements ApplicationRepository {
         application.setApplicationId(set.getLong(APPLICATION_ID));
         application.setUserId(set.getLong(USER_ID));
         application.setCreationDate(set.getTimestamp(CREATION_DATE));
-        application.setLoanType(new LoanType(set.getInt(LOAN_TYPE)));
-        application.setProductCode(new ProductCode(set.getLong(PRODUCT_CODE)));
+        application.setLoanType(set.getInt(LOAN_TYPE));
+        application.setProductCode(set.getInt(PRODUCT_CODE));
         application.setLoanAmount(set.getDouble(LOAN_AMOUNT));
         application.setCurrency(MyCurrency.valueOf(set.getString(CURRENCY)));
         application.setFinalAmount(set.getDouble(FINAL_AMOUNT));
@@ -80,8 +80,8 @@ public class ApplicationRepSpringImpl implements ApplicationRepository {
             params.addValue(APPLICATION_ID, getId());
             params.addValue(USER_ID, application.getUserId());
             params.addValue(CREATION_DATE, application.getCreationDate());
-            params.addValue(LOAN_TYPE, application.getLoanType().getIndex());
-            params.addValue(PRODUCT_CODE, application.getProductCode().getIndex());
+            params.addValue(LOAN_TYPE, application.getLoanType());
+            params.addValue(PRODUCT_CODE, application.getProductCode());
             params.addValue(LOAN_AMOUNT, application.getLoanAmount());
             params.addValue(CURRENCY, application.getCurrency().toString());
             params.addValue(DECISION, application.getDecision().toString());

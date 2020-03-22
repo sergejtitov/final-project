@@ -59,6 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/registration").not().fullyAuthenticated()
                 .antMatchers("/admin","/admin/**").permitAll()     //  hasRole("ADMIN")
+                .antMatchers("/products","/products/**").permitAll()  //  hasRole("ADMIN")
                 .antMatchers("/users","/users/**").permitAll()//hasRole("USER")
                 .antMatchers("/v2/api-docs", "/configuration/ui/**", "/swagger-resources/**", "/configuration/security/**", "/swagger-ui.html", "/webjars/**").permitAll()
                 .antMatchers("/actuator/**").permitAll()

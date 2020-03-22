@@ -1,3 +1,4 @@
+/*
 package htp.dao.spring_impl;
 
 import htp.dao.ApplicantRepository;
@@ -192,3 +193,4 @@ public class ApplicantRepSpringImpl implements ApplicantRepository {
         return !idExists(id);
     }
 }
+*/

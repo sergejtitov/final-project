@@ -10,8 +10,16 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.GenerationType;
+import javax.persistence.Column;
+import javax.persistence.Enumerated;
+import javax.persistence.OneToMany;
+import javax.persistence.FetchType;
+import javax.persistence.CascadeType;
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Set;

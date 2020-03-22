@@ -1,91 +1,49 @@
 package htp.entities.db_entities;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
+import lombok.Data;
+import lombok.ToString;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.GenerationType;
+import javax.persistence.Column;
 import java.util.Objects;
 
+@Data
+@ToString
+@Entity
+@Table(name = "m_credit_info")
 public class CreditInfo {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "info_id")
     private Long infoId;
+
+    @Column(name = "loan_amount")
     private Double loanAmount;
+
+    @Column(name = "interest_rate")
     private Double interestRate;
+
+    @Column(name = "balance_amount")
     private Double balanceAmount;
+
+    @Column(name = "balance_term")
     private Integer balanceTerm;
+
+    @Column
     private Double payment;
+
+    @Column(name = "applicant_id")
     private Long applicantId;
 
     public CreditInfo() {
     }
 
-    public CreditInfo(Long infoId, Double loanAmount, Double interestRate, Double balanceAmount, Integer balanceTerm, Double payment, Long applicantId) {
-        this.infoId = infoId;
-        this.loanAmount = loanAmount;
-        this.interestRate = interestRate;
-        this.balanceAmount = balanceAmount;
-        this.balanceTerm = balanceTerm;
-        this.payment = payment;
-        this.applicantId = applicantId;
-    }
-
-    public Long getInfoId() {
-        return infoId;
-    }
-
-    public void setInfoId(Long infoId) {
-        this.infoId = infoId;
-    }
-
-    public Double getLoanAmount() {
-        return loanAmount;
-    }
-
-    public void setLoanAmount(Double loanAmount) {
-        this.loanAmount = loanAmount;
-    }
-
-    public Double getInterestRate() {
-        return interestRate;
-    }
-
-    public void setInterestRate(Double interestRate) {
-        this.interestRate = interestRate;
-    }
-
-    public Double getBalanceAmount() {
-        return balanceAmount;
-    }
-
-    public void setBalanceAmount(Double balanceAmount) {
-        this.balanceAmount = balanceAmount;
-    }
-
-    public Integer getBalanceTerm() {
-        return balanceTerm;
-    }
-
-    public void setBalanceTerm(Integer balanceTerm) {
-        this.balanceTerm = balanceTerm;
-    }
-
-    public Double getPayment() {
-        return payment;
-    }
-
-    public void setPayment(Double payment) {
-        this.payment = payment;
-    }
-
-    public Long getApplicantId() {
-        return applicantId;
-    }
-
-    public void setApplicantId(Long applicantId) {
-        this.applicantId = applicantId;
-    }
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
-    }
 
     @Override
     public int hashCode() {

@@ -1,4 +1,4 @@
-package htp.dao.spring_impl;
+/*package htp.dao.spring_impl;
 
 import htp.dao.PhoneRepository;
 import htp.entities.db_entities.Phone;
@@ -127,4 +127,4 @@ public class PhoneRepSpringImpl implements PhoneRepository {
         phone.setPhoneNumber(set.getString(PHONE_NUMBER));
         return phone;
     }
-}
+}*/
