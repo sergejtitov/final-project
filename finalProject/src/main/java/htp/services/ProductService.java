@@ -20,7 +20,7 @@ public class ProductService implements ProductRepository {
     }
 
     @Override
-    public Product findByProductCode(Long productCode) {
+    public Product findByProductCode(Integer productCode) {
         Product product;
         try {
             product = productDao.findByProductCode(productCode);
@@ -51,7 +51,7 @@ public class ProductService implements ProductRepository {
 
     @Override
     public Product update(Product item) throws EntityAleadyExists {
-        if (item.getProductCode().equals(findByProductCode(item.getProductCode()).getProductCode())){
+        if (!item.getProductCode().equals(findByProductCode(item.getProductCode()).getProductCode())){
             throw new EntityAleadyExists("Such product already exists");
         }
         return productDao.update(item);

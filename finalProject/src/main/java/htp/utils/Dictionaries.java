@@ -1,19 +1,9 @@
 package htp.utils;
 
 import htp.entities.dictionaries.Gender;
-import htp.entities.dictionaries.MyCurrency;
 import htp.exceptions.NoSuchValueInDictionary;
 
 public class Dictionaries {
-
-    public static MyCurrency setMyCurrency(String currency){
-        switch (currency){
-            case "USD": return MyCurrency.USD;
-            case "EUR": return MyCurrency.EUR;
-            case "BYN": return MyCurrency.BYN;
-            default: throw new NoSuchValueInDictionary("No such Currency");
-        }
-    }
 
     public static Gender setGender(String sex){
         switch (sex){

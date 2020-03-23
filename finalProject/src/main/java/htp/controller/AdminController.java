@@ -29,7 +29,7 @@ public class AdminController {
 
     @GetMapping
     public ResponseEntity<List<User>> getUsers(@RequestParam Integer offset) {
-        return new ResponseEntity<>(userService.findAll(LIMIT,offset*LIMIT), HttpStatus.OK);
+        return new ResponseEntity<>(userService.findAll(LIMIT,offset), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")

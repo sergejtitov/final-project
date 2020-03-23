@@ -24,7 +24,7 @@ public class Product {
     private Long productId;
 
     @Column(name = "product_code")
-    private Long productCode;
+    private Integer productCode;
 
     @Column(name = "product_name")
     private String productName;
@@ -41,12 +41,15 @@ public class Product {
     @Column(name = "max_amount")
     private Long maxAmount;
 
+    @Column
+    private Double coefficient;
+
     public Product() {
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, productCode, productName, interestRate, loanTerm, minAmount, maxAmount);
+        return Objects.hash(productId, productCode, productName, interestRate, loanTerm, minAmount, maxAmount, coefficient);
     }
 
     @Override
@@ -60,6 +63,7 @@ public class Product {
                 Objects.equals(interestRate, product.interestRate) &&
                 Objects.equals(loanTerm, product.loanTerm) &&
                 Objects.equals(minAmount, product.minAmount) &&
-                Objects.equals(maxAmount, product.maxAmount);
+                Objects.equals(maxAmount, product.maxAmount) &&
+                Objects.equals(coefficient, product.coefficient);
     }
 }

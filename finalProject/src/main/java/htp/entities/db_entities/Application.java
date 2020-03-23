@@ -3,7 +3,6 @@ package htp.entities.db_entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import htp.entities.dictionaries.Decision;
-import htp.entities.dictionaries.MyCurrency;
 import htp.entities.dictionaries.Status;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -53,10 +52,6 @@ public class Application {
     @Column(name = "loan_amount")
     private Double loanAmount;
 
-    @Enumerated(STRING)
-    @Column
-    private MyCurrency currency;
-
     @Column(name = "final_amount")
     private Double finalAmount;
 
@@ -80,7 +75,7 @@ public class Application {
 
     @Override
     public int hashCode() {
-        return Objects.hash(applicationId, userId, creationDate, loanType, productCode, loanAmount, currency, finalAmount, decision, status, payment);
+        return Objects.hash(applicationId, userId, creationDate, loanType, productCode, loanAmount, finalAmount, decision, status, payment);
     }
 
     @Override
@@ -94,7 +89,6 @@ public class Application {
                 Objects.equals(loanType, application.loanType) &&
                 Objects.equals(productCode, application.productCode) &&
                 Objects.equals(loanAmount, application.loanAmount) &&
-                Objects.equals(currency, application.currency) &&
                 Objects.equals(finalAmount, application.finalAmount) &&
                 Objects.equals(decision, application.decision) &&
                 Objects.equals(status, application.status) &&

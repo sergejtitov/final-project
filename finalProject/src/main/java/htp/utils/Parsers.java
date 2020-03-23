@@ -1,16 +1,7 @@
 package htp.utils;
 
-import htp.entities.db_entities.Application;
-import htp.entities.db_entities.Roles;
-import htp.entities.db_entities.User;
-import htp.entities.db_entities.Applicant;
-import htp.entities.db_entities.Phone;
-import htp.entities.db_entities.Address;
-import htp.entities.front_entities.AddressFront;
-import htp.entities.front_entities.ApplicationFront;
-import htp.entities.front_entities.ApplicantFront;
-import htp.entities.front_entities.PhoneFront;
-import htp.entities.front_entities.UserF;
+import htp.entities.db_entities.*;
+import htp.entities.front_entities.*;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
@@ -87,7 +78,7 @@ public class Parsers {
             applicant.setPatronymic(applicantFront.getPatronymic());
             applicant.setTypeOfApplicant(applicantFront.getTypeOfApplicant());
             applicant.setBirthdayDate(applicantFront.getDateOfBirthday());
-            applicant.setIncome(applicantFront.getIncome().longValue());
+            applicant.setIncome(applicantFront.getIncome());
             applicant.setIncomeCurrency(Dictionaries.setMyCurrency(applicantFront.getIncomeCurrency()));
             applicant.setSex(Dictionaries.setGender(applicantFront.getGender()));
             applicant.setExperience(applicantFront.getExperience());
@@ -101,6 +92,18 @@ public class Parsers {
             applicants.add(applicant);
         }
         return applicants;
+    }
+
+    public static Product createProduct (ProductFront productFront){
+        Product product = new Product();
+        product.setProductCode(productFront.getProductCode());
+        product.setProductName(productFront.getProductName());
+        product.setInterestRate(productFront.getInterestRate());
+        product.setLoanTerm(productFront.getLoanTerm());
+        product.setMinAmount(productFront.getMinAmount());
+        product.setMaxAmount(productFront.getMaxAmount());
+        product.setCoefficient(productFront.getCoefficient());
+        return product;
     }
 
 }

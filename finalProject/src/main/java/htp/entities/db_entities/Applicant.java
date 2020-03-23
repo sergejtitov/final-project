@@ -3,7 +3,6 @@ package htp.entities.db_entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import htp.entities.dictionaries.Gender;
-import htp.entities.dictionaries.MyCurrency;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
@@ -54,11 +53,7 @@ public class Applicant {
     private Timestamp birthdayDate;
 
     @Column
-    private Long income;
-
-    @Enumerated(STRING)
-    @Column(name = "income_currency")
-    private MyCurrency incomeCurrency;
+    private Double income;
 
     @Enumerated(STRING)
     @Column
@@ -99,7 +94,7 @@ public class Applicant {
 
     @Override
     public int hashCode() {
-        return Objects.hash(applicantId, firstName, secondName, patronymic, typeOfApplicant,birthdayDate, income, incomeCurrency, sex, experience, maritalStatus, education, childrenQuantity, personalNumber);
+        return Objects.hash(applicantId, firstName, secondName, patronymic, typeOfApplicant,birthdayDate, income, sex, experience, maritalStatus, education, childrenQuantity, personalNumber);
     }
     @Override
     public boolean equals(Object o) {
@@ -113,7 +108,6 @@ public class Applicant {
                 Objects.equals(typeOfApplicant, applicant.typeOfApplicant) &&
                 Objects.equals(birthdayDate, applicant.birthdayDate) &&
                 Objects.equals(income, applicant.income) &&
-                Objects.equals(incomeCurrency, applicant.incomeCurrency) &&
                 Objects.equals(sex, applicant.sex) &&
                 Objects.equals(experience, applicant.experience) &&
                 Objects.equals(maritalStatus, applicant.maritalStatus) &&

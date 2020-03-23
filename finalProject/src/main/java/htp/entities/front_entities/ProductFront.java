@@ -32,4 +32,7 @@ public class ProductFront {
 
     @PositiveOrZero
     private Long maxAmount;
+
+    @PositiveOrZero
+    private Double coefficient;
 }

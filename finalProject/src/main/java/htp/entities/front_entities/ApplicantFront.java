@@ -35,9 +35,6 @@ public class ApplicantFront {
     @PositiveOrZero
     private Double income;
 
-    @Size(min = 3, max = 3)
-    private String incomeCurrency;
-
     @Size(min = 1, max = 1)
     private String gender;
 

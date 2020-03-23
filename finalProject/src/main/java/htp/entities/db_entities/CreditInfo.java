@@ -38,8 +38,8 @@ public class CreditInfo {
     @Column
     private Double payment;
 
-    @Column(name = "applicant_id")
-    private Long applicantId;
+    @Column(name = "personal_number")
+    private String personalNumber;
 
     public CreditInfo() {
     }
@@ -47,7 +47,7 @@ public class CreditInfo {
 
     @Override
     public int hashCode() {
-        return Objects.hash(infoId, loanAmount, interestRate, balanceAmount, balanceTerm, payment, applicantId);
+        return Objects.hash(infoId, loanAmount, interestRate, balanceAmount, balanceTerm, payment, personalNumber);
     }
 
     @Override
@@ -61,6 +61,6 @@ public class CreditInfo {
                 Objects.equals(balanceAmount, creditInfo.balanceAmount) &&
                 Objects.equals(balanceTerm, creditInfo.balanceTerm) &&
                 Objects.equals(payment, creditInfo.payment) &&
-                Objects.equals(applicantId, creditInfo.applicantId);
+                Objects.equals(personalNumber, creditInfo.personalNumber);
     }
 }

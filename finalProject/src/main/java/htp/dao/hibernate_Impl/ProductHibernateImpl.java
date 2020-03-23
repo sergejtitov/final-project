@@ -31,15 +31,15 @@ public class ProductHibernateImpl implements ProductRepository {
     }
 
     @Override
-    public Product findByProductCode(Long productCode) throws NoSuchEntityException {
-        Product product = (Product) entityManager.createQuery("select mp from Product mp " +
+    public Product findByProductCode(Integer productCode) throws NoSuchEntityException {
+        List<Product> products = (List<Product>) entityManager.createQuery("select mp from Product mp " +
                 "where mp.productCode = :productCode")
                 .setParameter(PRODUCT_CODE, productCode)
-                .getResultList().get(FIRST_ITEM);
-        if (product == null){
+                .getResultList();
+        if (products.size() == 0){
             throw new NoSuchEntityException("No such Entity");
         }
-        return product;
+        return products.get(FIRST_ITEM);
     }
 
     @Override
