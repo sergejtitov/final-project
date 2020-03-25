@@ -17,23 +17,26 @@ import java.util.List;
 
 @Data
 public class ApplicationProcessor {
+    public static final Integer MAIN_APPLICANT = 1;
+    public static final Integer GUARANTOR = 2;
 
     private ProductRepository productService;
     private CreditInfoRepository creditInfoService;
     private ApplicationWrapper applicationWrapper;
+    private ApplicantProcessor applicantProcessor;
     private Product product;
-
-    private Integer loanTerm;
 
 
     public ApplicationProcessor(ProductHibernateImpl productService, CreditInfoHibernateImpl creditInfoService) {
         this.productService = productService;
         this.creditInfoService = creditInfoService;
+        this.applicantProcessor = new ApplicantProcessor();
     }
 
     public void start(Application application){
         this.applicationWrapper = createApplicationWrapper(application);
         setLoanTerm(applicationWrapper.getApplicantsWrapper());
+        setFinalAmount(applicationWrapper.getApplicantsWrapper());
     }
 
     private void setLoanTerm(List<ApplicantWrapper> applicants){
@@ -45,7 +48,6 @@ public class ApplicationProcessor {
     private List<Integer> getListTerms(List<ApplicantWrapper> applicants) {
         List<Integer> applicantTerms = new ArrayList<>();
         for (ApplicantWrapper applicantWrapper : applicants){
-            ApplicantProcessor applicantProcessor = new ApplicantProcessor();
             applicantWrapper = applicantProcessor.definiteTerm(applicantWrapper, product);
             applicantTerms.add(applicantWrapper.getLoanTerm());
         }
@@ -78,5 +80,18 @@ public class ApplicationProcessor {
         applicationWrapper.setProductCode(application.getProductCode());
         applicationWrapper.setLoanAmount(application.getLoanAmount());
         return applicationWrapper;
+    }
+
+    private void setFinalAmount(List<ApplicantWrapper> applicants){
+        for (ApplicantWrapper applicantWrapper : applicants){
+            applicantWrapper = applicantProcessor.definiteMaxAmount(applicantWrapper, product);
+            if (applicantWrapper.getApplicant().getTypeOfApplicant().equals(MAIN_APPLICANT)){
+                applicationWrapper.setMaxApplicantAmount(applicantWrapper.getMaxAmount());
+            }
+            if (applicantWrapper.getApplicant().getTypeOfApplicant().equals(GUARANTOR)){
+                applicationWrapper.addMaxGuarantorAmount(applicantWrapper.getMaxAmount());
+            }
+        }
+        applicationWrapper.setMaxApplicationAmount(Math.min(applicationWrapper.getMaxApplicantAmount(), applicationWrapper.getMaxGuarantorAmount()));
     }
 }

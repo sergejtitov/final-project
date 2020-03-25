@@ -12,9 +12,12 @@ public class ApplicantWrapper {
     private List<CreditInfo> creditInfoList;
 
     private Integer ageMonths;
-    private Double externalPayments;
     private Integer maxTerm;
     private Integer loanTerm;
+
+    private Double externalPayments;
     private Double maxAmount;
+
+    private Integer score;
 
 }
