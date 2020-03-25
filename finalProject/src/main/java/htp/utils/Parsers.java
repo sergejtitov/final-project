@@ -1,6 +1,7 @@
 package htp.utils;
 
 import htp.entities.db_entities.*;
+import htp.entities.dictionaries.Gender;
 import htp.entities.front_entities.*;
 
 import java.sql.Timestamp;
@@ -40,7 +41,6 @@ public class Parsers {
         application.setLoanType(request.getLoanType());
         application.setProductCode(request.getProductCode());
         application.setLoanAmount(request.getLoanAmount());
-        application.setCurrency(Dictionaries.setMyCurrency(request.getCurrency()));
         application.setApplicants(createSetApplicants(request.getApplicants(), application));
         return new Application();
     }
@@ -79,8 +79,7 @@ public class Parsers {
             applicant.setTypeOfApplicant(applicantFront.getTypeOfApplicant());
             applicant.setBirthdayDate(applicantFront.getDateOfBirthday());
             applicant.setIncome(applicantFront.getIncome());
-            applicant.setIncomeCurrency(Dictionaries.setMyCurrency(applicantFront.getIncomeCurrency()));
-            applicant.setSex(Dictionaries.setGender(applicantFront.getGender()));
+            applicant.setSex(Gender.getGenderFromString(applicantFront.getGender()));
             applicant.setExperience(applicantFront.getExperience());
             applicant.setMaritalStatus(applicantFront.getMaritalStatus());
             applicant.setEducation(applicantFront.getEducation());

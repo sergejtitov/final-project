@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 public class ProductFront {
 
     @NotNull
-    private Long productCode;
+    private Integer productCode;
 
     @Size(min = 1, max = 200)
     private String productName;

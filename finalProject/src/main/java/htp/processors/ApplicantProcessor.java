@@ -10,15 +10,13 @@ import htp.utils.Scorecards;
 
 import java.sql.Timestamp;
 
+import static htp.entities.dictionaries.LoanType.*;
 
 
 public class ApplicantProcessor {
     public static final Integer MAX_AGE = 840;
     public static final Double ZERO = 0D;
-    public static final int MORTGAGE = 1;
-    public static final int AUTO = 1;
-    public static final int CONSUMER_LOANS = 1;
-    public static final int CREDIT_CARD = 1;
+
 
     public ApplicantProcessor() {
 

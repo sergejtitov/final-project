@@ -2,26 +2,12 @@ package htp.utils;
 
 import htp.entities.wrappers.ApplicantWrapper;
 
+import static htp.entities.dictionaries.Education.*;
+import static htp.entities.dictionaries.Experience.*;
+import static htp.entities.dictionaries.MaritalStatus.*;
+
 public class Scorecards {
     public static final Integer INITIAL_SCORE = 0;
-    public static final int EXPERIENCE_LESS_1M = 1;
-    public static final int EXPERIENCE_MORE_1M_LESS_1Y = 2;
-    public static final int EXPERIENCE_MORE_1Y_LESS_3Y = 3;
-    public static final int EXPERIENCE_MORE_3Y_LESS_10Y = 4;
-    public static final int EXPERIENCE_MORE_10Y = 5;
-
-    public static final int MARITAL_STATUS_SINGLE = 1;
-    public static final int MARITAL_STATUS_MARRIED = 2;
-    public static final int MARITAL_STATUS_DIVORCED = 3;
-
-    public static final int EDUCATION_HIGHER = 1;
-    public static final int EDUCATION_MAGISTRACY = 2;
-    public static final int EDUCATION_PHD = 3;
-    public static final int EDUCATION_SECONDARY = 4;
-    public static final int EDUCATION_VOCATIONAL = 5;
-    public static final int EDUCATION_WITHOUT = 6;
-
-
 
     public static Integer scorecardMortgageAndAuto (ApplicantWrapper applicantWrapper){
         final int AGE_LESS_25 = 1;
