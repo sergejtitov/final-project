@@ -60,7 +60,6 @@ public class ApplicationRepSpringImpl implements ApplicationRepository {
         application.setLoanType(set.getInt(LOAN_TYPE));
         application.setProductCode(set.getInt(PRODUCT_CODE));
         application.setLoanAmount(set.getDouble(LOAN_AMOUNT));
-        application.setCurrency(MyCurrency.valueOf(set.getString(CURRENCY)));
         application.setFinalAmount(set.getDouble(FINAL_AMOUNT));
         application.setDecision(Decision.valueOf(set.getString(DECISION).toUpperCase()));
         application.setStatus(Status.valueOf(set.getString(STATUS).toUpperCase()));
@@ -83,7 +82,6 @@ public class ApplicationRepSpringImpl implements ApplicationRepository {
             params.addValue(LOAN_TYPE, application.getLoanType());
             params.addValue(PRODUCT_CODE, application.getProductCode());
             params.addValue(LOAN_AMOUNT, application.getLoanAmount());
-            params.addValue(CURRENCY, application.getCurrency().toString());
             params.addValue(DECISION, application.getDecision().toString());
             params.addValue(STATUS, application.getStatus().toString());
 

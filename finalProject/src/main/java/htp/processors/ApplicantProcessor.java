@@ -9,6 +9,7 @@ import htp.utils.Functions;
 import htp.utils.Scorecards;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import static htp.entities.dictionaries.LoanType.*;
 
@@ -16,10 +17,10 @@ import static htp.entities.dictionaries.LoanType.*;
 public class ApplicantProcessor {
     public static final Integer MAX_AGE = 840;
     public static final Double ZERO = 0D;
-
+    private ScoreCalculator scoreCalculator;
 
     public ApplicantProcessor() {
-
+    scoreCalculator = new ScoreCalculatorImpl();
     }
     
     public ApplicantWrapper definiteTerm(ApplicantWrapper applicantWrapper, Product product){
@@ -43,17 +44,10 @@ public class ApplicantProcessor {
         return allPayments;
     }
 
-    public Integer calculateScoreCard(ApplicantWrapper applicantWrapper, Integer productCode){
-        if (productCode == MORTGAGE){
-            return Scorecards.scorecardMortgageAndAuto(applicantWrapper);
+    public List<ApplicantWrapper> setApplicantsScore(List<ApplicantWrapper> applicantsWrapper, Integer productCode) {
+        for (ApplicantWrapper applicantWrapper : applicantsWrapper){
+            applicantWrapper.setScore(scoreCalculator.getScore(applicantWrapper, productCode));
         }
-        if (productCode == AUTO){
-            return Scorecards.scorecardMortgageAndAuto(applicantWrapper);
-        }
-        if (productCode == CONSUMER_LOANS){
-            return Scorecards.scorecardLoansAndCards(applicantWrapper);
-        } else {
-            return Scorecards.scorecardLoansAndCards(applicantWrapper);
-        }
+        return applicantsWrapper;
     }
 }

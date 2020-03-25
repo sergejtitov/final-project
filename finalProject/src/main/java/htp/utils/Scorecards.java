@@ -9,15 +9,15 @@ import static htp.entities.dictionaries.MaritalStatus.*;
 public class Scorecards {
     public static final Integer INITIAL_SCORE = 0;
 
-    public static Integer scorecardMortgageAndAuto (ApplicantWrapper applicantWrapper){
-        final int AGE_LESS_25 = 1;
-        final int AGE_MORE_25_LESS_40 = 2;
-        final int AGE_MORE_40 = 3;
+    public static final int AGE_LESS_25 = 1;
+    public static final int AGE_MORE_25_LESS_40 = 2;
+    public static final int AGE_MORE_40 = 3;
 
+    public static Integer scorecardMortgageAndAuto (ApplicantWrapper applicantWrapper){
         final int ZERO_CHILD = 0;
         final int ONE_CHILD = 1;
-        final int TWO_CHILDS = 2;
-        final int THREE_CHILDS =3 ;
+        final int TWO_CHILDES = 2;
+        final int THREE_CHILDES =3 ;
 
         int score = INITIAL_SCORE;
 
@@ -59,8 +59,8 @@ public class Scorecards {
         switch (applicantWrapper.getApplicant().getChildrenQuantity()){
             case ZERO_CHILD: score += 5; break;
             case ONE_CHILD: score += 8; break;
-            case TWO_CHILDS: score += 7; break;
-            case THREE_CHILDS: score += 4; break;
+            case TWO_CHILDES: score += 7; break;
+            case THREE_CHILDES: score += 4; break;
             default: score += 1;  break;
         }
 
@@ -107,9 +107,6 @@ public class Scorecards {
         final int YEAR = 12;
         final int AGE_25 = 25;
         final int AGE_40 = 40;
-        final int AGE_LESS_25 = 1;
-        final int AGE_MORE_25_LESS_40 = 2;
-        final int AGE_MORE_40 = 3;
 
         if (ageMonths < YEAR * AGE_25){
             return AGE_LESS_25;

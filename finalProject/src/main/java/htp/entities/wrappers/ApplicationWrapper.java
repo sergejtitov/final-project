@@ -27,6 +27,7 @@ public class ApplicationWrapper {
     private Double payment;
 
     private Integer loanTerm;
+
     private Double maxApplicantAmount;
     private Double maxGuarantorAmount;
     private Double maxApplicationAmount;
