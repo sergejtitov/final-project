@@ -2,6 +2,7 @@ package htp.entities.wrappers;
 
 import htp.entities.db_entities.Applicant;
 import htp.entities.db_entities.CreditInfo;
+import htp.entities.dictionaries.Decision;
 import lombok.Data;
 
 import java.util.List;
@@ -19,5 +20,7 @@ public class ApplicantWrapper {
     private Double maxAmount;
 
     private Integer score;
+
+    private Decision decision;
 
 }

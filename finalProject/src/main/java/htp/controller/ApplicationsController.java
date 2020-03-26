@@ -1,11 +1,11 @@
 package htp.controller;
 
 
+import htp.dao.CreditInfoRepository;
+import htp.dao.ProductRepository;
 import htp.entities.db_entities.Application;
-import htp.entities.db_entities.User;
 import htp.entities.front_entities.ApplicationFront;
-import htp.entities.front_entities.ApplicationResult;
-import htp.entities.front_entities.UserF;
+import htp.processors.ApplicationProcessor;
 import htp.utils.Parsers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +22,21 @@ import java.util.Set;
 @RequestMapping(value = "/applications")
 public class ApplicationsController {
 
+    private ProductRepository productService;
+    private CreditInfoRepository creditInfoService;
+
+    public ApplicationsController(ProductRepository productService, CreditInfoRepository creditInfoService) {
+        this.productService = productService;
+        this.creditInfoService = creditInfoService;
+    }
+
     @PostMapping
     @Transactional
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ApplicationResult> createUser(@RequestBody @Valid ApplicationFront request){
+    public ResponseEntity<Application> createUser(@RequestBody @Valid ApplicationFront request){
         Application application = Parsers.createApplication(request);
-        return new ResponseEntity<>(new ApplicationResult(), HttpStatus.OK);
+        ApplicationProcessor processor = new ApplicationProcessor(productService, creditInfoService);
+        application = processor.start(application);
+        return new ResponseEntity<>(application, HttpStatus.OK);
     }
 }

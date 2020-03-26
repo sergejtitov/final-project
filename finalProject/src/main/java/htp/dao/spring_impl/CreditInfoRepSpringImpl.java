@@ -25,6 +25,7 @@ public class CreditInfoRepSpringImpl implements CreditInfoRepository {
     public static final String BALANCE_AMOUNT = "balance_amount";
     public static final String BALANCE_TERM = "balance_term";
     public static final String PAYMENT = "payment";
+    public static final String PERSONAL_NUMBER = "personal_number";
     public static final String APPLICANT_ID = "applicant_id";
     public static final String M_VALUE = "m_value";
     public static final Long UNIQUE_CREDIT_INFO = 1L;
@@ -44,10 +45,10 @@ public class CreditInfoRepSpringImpl implements CreditInfoRepository {
     }
 
     @Override
-    public List<CreditInfo> findCreditInfosByApplicantId(Long applicantId) {
-            final String getInfo = "select * from m_credit_info where info_id = :info_id";
+    public List<CreditInfo> findCreditInfosByPersonalNumber(String personalNumber) {
+            final String getInfo = "select * from m_credit_info where personal_number = :personalNumber";
             MapSqlParameterSource param = new MapSqlParameterSource();
-            param.addValue(INFO_ID, applicantId);
+            param.addValue(PERSONAL_NUMBER, personalNumber);
             return namedParameterJdbcTemplate.query(getInfo, param, this::fillCreditInfo);
     }
 
@@ -65,7 +66,7 @@ public class CreditInfoRepSpringImpl implements CreditInfoRepository {
         params.addValue(BALANCE_AMOUNT, item.getBalanceAmount());
         params.addValue(BALANCE_TERM, item.getBalanceTerm());
         params.addValue(PAYMENT, item.getPayment());
-        params.addValue(APPLICANT_ID, item.getApplicantId());
+        params.addValue(APPLICANT_ID, item.getPersonalNumber());
 
         namedParameterJdbcTemplate.update(createQuery, params, keyHolder, new String[]{INFO_ID});
 
@@ -147,7 +148,7 @@ public class CreditInfoRepSpringImpl implements CreditInfoRepository {
         creditInfo.setBalanceAmount(set.getDouble(BALANCE_AMOUNT));
         creditInfo.setBalanceTerm(set.getInt(BALANCE_TERM));
         creditInfo.setPayment(set.getDouble(PAYMENT));
-        creditInfo.setApplicantId(set.getLong(APPLICANT_ID));
+        creditInfo.setPersonalNumber(set.getString(PERSONAL_NUMBER));
         return creditInfo;
     }
 }

@@ -4,6 +4,7 @@ import htp.entities.wrappers.ApplicantWrapper;
 
 import static htp.entities.dictionaries.Education.*;
 import static htp.entities.dictionaries.Experience.*;
+import static htp.entities.dictionaries.LoanType.*;
 import static htp.entities.dictionaries.MaritalStatus.*;
 
 public class Scorecards {
@@ -12,6 +13,13 @@ public class Scorecards {
     public static final int AGE_LESS_25 = 1;
     public static final int AGE_MORE_25_LESS_40 = 2;
     public static final int AGE_MORE_40 = 3;
+
+    public static final int CUT_OFF_MORTGAGE = 20;
+    public static final int CUT_OFF_AUTO = 23;
+    public static final int CUT_OFF_CONSUMER_LOAN =16;
+    public static final int CUT_OFF_CREDIT_CARD = 18;
+
+    public static final int ZERO = 0;
 
     public static Integer scorecardMortgageAndAuto (ApplicantWrapper applicantWrapper){
         final int ZERO_CHILD = 0;
@@ -115,5 +123,15 @@ public class Scorecards {
             return AGE_MORE_25_LESS_40;
         }
         return AGE_MORE_40;
+    }
+
+    public static Integer declinedScore(Integer productCode) {
+        switch (Functions.getTypeFromCode(productCode)){
+            case MORTGAGE: return CUT_OFF_MORTGAGE;
+            case AUTO: return CUT_OFF_AUTO;
+            case CONSUMER_LOANS: return CUT_OFF_CONSUMER_LOAN;
+            case CREDIT_CARD: return CUT_OFF_CREDIT_CARD;
+            default: return ZERO;
+        }
     }
 }

@@ -1,22 +1,25 @@
 package htp.processors;
 
 
-import htp.entities.db_entities.Applicant;
+
 import htp.entities.db_entities.CreditInfo;
 import htp.entities.db_entities.Product;
+import htp.entities.dictionaries.Decision;
 import htp.entities.wrappers.ApplicantWrapper;
 import htp.utils.Functions;
 import htp.utils.Scorecards;
 
-import java.sql.Timestamp;
 import java.util.List;
 
-import static htp.entities.dictionaries.LoanType.*;
+
 
 
 public class ApplicantProcessor {
     public static final Integer MAX_AGE = 840;
+    public static final int AGE_18 = 216;
+    public static final int AGE_70 = 840;
     public static final Double ZERO = 0D;
+
     private ScoreCalculator scoreCalculator;
 
     public ApplicantProcessor() {
@@ -49,5 +52,24 @@ public class ApplicantProcessor {
             applicantWrapper.setScore(scoreCalculator.getScore(applicantWrapper, productCode));
         }
         return applicantsWrapper;
+    }
+
+    public Decision makeDecisionForApplicant (ApplicantWrapper applicantWrapper, Product product){
+        if (applicantWrapper.getMaxAmount().equals(ZERO)){
+            return Decision.DECLINE;
+        }
+        if (applicantWrapper.getAgeMonths() < AGE_18){
+            return Decision.DECLINE;
+        }
+        if (applicantWrapper.getAgeMonths() > AGE_70){
+            return Decision.DECLINE;
+        }
+        if (!applicantWrapper.getLoanTerm().equals(product.getLoanTerm())){
+            return Decision.DECLINE;
+        }
+        if (applicantWrapper.getScore() < Scorecards.declinedScore(product.getProductCode())){
+            return Decision.DECLINE;
+        }
+        return Decision.ACCEPT;
     }
 }

@@ -42,7 +42,7 @@ public class Parsers {
         application.setProductCode(request.getProductCode());
         application.setLoanAmount(request.getLoanAmount());
         application.setApplicants(createSetApplicants(request.getApplicants(), application));
-        return new Application();
+        return application;
     }
 
     public static Set<Phone> createSetPhones(List<PhoneFront> phoneFronts, Applicant applicant){
