@@ -18,8 +18,4 @@ public enum Decision {
         this.decision = decision;
     }
 
-    @Override
-    public String toString() {
-        return decision;
-    }
 }

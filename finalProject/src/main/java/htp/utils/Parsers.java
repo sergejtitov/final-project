@@ -1,7 +1,9 @@
 package htp.utils;
 
 import htp.entities.db_entities.*;
+import htp.entities.dictionaries.Decision;
 import htp.entities.dictionaries.Gender;
+import htp.entities.dictionaries.LoanType;
 import htp.entities.front_entities.*;
 
 import java.sql.Timestamp;
@@ -103,6 +105,20 @@ public class Parsers {
         product.setMaxAmount(productFront.getMaxAmount());
         product.setCoefficient(productFront.getCoefficient());
         return product;
+    }
+
+    public static ApplicationResult createApplicationResult (Application application){
+        ApplicationResult applicationResult = new ApplicationResult();
+        applicationResult.setApplicationId(application.getApplicationId());
+        applicationResult.setCreationDate(application.getCreationDate());
+        applicationResult.setLoanType(LoanType.getNameLoanType(application.getLoanType()));
+        applicationResult.setProductCode(application.getProductCode());
+        applicationResult.setLoanAmount(application.getLoanAmount());
+        applicationResult.setDecision(application.getDecision().toString());
+        applicationResult.setFinalAmount(application.getFinalAmount());
+        applicationResult.setPayment(application.getPayment());
+        applicationResult.setStatus(application.getStatus().toString());
+        return applicationResult;
     }
 
 }

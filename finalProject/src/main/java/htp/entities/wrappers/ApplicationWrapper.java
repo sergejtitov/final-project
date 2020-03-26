@@ -29,7 +29,7 @@ public class ApplicationWrapper {
     private Integer loanTerm;
 
     private Double maxApplicantAmount;
-    private Double maxGuarantorAmount;
+    private Double maxGuarantorAmount = 0D;
     private Double maxApplicationAmount;
 
     public void addMaxGuarantorAmount(Double value){

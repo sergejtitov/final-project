@@ -86,7 +86,7 @@ public class ApplicationProcessor {
 
     private Double setFinalAmount(){
         double finalAmount = Math.min(applicationWrapper.getLoanAmount(), applicationWrapper.getProduct().getMaxAmount());
-        finalAmount = Math.min(finalAmount, applicationWrapper.getMaxApplicantAmount());
+        finalAmount = Math.min(finalAmount, applicationWrapper.getMaxApplicationAmount());
         if (finalAmount < applicationWrapper.getProduct().getMinAmount()){
             finalAmount = 0;
         }

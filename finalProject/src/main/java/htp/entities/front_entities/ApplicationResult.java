@@ -13,10 +13,10 @@ public class ApplicationResult {
     private Long applicationId;
     private Timestamp creationDate;
     private String loanType;
-    private Long productCode;
-    private String currency;
-    private Long loanAmount;
+    private Integer productCode;
+    private Double loanAmount;
     private String decision;
     private Double finalAmount;
     private Double payment;
+    private String status;
 }

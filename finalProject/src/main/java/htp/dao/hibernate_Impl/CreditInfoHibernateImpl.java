@@ -28,6 +28,11 @@ public class CreditInfoHibernateImpl implements CreditInfoRepository {
     }
 
     @Override
+    public CreditInfo findCreditInfoByApplicationId(Long applicationId) {
+        return null;
+    }
+
+    @Override
     public CreditInfo save(CreditInfo item) {
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();

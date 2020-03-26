@@ -53,6 +53,11 @@ public class CreditInfoRepSpringImpl implements CreditInfoRepository {
     }
 
     @Override
+    public CreditInfo findCreditInfoByApplicationId(Long applicationId) {
+        return null;
+    }
+
+    @Override
     @Transactional
     public CreditInfo save(CreditInfo item) {
         final String createQuery = "INSERT INTO m_credit_info (info_id, loan_amount, interest_rate, balance_amount, balance_term, payment, applicant_id) " +
