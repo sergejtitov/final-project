@@ -1,10 +1,10 @@
 package htp.controller;
 
 
-import htp.entities.db_entities.User;
-import htp.entities.front_entities.UserF;
+import htp.domain.model.User;
+import htp.controller.request.UserFront;
 import htp.services.UserDetailsServiceImpl;
-import htp.utils.Parsers;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,24 +16,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 import javax.validation.Valid;
+import java.util.Objects;
 
 @RestController
 @CrossOrigin
 public class StartController {
 
+    private final ConversionService conversionService;
+
     private UserDetailsServiceImpl userService;
 
-    public StartController(UserDetailsServiceImpl userDao) {
+    public StartController(UserDetailsServiceImpl userDao, ConversionService conversionService) {
         this.userService = userDao;
+        this.conversionService = conversionService;
     }
 
     @PostMapping(value = "/registration")
-    @Transactional
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<User> createUser(@RequestBody @Valid UserF request){
-        User user = Parsers.createUser(request);
-        User savedUser = userService.saveUser(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.OK);
+    public ResponseEntity<User> createUser(@RequestBody @Valid UserFront request){
+        User user = conversionService.convert(request, User.class);
+        return new ResponseEntity<>(userService.saveUser(Objects.requireNonNull(user)), HttpStatus.OK);
     }
 
 }

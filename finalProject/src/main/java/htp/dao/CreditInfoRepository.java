@@ -1,6 +1,6 @@
 package htp.dao;
 
-import htp.entities.db_entities.CreditInfo;
+import htp.domain.model.CreditInfo;
 
 import java.util.List;
 

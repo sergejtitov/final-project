@@ -2,25 +2,28 @@ package htp.processors;
 
 import htp.dao.CreditInfoRepository;
 import htp.dao.ProductRepository;
-import htp.entities.db_entities.Applicant;
-import htp.entities.db_entities.Application;
-import htp.entities.dictionaries.Decision;
-import htp.entities.dictionaries.Status;
-import htp.entities.wrappers.ApplicantWrapper;
-import htp.entities.wrappers.ApplicationWrapper;
+import htp.domain.model.Applicant;
+import htp.domain.model.Application;
+import htp.domain.dictionaries.Decision;
+import htp.domain.dictionaries.Status;
+import htp.domain.model.Product;
+import htp.domain.wrappers.ApplicantWrapper;
+import htp.domain.wrappers.ApplicationWrapper;
 import htp.utils.Functions;
 import lombok.Data;
+import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static htp.entities.dictionaries.TypeOfApplicant.APPLICANT;
-import static htp.entities.dictionaries.TypeOfApplicant.GUARANTOR;
+import static htp.domain.dictionaries.TypeOfApplicant.APPLICANT;
+import static htp.domain.dictionaries.TypeOfApplicant.GUARANTOR;
 
 @Data
 public class ApplicationProcessor {
+    public static final Double DECLINE_AMOUNT = 0D;
 
     private ProductRepository productService;
     private CreditInfoRepository creditInfoService;
@@ -77,11 +80,13 @@ public class ApplicationProcessor {
                 hasGuarantors =true;
             }
         }
+        Double maxApplAmount;
         if (hasGuarantors) {
-            applicationWrapper.setMaxApplicationAmount(Math.min(applicationWrapper.getMaxApplicantAmount(), applicationWrapper.getMaxGuarantorAmount()));
+            maxApplAmount = Math.min(applicationWrapper.getMaxApplicantAmount(), applicationWrapper.getMaxGuarantorAmount());
         } else {
-            applicationWrapper.setMaxApplicationAmount(applicationWrapper.getMaxApplicantAmount());
+            maxApplAmount = applicationWrapper.getMaxApplicantAmount();
         }
+        applicationWrapper.setMaxApplicationAmount(maxApplAmount);
     }
 
     private Double setFinalAmount(){
@@ -120,15 +125,28 @@ public class ApplicationProcessor {
         application.setDecision(applicationWrapper.getDecision());
         application.setStatus(applicationWrapper.getStatus());
         application.setPayment(applicationWrapper.getPayment());
-        application.setApplicants(returnListApplicants(applicationWrapper.getApplicantsWrapper()));
+        application.setApplicants(returnListApplicants(applicationWrapper.getApplicantsWrapper(), application));
         return application;
     }
 
-    private Set<Applicant> returnListApplicants(List<ApplicantWrapper> applicantWrapperList){
+    private Set<Applicant> returnListApplicants(List<ApplicantWrapper> applicantWrapperList, Application application){
         Set<Applicant> applicants = new HashSet<>();
         for (ApplicantWrapper applicantWrapper : applicantWrapperList){
+            Applicant applicant = applicantWrapper.getApplicant();
+            applicant.setApplication(application);
             applicants.add(applicantWrapper.getApplicant());
         }
         return applicants;
+    }
+
+    public Application confirm(Application item, Double finalAmount) {
+        if (finalAmount < item.getFinalAmount()){
+            item.setFinalAmount(DECLINE_AMOUNT);
+            item.setStatus(Status.CUSTOMER_FAILURE);
+            item.setPayment(DECLINE_AMOUNT);
+        } else {
+            item.setStatus(Status.ISSUED);
+        }
+        return item;
     }
 }

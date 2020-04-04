@@ -1,11 +1,11 @@
 package htp.utils;
 
-import htp.entities.wrappers.ApplicantWrapper;
+import htp.domain.wrappers.ApplicantWrapper;
 
-import static htp.entities.dictionaries.Education.*;
-import static htp.entities.dictionaries.Experience.*;
-import static htp.entities.dictionaries.LoanType.*;
-import static htp.entities.dictionaries.MaritalStatus.*;
+import static htp.domain.dictionaries.Education.*;
+import static htp.domain.dictionaries.Experience.*;
+import static htp.domain.dictionaries.LoanType.*;
+import static htp.domain.dictionaries.MaritalStatus.*;
 
 public class Scorecards {
     public static final Integer INITIAL_SCORE = 0;

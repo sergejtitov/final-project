@@ -1,10 +1,9 @@
 package htp.utils;
 
-import htp.entities.db_entities.*;
-import htp.entities.dictionaries.Decision;
-import htp.entities.dictionaries.Gender;
-import htp.entities.dictionaries.LoanType;
-import htp.entities.front_entities.*;
+import htp.controller.request.*;
+import htp.domain.model.*;
+import htp.domain.dictionaries.Gender;
+import htp.domain.dictionaries.LoanType;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
@@ -21,19 +20,6 @@ public class Parsers {
             roles.add(newRole);
         }
         return roles;
-    }
-
-    public static User createUser (UserF request){
-        User user = new User();
-        user.setLogin(request.getLogin());
-        user.setPassword(request.getPassword());
-        user.setCreated(new Timestamp(System.currentTimeMillis()));
-        user.setChanged(user.getCreated());
-        Set<Roles> roles = new HashSet<>();
-        roles.add(new Roles("ROLE_USER", user));
-        user.setRoles(roles);
-        user.setIsdeleted(false);
-        return user;
     }
 
     public static Application createApplication(ApplicationFront request){
@@ -64,7 +50,7 @@ public class Parsers {
         for (AddressFront addressFront: addressFronts){
             Address address = new Address();
             address.setAddressType(addressFront.getAddressType());
-            address.setAddress(addressFront.getAddress());
+            address.setAddressDescription(addressFront.getAddress());
             address.setApplicant(applicant);
             addresses.add(address);
         }
@@ -81,7 +67,7 @@ public class Parsers {
             applicant.setTypeOfApplicant(applicantFront.getTypeOfApplicant());
             applicant.setBirthdayDate(applicantFront.getDateOfBirthday());
             applicant.setIncome(applicantFront.getIncome());
-            applicant.setSex(Gender.getGenderFromString(applicantFront.getGender()));
+            applicant.setSex(Gender.findByName(applicantFront.getGender()));
             applicant.setExperience(applicantFront.getExperience());
             applicant.setMaritalStatus(applicantFront.getMaritalStatus());
             applicant.setEducation(applicantFront.getEducation());
@@ -119,6 +105,18 @@ public class Parsers {
         applicationResult.setPayment(application.getPayment());
         applicationResult.setStatus(application.getStatus().toString());
         return applicationResult;
+    }
+
+    public static CreditInfo createCreditInfo (Application application, Product product){
+        CreditInfo creditInfo = new CreditInfo();
+        creditInfo.setLoanAmount(application.getFinalAmount());
+        creditInfo.setInterestRate(product.getInterestRate());
+        creditInfo.setBalanceAmount(application.getFinalAmount());
+        creditInfo.setBalanceTerm(product.getLoanTerm());
+        creditInfo.setPayment(application.getPayment());
+        creditInfo.setApplicationId(application.getApplicationId());
+        creditInfo.setPersonalNumber(Functions.findMainApplicantPersonalNumber(application.getApplicants()));
+        return creditInfo;
     }
 
 }

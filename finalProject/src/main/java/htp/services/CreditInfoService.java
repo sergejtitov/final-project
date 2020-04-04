@@ -2,7 +2,7 @@ package htp.services;
 
 import htp.dao.CreditInfoRepository;
 import htp.dao.hibernate_Impl.CreditInfoHibernateImpl;
-import htp.entities.db_entities.CreditInfo;
+import htp.domain.model.CreditInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +14,11 @@ public class CreditInfoService implements CreditInfoRepository {
 
     public CreditInfoService(CreditInfoHibernateImpl creditInfoDao) {
         this.creditInfoDao = creditInfoDao;
+    }
+
+    @Override
+    public CreditInfo findCreditInfoByApplicationId(Long applicationId) {
+        return creditInfoDao.findCreditInfoByApplicationId(applicationId);
     }
 
     @Override

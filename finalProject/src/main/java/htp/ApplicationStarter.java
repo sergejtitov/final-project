@@ -15,6 +15,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -30,6 +31,7 @@ import java.util.Properties;
 
 @EnableSwagger2
 @EnableAspectJAutoProxy
+@EnableJpaRepositories
 @EnableTransactionManagement(proxyTargetClass = true)
 @SpringBootApplication(scanBasePackages = {"htp"},
         exclude = {
@@ -46,11 +48,6 @@ public class ApplicationStarter extends SpringBootServletInitializer {
         SpringApplication.run(ApplicationStarter.class, args);
     }
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(ApplicationStarter.class);
-    }
-
     @Bean(name = "entityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean em
@@ -65,30 +62,12 @@ public class ApplicationStarter extends SpringBootServletInitializer {
         return em;
     }
 
-    @Bean(name = "entityManager")
-    public EntityManager getEntityManager(EntityManagerFactory entityManagerFactory) {
-        return entityManagerFactory.createEntityManager();
-    }
-
     private Properties getAdditionalProperties() {
         Properties properties = new Properties();
         properties.put("hibernate.show_sql", "true");
+        properties.put("hibernate.archive.autodetection", "class, hbm");
         properties.put("current_session_context_class", "org.springframework.orm.hibernate5.SpringSessionContext");
         return properties;
-    }
-
-    @Autowired
-    @Bean(name = "sessionFactory")
-    public SessionFactory getSessionFactory(DataSource dataSource) throws Exception {
-        LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
-        factoryBean.setPackagesToScan("htp");
-        factoryBean.setDataSource(dataSource);
-        factoryBean.setHibernateProperties(getAdditionalProperties());
-        factoryBean.afterPropertiesSet();
-        //
-        SessionFactory sf = factoryBean.getObject();
-        System.out.println("## getSessionFactory: " + sf);
-        return sf;
     }
 
     @Bean

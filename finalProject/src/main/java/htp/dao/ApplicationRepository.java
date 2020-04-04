@@ -1,6 +1,6 @@
 package htp.dao;
 
-import htp.entities.db_entities.Application;
+import htp.domain.model.Application;
 
 import java.util.List;
 

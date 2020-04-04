@@ -1,6 +1,6 @@
 package htp.dao;
 
-import htp.entities.db_entities.Roles;
+import htp.domain.model.Roles;
 
 import java.util.List;
 

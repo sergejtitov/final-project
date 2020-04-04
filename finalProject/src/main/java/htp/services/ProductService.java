@@ -2,8 +2,8 @@ package htp.services;
 
 import htp.dao.ProductRepository;
 import htp.dao.hibernate_Impl.ProductHibernateImpl;
-import htp.entities.db_entities.Product;
-import htp.exceptions.EntityAleadyExists;
+import htp.domain.model.Product;
+import htp.exceptions.EntityAlreadyExists;
 import htp.exceptions.NoSuchEntityException;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +41,7 @@ public class ProductService implements ProductRepository {
         try {
             product = productDao.findByProductCode(item.getProductCode());
             if (product!=null){
-                throw new EntityAleadyExists("Such entity already exists!");
+                throw new EntityAlreadyExists("Such entity already exists!");
             }
         } catch (NoSuchEntityException e){
             return productDao.save(item);
@@ -50,9 +50,9 @@ public class ProductService implements ProductRepository {
     }
 
     @Override
-    public Product update(Product item) throws EntityAleadyExists {
+    public Product update(Product item) throws EntityAlreadyExists {
         if (!item.getProductCode().equals(findByProductCode(item.getProductCode()).getProductCode())){
-            throw new EntityAleadyExists("Such product already exists");
+            throw new EntityAlreadyExists("Such product already exists");
         }
         return productDao.update(item);
     }

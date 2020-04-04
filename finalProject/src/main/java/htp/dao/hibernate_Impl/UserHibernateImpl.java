@@ -1,9 +1,10 @@
 package htp.dao.hibernate_Impl;
 
 import htp.dao.UserRepository;
-import htp.entities.db_entities.User;
+import htp.domain.model.User;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -53,6 +54,7 @@ public class UserHibernateImpl implements UserRepository {
     }
 
     @Override
+    @Transactional
     public User save(User item) {
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();

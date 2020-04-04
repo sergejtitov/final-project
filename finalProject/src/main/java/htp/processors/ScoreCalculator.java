@@ -1,6 +1,6 @@
 package htp.processors;
 
-import htp.entities.wrappers.ApplicantWrapper;
+import htp.domain.wrappers.ApplicantWrapper;
 
 public interface ScoreCalculator {
 

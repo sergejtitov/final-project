@@ -1,9 +1,12 @@
 package htp.utils;
 
 
+import htp.domain.model.Applicant;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
+import java.util.Set;
 
 public class Functions {
     public static final Integer SECONDS = 1000;
@@ -18,6 +21,7 @@ public class Functions {
     public static final Integer FIRST_ITEM = 0;
     public static final Integer SECOND_ITEM = 1;
     public static final int TWO_DIGITS_AFTER_COMMA = 2;
+    public static final int MAIN_APPLICANT = 1;
 
 
     public static Integer positiveOrZeroInt (Integer number){
@@ -45,7 +49,7 @@ public class Functions {
         if (positiveOrZeroInt(term)==ZERO_INT){
             return ZERO_DOUBLE;
         }
-        BigDecimal payment = new BigDecimal(Double.toString(amount/term + interestRate/IN_YEAR));
+        BigDecimal payment = new BigDecimal(Double.toString(amount/term + interestRate*amount/IN_YEAR));
         payment = payment.setScale(TWO_DIGITS_AFTER_COMMA, RoundingMode.HALF_EVEN);
         return payment.doubleValue();
     }
@@ -54,5 +58,14 @@ public class Functions {
         String codeString = productCode.toString();
         String firstDigit = codeString.substring(FIRST_ITEM, SECOND_ITEM);
         return Integer.parseInt(firstDigit);
+    }
+
+    public static String findMainApplicantPersonalNumber(Set<Applicant> applicants){
+        for (Applicant applicant : applicants){
+            if (applicant.getTypeOfApplicant().equals(MAIN_APPLICANT)){
+                return applicant.getPersonalNumber();
+            }
+        }
+        return null;
     }
 }

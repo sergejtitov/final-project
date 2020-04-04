@@ -1,7 +1,7 @@
 package htp.dao.hibernate_Impl;
 
 import htp.dao.ProductRepository;
-import htp.entities.db_entities.Product;
+import htp.domain.model.Product;
 import htp.exceptions.NoSuchEntityException;
 import org.springframework.stereotype.Repository;
 

@@ -1,8 +1,7 @@
 package htp.dao.hibernate_Impl;
 
 import htp.dao.RolesRepository;
-import htp.entities.db_entities.Roles;
-import htp.entities.db_entities.User;
+import htp.domain.model.Roles;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 

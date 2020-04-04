@@ -2,7 +2,7 @@ package htp.dao.spring_impl;
 
 
 import htp.dao.UserRepository;
-import htp.entities.db_entities.User;
+import htp.domain.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.JdbcTemplate;

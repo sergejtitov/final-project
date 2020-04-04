@@ -1,8 +1,8 @@
 package htp.dao.spring_impl;
 
 import htp.dao.ApplicationRepository;
-import htp.entities.db_entities.Application;
-import htp.entities.dictionaries.*;
+import htp.domain.model.Application;
+import htp.domain.dictionaries.*;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;

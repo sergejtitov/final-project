@@ -1,7 +1,7 @@
 package htp.dao.hibernate_Impl;
 
 import htp.dao.CreditInfoRepository;
-import htp.entities.db_entities.CreditInfo;
+import htp.domain.model.CreditInfo;
 import htp.exceptions.NoSuchEntityException;
 import org.springframework.stereotype.Repository;
 

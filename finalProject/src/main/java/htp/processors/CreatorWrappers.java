@@ -2,11 +2,11 @@ package htp.processors;
 
 import htp.dao.CreditInfoRepository;
 import htp.dao.ProductRepository;
-import htp.entities.db_entities.Applicant;
-import htp.entities.db_entities.Application;
-import htp.entities.db_entities.CreditInfo;
-import htp.entities.wrappers.ApplicantWrapper;
-import htp.entities.wrappers.ApplicationWrapper;
+import htp.domain.model.Applicant;
+import htp.domain.model.Application;
+import htp.domain.model.CreditInfo;
+import htp.domain.wrappers.ApplicantWrapper;
+import htp.domain.wrappers.ApplicationWrapper;
 
 import java.util.List;
 

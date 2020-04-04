@@ -2,10 +2,10 @@ package htp.processors;
 
 
 
-import htp.entities.db_entities.CreditInfo;
-import htp.entities.db_entities.Product;
-import htp.entities.dictionaries.Decision;
-import htp.entities.wrappers.ApplicantWrapper;
+import htp.domain.model.CreditInfo;
+import htp.domain.model.Product;
+import htp.domain.dictionaries.Decision;
+import htp.domain.wrappers.ApplicantWrapper;
 import htp.utils.Functions;
 import htp.utils.Scorecards;
 

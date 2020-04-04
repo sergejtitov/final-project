@@ -1,9 +1,9 @@
 package htp.processors;
 
-import htp.entities.wrappers.ApplicantWrapper;
+import htp.domain.wrappers.ApplicantWrapper;
 import htp.utils.Scorecards;
 
-import static htp.entities.dictionaries.LoanType.*;
+import static htp.domain.dictionaries.LoanType.*;
 
 public class ScoreCalculatorImpl implements ScoreCalculator {
     @Override
