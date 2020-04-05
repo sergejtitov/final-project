@@ -4,27 +4,30 @@ import htp.domain.model.Applicant;
 import htp.domain.model.Application;
 import htp.exceptions.CustomValidationException;
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
-import java.util.List;
 import java.util.Set;
 
 @Data
+@Configuration
+@ConfigurationProperties("validation")
 public class CustomValidation {
     public static final int INITIALIZE_INT = 0;
-    public static final int MIN_LOAN_TYPE = 1;
-    public static final int MAX_LOAN_TYPE = 4;
-    public static final int MIN_TYPE_OF_APPLICANT = 1;
-    public static final int MAX_TYPE_OF_APPLICANT = 2;
-    public static final int MAIN_APPLICANT = 1;
-    public static final int MAX_AMOUNT_APPLICANTS = 5;
-    public static final int MIN_EXPERIENCE = 1;
-    public static final int MAX_EXPERIENCE = 5;
-    public static final int MIN_MARITAL_STATUS = 1;
-    public static final int MAX_MARITAL_STATUS = 3;
-    public static final int MIN_EDUCATION = 1;
-    public static final int MAX_EDUCATION = 6;
+    public static int MIN_LOAN_TYPE;
+    public static int MAX_LOAN_TYPE;
+    public static int MIN_TYPE_OF_APPLICANT;
+    public static int MAX_TYPE_OF_APPLICANT;
+    public static int MAIN_APPLICANT;
+    public static int MAX_AMOUNT_APPLICANTS;
+    public static int MIN_EXPERIENCE;
+    public static int MAX_EXPERIENCE;
+    public static int MIN_MARITAL_STATUS;
+    public static int MAX_MARITAL_STATUS;
+    public static int MIN_EDUCATION;
+    public static int MAX_EDUCATION;
 
-    public static Application validate(Application application){
+    public static void validate(Application application){
         validateLoanType(application.getLoanType());
         validateAmountApplicants(application.getApplicants());
         for (Applicant applicant : application.getApplicants()){
@@ -32,7 +35,6 @@ public class CustomValidation {
             validateMaritalStatus(applicant.getMaritalStatus());
             validateEducation(applicant.getEducation());
         }
-        return application;
     }
 
     private static void validateLoanType(Integer loanType){

@@ -2,9 +2,7 @@ package htp.processors;
 
 import htp.domain.wrappers.ApplicantWrapper;
 
-public interface ScoreCalculator {
-
-    Integer getScore (ApplicantWrapper applicantWrapper, Integer productCode);
-
+public interface ScoreCard {
+    Integer calculateScore(ApplicantWrapper applicantWrapper);
     Integer getDeclinedScore (Integer productCode);
 }

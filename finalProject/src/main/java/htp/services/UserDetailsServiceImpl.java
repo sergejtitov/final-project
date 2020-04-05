@@ -1,47 +1,48 @@
 package htp.services;
 
-
-import htp.dao.RolesRepository;
 import htp.dao.spring_data.UserDataRepository;
 import htp.domain.model.Roles;
 import htp.domain.model.User;
+import htp.exceptions.EntityAlreadyExists;
 import htp.exceptions.NoSuchEntityException;
 
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
 
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@AllArgsConstructor
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService  {
 
     private UserDataRepository userDao;
-    private RolesRepository rolesDao;
-    private BCryptPasswordEncoder cryptPassword;
-
-    public UserDetailsServiceImpl(UserDataRepository userDao, RolesRepository rolesDao, BCryptPasswordEncoder cryptPassword) {
-        this.userDao = userDao;
-        this.rolesDao = rolesDao;
-        this.cryptPassword = cryptPassword;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userDao.findByLogin(username);
-        List<Roles> roles = rolesDao.findRolesByUserId(user.getUserId());
-        if (user.getUserId() == null) {
-            throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
+        try {
+            Optional<User> searchUser = userDao.findByLogin(username);
+            if (searchUser.isPresent()) {
+                User user = searchUser.get();
+                return new org.springframework.security.core.userdetails.User(
+                        user.getLogin(),
+                        user.getPassword(),
+                        AuthorityUtils.commaSeparatedStringToAuthorityList(user.getRoles().stream().map(Roles::getName).collect(Collectors.joining(",")))
+                );
+            } else {
+                throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
+            }
+        } catch (Exception e){
+            throw new UsernameNotFoundException("User with this login not found");
         }
-        return new org.springframework.security.core.userdetails.User(user.getLogin(),user.getPassword(), user.isEnabled(), user.isAccountNonExpired(),user.isCredentialsNonExpired(),user.isAccountNonLocked(),AuthorityUtils.commaSeparatedStringToAuthorityList(roles.get(0).getName()));
-
     }
 
     public User findUserById(Long userId){
@@ -55,16 +56,16 @@ public class UserDetailsServiceImpl implements UserDetailsService  {
 
    @Transactional
     public User saveUser(User entity){
-        User user = userDao.findByLogin(entity.getLogin());
-        if (user!= null){
-            return new User();
+        Optional<User> user = userDao.findByLogin(entity.getLogin());
+        if (user.isPresent()){
+            throw new EntityAlreadyExists("Such user already exists!");
         }
-        entity.setPassword(cryptPassword.encode(entity.getPassword()));
+        entity.setPassword(entity.getPassword());
             return userDao.saveAndFlush(entity);
     }
 
     public User updateUser(User entity){
-        entity.setPassword(cryptPassword.encode(entity.getPassword()));
+        entity.setPassword(entity.getPassword());
         return userDao.save(entity);
     }
 

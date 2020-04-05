@@ -1,8 +1,6 @@
 package htp.config;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
@@ -10,9 +8,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 
 import java.util.Objects;
 
-@Setter
-@Getter
-@NoArgsConstructor
+@Data
 @Configuration
 @ConfigurationProperties("database")
 public class DatabaseConfig {

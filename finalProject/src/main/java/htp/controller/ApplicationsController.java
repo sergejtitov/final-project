@@ -9,6 +9,8 @@ import htp.controller.request.ApplicationResult;
 import htp.exceptions.CustomValidationException;
 import htp.services.ApplicationService;
 import htp.utils.Parsers;
+import lombok.AllArgsConstructor;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,25 +19,23 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 
-
+@AllArgsConstructor
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/applications")
 public class ApplicationsController {
 
     ApplicationService applicationService;
+    private final ConversionService conversionService;
 
-    public ApplicationsController(ApplicationService applicationService) {
-        this.applicationService = applicationService;
-    }
 
     @PostMapping
     @Transactional
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ApplicationResult> createUser(@RequestBody @Valid ApplicationFront request){
-        Application application = Parsers.createApplication(request);
+        Application application = conversionService.convert(request, Application.class);
         application = applicationService.save(application);
-        ApplicationResult applicationResult = Parsers.createApplicationResult(application);
+        ApplicationResult applicationResult = conversionService.convert(application, ApplicationResult.class);
         return new ResponseEntity<>(applicationResult, HttpStatus.OK);
     }
 
@@ -51,7 +51,7 @@ public class ApplicationsController {
             confirmAmount = Double.parseDouble(request.getFinalAmount());
             updatedApplicationId = Long.parseLong(applicationId);
             updatedApplication = applicationService.update(updatedApplicationId, confirmAmount);
-            applicationResult = Parsers.createApplicationResult(updatedApplication);
+            applicationResult = conversionService.convert(updatedApplication, ApplicationResult.class);
         } catch (NumberFormatException e){
             throw new CustomValidationException("Illegal path!");
         }

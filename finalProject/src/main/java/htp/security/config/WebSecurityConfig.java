@@ -1,8 +1,9 @@
 
-package htp.config;
+package htp.security.config;
 
 import htp.services.AuthProviderImpl;
 import htp.services.UserDetailsServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,20 +19,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @ComponentScan("htp")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private AuthProviderImpl authProvider;
 
-    private UserDetailsService userDetailsService;
-
-    public WebSecurityConfig(AuthProviderImpl authProvider, UserDetailsService userDetailsService) {
-        this.authProvider = authProvider;
-        this.userDetailsService = userDetailsService;
-    }
+    private final UserDetailsService userDetailsService;
 
 
     @Autowired
@@ -67,22 +62,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/swagger-ui.html#").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated();
-                /*.and()
-                .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/login/process")
-                .usernameParameter("login")
-                .defaultSuccessUrl("/")
-                .permitAll()
-                .and()
-                .logout();
-*/
+
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authProvider);
-    }
 
     @Override
     public void configure(WebSecurity web) {

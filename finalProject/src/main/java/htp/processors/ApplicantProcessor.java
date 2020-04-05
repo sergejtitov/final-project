@@ -6,8 +6,8 @@ import htp.domain.model.CreditInfo;
 import htp.domain.model.Product;
 import htp.domain.dictionaries.Decision;
 import htp.domain.wrappers.ApplicantWrapper;
+import htp.processors.scorecards.ScoreCalculatorImpl;
 import htp.utils.Functions;
-import htp.utils.Scorecards;
 
 import java.util.List;
 
@@ -67,7 +67,7 @@ public class ApplicantProcessor {
         if (!applicantWrapper.getLoanTerm().equals(product.getLoanTerm())){
             return Decision.DECLINE;
         }
-        if (applicantWrapper.getScore() < Scorecards.declinedScore(product.getProductCode())){
+        if (applicantWrapper.getScore() < scoreCalculator.getDeclinedScore(product.getProductCode())){
             return Decision.DECLINE;
         }
         return Decision.ACCEPT;

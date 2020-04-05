@@ -4,9 +4,9 @@ import htp.dao.ProductRepository;
 import htp.domain.model.Product;
 import htp.controller.request.ProductFront;
 import htp.exceptions.CustomValidationException;
-import htp.services.ProductService;
-import htp.utils.Parsers;
 import io.swagger.annotations.ApiParam;
+import lombok.AllArgsConstructor;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
+@AllArgsConstructor
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/products")
@@ -22,10 +24,8 @@ public class ProductController {
     public static final Integer LIMIT = 10;
 
     private ProductRepository productService;
+    private final ConversionService conversionService;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
 
     @GetMapping
     public ResponseEntity<List<Product>> getProducts(@RequestParam Integer offset) {
@@ -49,7 +49,7 @@ public class ProductController {
     @Transactional
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductFront request){
-        Product product = Parsers.createProduct(request);
+        Product product = conversionService.convert(request, Product.class);
         return new ResponseEntity<>(productService.save(product), HttpStatus.OK);
     }
 
@@ -61,8 +61,8 @@ public class ProductController {
         Product updatedProduct;
         try {
             productIdLong = Long.parseLong(productId);
-            updatedProduct = Parsers.createProduct(request);
-            updatedProduct.setProductId(productIdLong);
+            updatedProduct = conversionService.convert(request, Product.class);
+            Objects.requireNonNull(updatedProduct).setProductId(productIdLong);
         } catch (NumberFormatException e){
             throw new CustomValidationException("Illegal path!");
         }
