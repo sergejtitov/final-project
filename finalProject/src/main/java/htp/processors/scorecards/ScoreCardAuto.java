@@ -2,65 +2,79 @@ package htp.processors.scorecards;
 
 import htp.domain.wrappers.ApplicantWrapper;
 import htp.processors.ScoreCard;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import static htp.domain.dictionaries.Education.*;
+import static htp.domain.dictionaries.Education.EDUCATION_HIGHER;
+import static htp.domain.dictionaries.Education.EDUCATION_MAGISTRACY;
+import static htp.domain.dictionaries.Education.EDUCATION_PHD;
+import static htp.domain.dictionaries.Education.EDUCATION_SECONDARY;
+import static htp.domain.dictionaries.Education.EDUCATION_VOCATIONAL;
 import static htp.domain.dictionaries.Education.EDUCATION_WITHOUT;
-import static htp.domain.dictionaries.Experience.*;
-import static htp.domain.dictionaries.MaritalStatus.*;
 
-@Configuration
-@ConfigurationProperties("autoscoring")
-public class ScoreCardAuto implements ScoreCard {
+import static htp.domain.dictionaries.Experience.EXPERIENCE_LESS_1M;
+import static htp.domain.dictionaries.Experience.EXPERIENCE_MORE_1Y_LESS_3Y;
+import static htp.domain.dictionaries.Experience.EXPERIENCE_MORE_1M_LESS_1Y;
+import static htp.domain.dictionaries.Experience.EXPERIENCE_MORE_3Y_LESS_10Y;
+import static htp.domain.dictionaries.Experience.EXPERIENCE_MORE_10Y;
+
+import static htp.domain.dictionaries.MaritalStatus.MARITAL_STATUS_MARRIED;
+import static htp.domain.dictionaries.MaritalStatus.MARITAL_STATUS_SINGLE;
+import static htp.domain.dictionaries.MaritalStatus.MARITAL_STATUS_DIVORCED;
+
+@Data
+/*@Configuration
+@ConfigurationProperties("autoscoring")*/
+public class ScoreCardAuto implements ScoreCard{
     public static final int YEAR = 12;
     public static final int AGE_25 = 25;
     public static final int AGE_40 = 40;
 
-    public static Integer AUTO_INITIAL_SCORE;
+    public Integer AUTO_INITIAL_SCORE = 0;
 
     public static final int AGE_LESS_25 = 1;
     public static final int AGE_MORE_25_LESS_40 = 2;
     public static final int AGE_MORE_40 = 3;
-    public static int AGE_AUTO_LESS_25_VALUE;
-    public static int AGE_AUTO_MORE_25_LESS_40_VALUE;
-    public static int AGE_AUTO_MORE_40_VALUE;
+    public Integer AGE_AUTO_LESS_25_VALUE = 1;
+    public Integer AGE_AUTO_MORE_25_LESS_40_VALUE = 10;
+    public Integer AGE_AUTO_MORE_40_VALUE = 7;
 
-    public static int GENDER_AUTO_M_VALUE;
-    public static int GENDER_AUTO_F_VALUE;
+    public Integer GENDER_AUTO_M_VALUE = 7;
+    public Integer GENDER_AUTO_F_VALUE = 5;
 
-    public static int EXPERIENCE_AUTO_LESS_1M_VALUE;
-    public static int EXPERIENCE_AUTO_MORE_1M_LESS_1Y_VALUE;
-    public static int EXPERIENCE_AUTO_MORE_1Y_LESS_3Y_VALUE;
-    public static int EXPERIENCE_AUTO_MORE_3Y_LESS_10Y_VALUE;
-    public static int EXPERIENCE_AUTO_MORE_10Y_VALUE;
+    public Integer EXPERIENCE_AUTO_LESS_1M_VALUE = 1;
+    public Integer EXPERIENCE_AUTO_MORE_1M_LESS_1Y_VALUE = 2;
+    public Integer EXPERIENCE_AUTO_MORE_1Y_LESS_3Y_VALUE = 5;
+    public Integer EXPERIENCE_AUTO_MORE_3Y_LESS_10Y_VALUE = 7;
+    public Integer EXPERIENCE_AUTO_MORE_10Y_VALUE = 8;
 
-    public static int MARITAL_STATUS_AUTO_SINGLE_VALUE;
-    public static int MARITAL_STATUS_AUTO_MARRIED_VALUE;
-    public static int MARITAL_STATUS_AUTO_DIVORCED_VALUE;
+    public Integer MARITAL_STATUS_AUTO_SINGLE_VALUE = 3;
+    public Integer MARITAL_STATUS_AUTO_MARRIED_VALUE = 9;
+    public Integer MARITAL_STATUS_AUTO_DIVORCED_VALUE = 5;
 
-    public static int EDUCATION_AUTO_HIGHER_VALUE;
-    public static int EDUCATION_AUTO_MAGISTRACY_VALUE;
-    public static int EDUCATION_AUTO_PHD_VALUE;
-    public static int EDUCATION_AUTO_SECONDARY_VALUE;
-    public static int EDUCATION_AUTO_VOCATIONAL_VALUE;
-    public static int EDUCATION_AUTO_WITHOUT_VALUE;
+    public Integer EDUCATION_AUTO_HIGHER_VALUE = 8;
+    public Integer EDUCATION_AUTO_MAGISTRACY_VALUE = 9;
+    public Integer EDUCATION_AUTO_PHD_VALUE = 10;
+    public Integer EDUCATION_AUTO_SECONDARY_VALUE = 2;
+    public Integer EDUCATION_AUTO_VOCATIONAL_VALUE = 5;
+    public Integer EDUCATION_AUTO_WITHOUT_VALUE = 1;
 
     public static final int NO_CHILD_AUTO = 0;
     public static final int ONE_CHILD_AUTO = 1;
     public static final int TWO_CHILDES_AUTO = 2;
     public static final int THREE_CHILDES_AUTO = 3;
-    public static int NO_CHILD_AUTO_VALUE;
-    public static int ONE_CHILD_AUTO_VALUE;
-    public static int TWO_CHILDES_AUTO_VALUE;
-    public static int THREE_CHILDES_AUTO_VALUE;
-    public static int DEFAULT_CHILDS_AMOUNT_AUTO_VALUE;
+    public Integer NO_CHILD_AUTO_VALUE = 5;
+    public Integer ONE_CHILD_AUTO_VALUE = 8;
+    public Integer TWO_CHILDES_AUTO_VALUE = 7;
+    public Integer THREE_CHILDES_AUTO_VALUE = 4;
+    public Integer DEFAULT_CHILDS_AMOUNT_AUTO_VALUE = 1;
 
-    public static final int CUT_OFF_AUTO = 23;
+    public int CUT_OFF_AUTO = 20;
 
 
     @Override
-    public Integer calculateScore(ApplicantWrapper applicantWrapper) {
+    public synchronized Integer calculateScore(ApplicantWrapper applicantWrapper) {
         int score = AUTO_INITIAL_SCORE;
 
         switch (getAgeForMortgageAndAuto(applicantWrapper.getAgeMonths())){
@@ -110,13 +124,11 @@ public class ScoreCardAuto implements ScoreCard {
     }
 
     @Override
-    public Integer getDeclinedScore(Integer productCode) {
+    public Integer getDeclinedScore() {
         return CUT_OFF_AUTO;
     }
 
-    private static Integer getAgeForMortgageAndAuto(Integer ageMonths){
-
-
+    private synchronized Integer getAgeForMortgageAndAuto(Integer ageMonths){
         if (ageMonths < YEAR * AGE_25){
             return AGE_LESS_25;
         }

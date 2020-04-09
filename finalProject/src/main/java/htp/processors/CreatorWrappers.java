@@ -1,7 +1,7 @@
 package htp.processors;
 
-import htp.dao.CreditInfoRepository;
-import htp.dao.ProductRepository;
+import htp.dao.spring_data.CreditInfoDataRepository;
+import htp.dao.spring_data.ProductDataRepository;
 import htp.domain.model.Applicant;
 import htp.domain.model.Application;
 import htp.domain.model.CreditInfo;
@@ -14,7 +14,7 @@ public interface CreatorWrappers {
 
     ApplicantWrapper createApplicantWrapper(Applicant applicant, List<CreditInfo> creditInfos);
 
-    List<ApplicantWrapper> createListApplicantWrapper(Application application, CreditInfoRepository creditInfoService);
+    List<ApplicantWrapper> createListApplicantWrapper(Application application, CreditInfoDataRepository creditInfoService);
 
-    ApplicationWrapper createApplicationWrapper (Application application, CreditInfoRepository creditInfoService, ProductRepository productService);
+    ApplicationWrapper createApplicationWrapper (Application application, CreditInfoDataRepository creditInfoService, ProductDataRepository productService);
 }

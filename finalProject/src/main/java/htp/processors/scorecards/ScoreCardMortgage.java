@@ -3,65 +3,78 @@ package htp.processors.scorecards;
 
 import htp.domain.wrappers.ApplicantWrapper;
 import htp.processors.ScoreCard;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import static htp.domain.dictionaries.Education.*;
+import static htp.domain.dictionaries.Education.EDUCATION_HIGHER;
+import static htp.domain.dictionaries.Education.EDUCATION_MAGISTRACY;
+import static htp.domain.dictionaries.Education.EDUCATION_PHD;
+import static htp.domain.dictionaries.Education.EDUCATION_SECONDARY;
+import static htp.domain.dictionaries.Education.EDUCATION_VOCATIONAL;
 import static htp.domain.dictionaries.Education.EDUCATION_WITHOUT;
-import static htp.domain.dictionaries.Experience.*;
-import static htp.domain.dictionaries.MaritalStatus.*;
 
-@Configuration
-@ConfigurationProperties("mortgagescoring")
+import static htp.domain.dictionaries.Experience.EXPERIENCE_LESS_1M;
+import static htp.domain.dictionaries.Experience.EXPERIENCE_MORE_1M_LESS_1Y;
+import static htp.domain.dictionaries.Experience.EXPERIENCE_MORE_1Y_LESS_3Y;
+import static htp.domain.dictionaries.Experience.EXPERIENCE_MORE_3Y_LESS_10Y;
+import static htp.domain.dictionaries.Experience.EXPERIENCE_MORE_10Y;
+
+import static htp.domain.dictionaries.MaritalStatus.MARITAL_STATUS_SINGLE;
+import static htp.domain.dictionaries.MaritalStatus.MARITAL_STATUS_MARRIED;
+import static htp.domain.dictionaries.MaritalStatus.MARITAL_STATUS_DIVORCED;
+
+@Data
+/*@Configuration
+@ConfigurationProperties("mortgagescoring")*/
 public class ScoreCardMortgage implements ScoreCard {
     public static final int YEAR = 12;
     public static final int AGE_25 = 25;
     public static final int AGE_40 = 40;
 
-    public static Integer MORTGAGE_INITIAL_SCORE;
+    public static Integer MORTGAGE_INITIAL_SCORE = 0;
 
     public static final int AGE_LESS_25 = 1;
     public static final int AGE_MORE_25_LESS_40 = 2;
     public static final int AGE_MORE_40 = 3;
-    public static int AGE_MORTGAGE_LESS_25_VALUE;
-    public static int AGE_MORTGAGE_MORE_25_LESS_40_VALUE;
-    public static int AGE_MORTGAGE_MORE_40_VALUE;
+    public static Integer AGE_MORTGAGE_LESS_25_VALUE = 1;
+    public static Integer AGE_MORTGAGE_MORE_25_LESS_40_VALUE = 10;
+    public static Integer AGE_MORTGAGE_MORE_40_VALUE = 7;
 
-    public static int GENDER_MORTGAGE_M_VALUE;
-    public static int GENDER_MORTGAGE_F_VALUE;
+    public static Integer GENDER_MORTGAGE_M_VALUE = 7;
+    public static Integer GENDER_MORTGAGE_F_VALUE = 5;
 
-    public static int EXPERIENCE_MORTGAGE_LESS_1M_VALUE;
-    public static int EXPERIENCE_MORTGAGE_MORE_1M_LESS_1Y_VALUE;
-    public static int EXPERIENCE_MORTGAGE_MORE_1Y_LESS_3Y_VALUE;
-    public static int EXPERIENCE_MORTGAGE_MORE_3Y_LESS_10Y_VALUE;
-    public static int EXPERIENCE_MORTGAGE_MORE_10Y_VALUE;
+    public static Integer EXPERIENCE_MORTGAGE_LESS_1M_VALUE = 1;
+    public static Integer EXPERIENCE_MORTGAGE_MORE_1M_LESS_1Y_VALUE = 2;
+    public static Integer EXPERIENCE_MORTGAGE_MORE_1Y_LESS_3Y_VALUE = 5;
+    public static Integer EXPERIENCE_MORTGAGE_MORE_3Y_LESS_10Y_VALUE = 7;
+    public static Integer EXPERIENCE_MORTGAGE_MORE_10Y_VALUE = 8;
 
-    public static int MARITAL_STATUS_MORTGAGE_SINGLE_VALUE;
-    public static int MARITAL_STATUS_MORTGAGE_MARRIED_VALUE;
-    public static int MARITAL_STATUS_MORTGAGE_DIVORCED_VALUE;
+    public static Integer MARITAL_STATUS_MORTGAGE_SINGLE_VALUE = 3;
+    public static Integer MARITAL_STATUS_MORTGAGE_MARRIED_VALUE = 9;
+    public static Integer MARITAL_STATUS_MORTGAGE_DIVORCED_VALUE = 5;
 
-    public static int EDUCATION_MORTGAGE_HIGHER_VALUE;
-    public static int EDUCATION_MORTGAGE_MAGISTRACY_VALUE;
-    public static int EDUCATION_MORTGAGE_PHD_VALUE;
-    public static int EDUCATION_MORTGAGE_SECONDARY_VALUE;
-    public static int EDUCATION_MORTGAGE_VOCATIONAL_VALUE;
-    public static int EDUCATION_MORTGAGE_WITHOUT_VALUE;
+    public static Integer EDUCATION_MORTGAGE_HIGHER_VALUE = 8;
+    public static Integer EDUCATION_MORTGAGE_MAGISTRACY_VALUE = 9;
+    public static Integer EDUCATION_MORTGAGE_PHD_VALUE = 0;
+    public static Integer EDUCATION_MORTGAGE_SECONDARY_VALUE = 2;
+    public static Integer EDUCATION_MORTGAGE_VOCATIONAL_VALUE = 5;
+    public static Integer EDUCATION_MORTGAGE_WITHOUT_VALUE = 1;
 
     public static final int NO_CHILD_MORTGAGE = 0;
     public static final int ONE_CHILD_MORTGAGE = 1;
     public static final int TWO_CHILDES_MORTGAGE = 2;
     public static final int THREE_CHILDES_MORTGAGE = 3;
-    public static int NO_CHILD_MORTGAGE_VALUE;
-    public static int ONE_CHILD_MORTGAGE_VALUE;
-    public static int TWO_CHILDES_MORTGAGE_VALUE;
-    public static int THREE_CHILDES_MORTGAGE_VALUE;
-    public static int DEFAULT_CHILDS_AMOUNT_MORTGAGE_VALUE;
+    public static Integer NO_CHILD_MORTGAGE_VALUE = 5;
+    public static Integer ONE_CHILD_MORTGAGE_VALUE = 8;
+    public static Integer TWO_CHILDES_MORTGAGE_VALUE = 7;
+    public static Integer THREE_CHILDES_MORTGAGE_VALUE = 4;
+    public static Integer DEFAULT_CHILDS_AMOUNT_MORTGAGE_VALUE = 1;
 
-    public static final int CUT_OFF_MORTGAGE = 20;
-
+    public static Integer CUT_OFF_MORTGAGE = 20;
 
     @Override
-    public Integer calculateScore(ApplicantWrapper applicantWrapper) {
+    public synchronized Integer calculateScore(ApplicantWrapper applicantWrapper) {
         int score = MORTGAGE_INITIAL_SCORE;
 
         switch (getAgeForMortgageAndAuto(applicantWrapper.getAgeMonths())){
@@ -110,12 +123,13 @@ public class ScoreCardMortgage implements ScoreCard {
         return score;
     }
 
+
     @Override
-    public Integer getDeclinedScore(Integer productCode) {
+    public Integer getDeclinedScore() {
         return CUT_OFF_MORTGAGE;
     }
 
-    private static Integer getAgeForMortgageAndAuto(Integer ageMonths){
+    private synchronized static Integer getAgeForMortgageAndAuto(Integer ageMonths){
 
 
         if (ageMonths < YEAR * AGE_25){

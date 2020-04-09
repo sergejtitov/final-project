@@ -6,6 +6,10 @@ import htp.exceptions.CustomValidationException;
 import htp.exceptions.EntityAlreadyExists;
 import htp.exceptions.NoSuchEntityException;
 import htp.exceptions.NoSuchValueInDictionary;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +50,17 @@ public class DefaultExceptionHandler {
     }
 
     @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorMessage> handleTokenProcessingException(AuthenticationException e) {
+        LOG.error(e.getMessage(), e);
+        return new ResponseEntity<>(new ErrorMessage(e.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler({UnsupportedJwtException.class,
+            MalformedJwtException.class,
+            SignatureException.class,
+            ExpiredJwtException.class,
+            IllegalArgumentException.class
+    })
     public ResponseEntity<ErrorMessage> handleAuthenticationException(AuthenticationException e) {
         LOG.error(e.getMessage(), e);
         return new ResponseEntity<>(new ErrorMessage(e.getMessage()), HttpStatus.UNAUTHORIZED);

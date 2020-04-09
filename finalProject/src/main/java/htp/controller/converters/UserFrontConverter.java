@@ -3,6 +3,8 @@ package htp.controller.converters;
 import htp.controller.request.UserFront;
 import htp.domain.model.Roles;
 import htp.domain.model.User;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,11 @@ import java.util.Set;
 @Component
 public class UserFrontConverter extends GenericConverter <UserFront, User> {
     public static final String ROLE_USER = "ROLE_USER";
+
+    public UserFrontConverter(BCryptPasswordEncoder cryptPassword) {
+        this.cryptPassword = cryptPassword;
+    }
+
     private BCryptPasswordEncoder cryptPassword;
 
     @Override

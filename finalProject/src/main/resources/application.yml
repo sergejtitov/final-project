@@ -113,3 +113,7 @@ creditcardsscoring:
   EDUCATION_CREDIT_CARD_VALUE_VOCATIONAL : 7
   EDUCATION_CREDIT_CARD_VALUE_WITHOUT : 1
   CUT_OFF_CONSCREDIT_CARD : 18
+---
+jwttoken:
+  secret : terces
+  expire : 2000000000

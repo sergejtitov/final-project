@@ -4,6 +4,7 @@ import htp.dao.CreditInfoRepository;
 import htp.dao.hibernate_Impl.CreditInfoHibernateImpl;
 import htp.domain.model.CreditInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,11 +28,13 @@ public class CreditInfoService implements CreditInfoRepository {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public CreditInfo save(CreditInfo item) {
         return creditInfoDao.save(item);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public CreditInfo update(CreditInfo item) {
         return creditInfoDao.update(item);
     }

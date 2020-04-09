@@ -32,7 +32,13 @@ public class AdminController {
 
 
     @GetMapping
-    public ResponseEntity<Page<User>> getUsers(@RequestParam Integer offset) {
+    public ResponseEntity<Page<User>> getUsers(@RequestParam String offsetString) {
+        int offset;
+        try {
+            offset = Integer.parseInt(offsetString);
+        } catch (NumberFormatException e){
+            throw new CustomValidationException("Illegal path!");
+        }
         return new ResponseEntity<>(userService.findAll(LIMIT,offset), HttpStatus.OK);
     }
 

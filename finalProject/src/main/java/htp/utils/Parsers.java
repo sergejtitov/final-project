@@ -1,14 +1,27 @@
 package htp.utils;
 
-import htp.controller.request.*;
-import htp.domain.model.*;
+
+import htp.controller.request.AddressFront;
+import htp.controller.request.ApplicantFront;
+import htp.controller.request.ApplicationResult;
+import htp.controller.request.PhoneFront;
+
 import htp.domain.dictionaries.Gender;
+import htp.domain.model.Phone;
+import htp.domain.model.Address;
+import htp.domain.model.Roles;
+import htp.domain.model.User;
+import htp.domain.model.Applicant;
+import htp.domain.model.Application;
+import htp.domain.model.CreditInfo;
+import htp.domain.model.Product;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class Parsers {
+
     public static Set<Roles> getSetOfRoles(List<String> list, User user){
         Set<Roles> roles = new HashSet<>();
         for (String role : list){

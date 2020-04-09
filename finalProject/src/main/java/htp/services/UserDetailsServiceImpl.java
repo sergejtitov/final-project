@@ -50,11 +50,20 @@ public class UserDetailsServiceImpl implements UserDetailsService  {
         return user.orElseThrow(()-> new NoSuchEntityException("No such User"));
     }
 
+    public User findByLogin(String login){
+        Optional<User> user = userDao.findByLogin(login);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new NoSuchEntityException("No such User");
+        }
+    }
+
     public Page<User> findAll(int limit, int offset){
         return userDao.findAll(PageRequest.of(offset, limit));
     }
 
-   @Transactional
+   @Transactional(rollbackFor = Exception.class)
     public User saveUser(User entity){
         Optional<User> user = userDao.findByLogin(entity.getLogin());
         if (user.isPresent()){
@@ -64,6 +73,7 @@ public class UserDetailsServiceImpl implements UserDetailsService  {
             return userDao.saveAndFlush(entity);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public User updateUser(User entity){
         entity.setPassword(entity.getPassword());
         return userDao.save(entity);
@@ -77,6 +87,7 @@ public class UserDetailsServiceImpl implements UserDetailsService  {
         userDao.delete(userToDelete);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void fakeDelete(Long userId){
         User userToFakeDelete = userDao.findByUserId(userId);
         userToFakeDelete.setIsdeleted(true);

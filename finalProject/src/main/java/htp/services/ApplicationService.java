@@ -1,89 +1,115 @@
 package htp.services;
 
-import htp.dao.ApplicationRepository;
-import htp.dao.CreditInfoRepository;
-import htp.dao.ProductRepository;
-import htp.dao.hibernate_Impl.ApplicationHibernateImpl;
-import htp.dao.hibernate_Impl.CreditInfoHibernateImpl;
-import htp.dao.hibernate_Impl.ProductHibernateImpl;
+
 import htp.dao.spring_data.ApplicationDataRepository;
+import htp.dao.spring_data.CreditInfoDataRepository;
+import htp.dao.spring_data.ProductDataRepository;
 import htp.domain.dictionaries.Decision;
 import htp.domain.dictionaries.Status;
 import htp.domain.model.Application;
 import htp.domain.model.CreditInfo;
 import htp.domain.model.Product;
+import htp.exceptions.NoSuchEntityException;
 import htp.processors.ApplicationProcessor;
 import htp.utils.CustomValidation;
 import htp.utils.Parsers;
-import jdk.jshell.Snippet;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ApplicationService {
 
-    private ProductRepository productDao;
-    private CreditInfoRepository creditInfoDao;
-    private ApplicationRepository applicationDao;
-    ApplicationProcessor processor;
+    private final ProductDataRepository productDao;
+    private final CreditInfoDataRepository creditInfoDataRepository;
+    private final ApplicationDataRepository applicationDataRepository;
+    private final CustomValidation customValidation;
+    private ApplicationProcessor processor;
 
-    public ApplicationService(ProductHibernateImpl productDao, CreditInfoHibernateImpl creditInfoDao, ApplicationHibernateImpl applicationDao) {
+    public ApplicationService(ProductDataRepository productDao,  ApplicationDataRepository applicationDataRepository, CustomValidation customValidation, CreditInfoDataRepository creditInfoDataRepository) {
         this.productDao = productDao;
-        this.creditInfoDao = creditInfoDao;
-        this.applicationDao = applicationDao;
-        processor = new ApplicationProcessor(productDao, creditInfoDao);
+        this.creditInfoDataRepository= creditInfoDataRepository;
+        this.applicationDataRepository = applicationDataRepository;
+        this.customValidation = customValidation;
+        processor = new ApplicationProcessor(productDao, creditInfoDataRepository);
     }
 
 
-    public List<Application> findAll(int limit, int offset) {
-        return null;
-    }
+    /*public List<Application> findAll(int limit, int offset) {
+        return applicationDataRepository.findAll(limit,offset);
+    }*/
 
+    public List<Application> findAll(Specification<Application> specification){
+        return applicationDataRepository.findAll(specification);
+    }
 
     public List<Application> findApplicationByUserId(Long userId) {
-        return null;
-    }
-
-
-    public List<Application> findApplicationByUserId(Long userId, int limit, int offset) {
-        return null;
+        return applicationDataRepository.findApplicationByUserId(userId);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public Application save(Application item) {
-        CustomValidation.validate(item);
+        customValidation.validate(item);
         Application application = processor.start(item);
-        Application savedApplication = applicationDao.save(application);
+        Application savedApplication = applicationDataRepository.save(application);
         if (application.getDecision().equals(Decision.ACCEPT)){
-            Product product = productDao.findByProductCode(application.getProductCode());
-            CreditInfo creditInfo = Parsers.createCreditInfo(application, product);
-            creditInfoDao.save(creditInfo);
+            Optional<Product> product = productDao.findByProductCode(application.getProductCode());
+            if (product.isPresent()){
+                CreditInfo creditInfo = Parsers.createCreditInfo(application, product.get());
+                creditInfoDataRepository.save(creditInfo);
+            }
         }
        return savedApplication;
     }
 
-    public Application update(Long applicationId, Double finalAmount) {
-        Application updatedApplication = applicationDao.findById(applicationId);
-        if (updatedApplication.getDecision().equals(Decision.ACCEPT) && updatedApplication.getStatus().equals(Status.ACCEPT)) {
-            updatedApplication = processor.confirm(updatedApplication, finalAmount);
-            if (updatedApplication.getStatus().equals(Status.ISSUED)){
-                updatedApplication = applicationDao.update(updatedApplication);
+    public Application update(Long applicationId, Double finalAmount, Long userId) {
+        Optional<Application> optionalUpdatedApplication = applicationDataRepository.findById(applicationId);
+        if (optionalUpdatedApplication.isPresent()) {
+            Application updatedApplication = optionalUpdatedApplication.get();
+            if (updatedApplication.getUserId().equals(userId)) {
+                if (updatedApplication.getDecision().equals(Decision.ACCEPT) && updatedApplication.getStatus().equals(Status.ACCEPT)) {
+                    updatedApplication = processor.confirm(updatedApplication, finalAmount);
+                    if (updatedApplication.getStatus().equals(Status.ISSUED)) {
+                        updatedApplication = applicationDataRepository.saveAndFlush(updatedApplication);
+                    }
+                    if (updatedApplication.getStatus().equals(Status.CUSTOMER_FAILURE)) {
+                        updatedApplication = applicationDataRepository.saveAndFlush(updatedApplication);
+                        creditInfoDataRepository.delete(creditInfoDataRepository.findCreditInfoByApplicationId(updatedApplication.getApplicationId()));
+                    }
+                }
+                return updatedApplication;
+            } else {
+                throw new AuthenticationServiceException("Access is denied");
             }
-            if (updatedApplication.getStatus().equals(Status.CUSTOMER_FAILURE)){
-                updatedApplication = applicationDao.update(updatedApplication);
-                creditInfoDao.delete(creditInfoDao.findCreditInfoByApplicationId(updatedApplication.getApplicationId()).getInfoId());
-            }
+        } else {
+            throw new NoSuchEntityException("No such Application");
         }
-        return updatedApplication;
     }
 
     public void delete(Long id) {
-        applicationDao.delete(applicationDao.findById(id).getApplicationId());
+        Optional<Application> optionalApplicationToDelete = applicationDataRepository.findById(id);
+        if (optionalApplicationToDelete.isPresent()) {
+            Application applicationToDelete = optionalApplicationToDelete.get();
+            applicationDataRepository.delete(applicationToDelete);
+        }
     }
 
-    public Application findById(Long id) {
-        return applicationDao.findById(id);
+    public Application findById(Long id, Long userId) {
+        Optional<Application> application = applicationDataRepository.findById(id);
+        if (application.isPresent()){
+            if (application.get().getUserId().equals(userId)){
+                return  application.get();
+            } else {
+                throw new AuthenticationServiceException("Access is denied");
+            }
+        } else {
+            throw new NoSuchEntityException("No such Application");
+        }
     }
 }

@@ -13,7 +13,6 @@ public class ApplicationFrontConverter extends GenericConverter<ApplicationFront
     @Override
     public Application convert(ApplicationFront request) {
         Application application = new Application();
-        application.setUserId(1L);
         application.setCreationDate(new Timestamp(System.currentTimeMillis()));
         application.setLoanType(request.getLoanType());
         application.setProductCode(request.getProductCode());

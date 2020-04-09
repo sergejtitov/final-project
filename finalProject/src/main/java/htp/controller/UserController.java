@@ -26,6 +26,9 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+    })
     public ResponseEntity<User> getUserById(@ApiParam("User Path Id") @PathVariable String id) {
         User user;
         long userId;
@@ -39,6 +42,9 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+    })
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Long> deleteUser(@PathVariable("id") String userId) {
         long userIdLong;
@@ -54,6 +60,9 @@ public class UserController {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+    })
     public ResponseEntity<User> updateUser(@PathVariable("id") String userId,
                                            @RequestBody @Valid UserFront request) {
         long userIdLong;

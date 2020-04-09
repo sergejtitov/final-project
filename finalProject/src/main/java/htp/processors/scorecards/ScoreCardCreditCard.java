@@ -5,38 +5,50 @@ import htp.processors.ScoreCard;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import static htp.domain.dictionaries.Education.*;
+import static htp.domain.dictionaries.Education.EDUCATION_HIGHER;
+import static htp.domain.dictionaries.Education.EDUCATION_MAGISTRACY;
+import static htp.domain.dictionaries.Education.EDUCATION_PHD;
+import static htp.domain.dictionaries.Education.EDUCATION_SECONDARY;
+import static htp.domain.dictionaries.Education.EDUCATION_VOCATIONAL;
 import static htp.domain.dictionaries.Education.EDUCATION_WITHOUT;
-import static htp.domain.dictionaries.Experience.*;
-import static htp.domain.dictionaries.MaritalStatus.*;
 
-@Configuration
-@ConfigurationProperties("creditcardsscoring")
-public class ScoreCardCreditCard implements ScoreCard {
-    public static Integer CREDIT_CARD_INITIAL_SCORE;
+import static htp.domain.dictionaries.Experience.EXPERIENCE_LESS_1M;
+import static htp.domain.dictionaries.Experience.EXPERIENCE_MORE_1M_LESS_1Y;
+import static htp.domain.dictionaries.Experience.EXPERIENCE_MORE_1Y_LESS_3Y;
+import static htp.domain.dictionaries.Experience.EXPERIENCE_MORE_3Y_LESS_10Y;
+import static htp.domain.dictionaries.Experience.EXPERIENCE_MORE_10Y;
 
-    public static int CREDIT_CARD_GENDER_VALUE_M;
-    public static int CREDIT_CARD_GENDER_VALUE_F;
+import static htp.domain.dictionaries.MaritalStatus.MARITAL_STATUS_SINGLE;
+import static htp.domain.dictionaries.MaritalStatus.MARITAL_STATUS_MARRIED;
+import static htp.domain.dictionaries.MaritalStatus.MARITAL_STATUS_DIVORCED;
 
-    public static int EXPERIENCE_CREDIT_CARD_VALUE_LESS_1Y;
-    public static int EXPERIENCE_CREDIT_CARD_VALUE_MORE_1Y_LESS_3Y;
-    public static int EXPERIENCE_CREDIT_CARD_VALUE_MORE_3Y_LESS_10Y;
-    public static int EXPERIENCE_CREDIT_CARD_VALUE_MORE_10Y;
+/*@Configuration
+@ConfigurationProperties("creditcardsscoring")*/
+public class ScoreCardCreditCard implements ScoreCard{
+    public Integer CREDIT_CARD_INITIAL_SCORE = 0;
 
-    public static int MARITAL_STATUS_CREDIT_CARD_VALUE_SINGLE;
-    public static int MARITAL_STATUS_CREDIT_CARD_VALUE_MARRIED;
-    public static int MARITAL_STATUS_CREDIT_CARD_VALUE_DIVORCED;
+    public Integer CREDIT_CARD_GENDER_VALUE_M = 8;
+    public Integer CREDIT_CARD_GENDER_VALUE_F = 6;
 
-    public static int EDUCATION_CREDIT_CARD_VALUE_MAGISTRACY;
-    public static int EDUCATION_CREDIT_CARD_VALUE_PHD;
-    public static int EDUCATION_CREDIT_CARD_VALUE_SECONDARY;
-    public static int EDUCATION_CREDIT_CARD_VALUE_VOCATIONAL;
-    public static int EDUCATION_CREDIT_CARD_VALUE_WITHOUT;
+    public Integer EXPERIENCE_CREDIT_CARD_VALUE_LESS_1Y = 1;
+    public Integer EXPERIENCE_CREDIT_CARD_VALUE_MORE_1Y_LESS_3Y = 5;
+    public Integer EXPERIENCE_CREDIT_CARD_VALUE_MORE_3Y_LESS_10Y = 8;
+    public Integer EXPERIENCE_CREDIT_CARD_VALUE_MORE_10Y = 10;
 
-    public static int CUT_OFF_CREDIT_CARD;
+    public Integer MARITAL_STATUS_CREDIT_CARD_VALUE_SINGLE = 6;
+    public Integer MARITAL_STATUS_CREDIT_CARD_VALUE_MARRIED = 8;
+    public Integer MARITAL_STATUS_CREDIT_CARD_VALUE_DIVORCED = 4;
+
+    public Integer EDUCATION_CREDIT_CARD_VALUE_MAGISTRACY = 8;
+    public Integer EDUCATION_CREDIT_CARD_VALUE_PHD = 10;
+    public Integer EDUCATION_CREDIT_CARD_VALUE_SECONDARY = 4;
+    public Integer EDUCATION_CREDIT_CARD_VALUE_VOCATIONAL = 7;
+    public Integer EDUCATION_CREDIT_CARD_VALUE_WITHOUT = 1;
+
+    public static Integer CUT_OFF_CREDIT_CARD = 18;
 
     @Override
-    public Integer calculateScore(ApplicantWrapper applicantWrapper) {
+    public synchronized Integer calculateScore(ApplicantWrapper applicantWrapper) {
         int score = CREDIT_CARD_INITIAL_SCORE;
 
         switch (applicantWrapper.getApplicant().getSex()){
@@ -73,7 +85,7 @@ public class ScoreCardCreditCard implements ScoreCard {
     }
 
     @Override
-    public Integer getDeclinedScore(Integer productCode) {
+    public Integer getDeclinedScore() {
         return CUT_OFF_CREDIT_CARD;
     }
 }

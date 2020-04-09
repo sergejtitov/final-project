@@ -5,38 +5,49 @@ import htp.processors.ScoreCard;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import static htp.domain.dictionaries.Education.*;
+import static htp.domain.dictionaries.Education.EDUCATION_HIGHER;
+import static htp.domain.dictionaries.Education.EDUCATION_MAGISTRACY;
+import static htp.domain.dictionaries.Education.EDUCATION_PHD;
+import static htp.domain.dictionaries.Education.EDUCATION_SECONDARY;
+import static htp.domain.dictionaries.Education.EDUCATION_VOCATIONAL;
 import static htp.domain.dictionaries.Education.EDUCATION_WITHOUT;
-import static htp.domain.dictionaries.Experience.*;
-import static htp.domain.dictionaries.MaritalStatus.*;
 
-@Configuration
-@ConfigurationProperties("consloanscoring")
+import static htp.domain.dictionaries.Experience.EXPERIENCE_LESS_1M;
+import static htp.domain.dictionaries.Experience.EXPERIENCE_MORE_1M_LESS_1Y;
+import static htp.domain.dictionaries.Experience.EXPERIENCE_MORE_1Y_LESS_3Y;
+import static htp.domain.dictionaries.Experience.EXPERIENCE_MORE_3Y_LESS_10Y;
+import static htp.domain.dictionaries.Experience.EXPERIENCE_MORE_10Y;
+
+import static htp.domain.dictionaries.MaritalStatus.MARITAL_STATUS_SINGLE;
+import static htp.domain.dictionaries.MaritalStatus.MARITAL_STATUS_MARRIED;
+import static htp.domain.dictionaries.MaritalStatus.MARITAL_STATUS_DIVORCED;
+
+/*@Configuration
+@ConfigurationProperties("consloanscoring")*/
 public class ScoreCardConsumerLoans implements ScoreCard {
-    public static Integer CONS_LOAN_INITIAL_SCORE;
+    public Integer CONS_LOAN_INITIAL_SCORE = 0;
 
-    public static int CONS_LOAN_GENDER_VALUE_M;
-    public static int CONS_LOAN_GENDER_VALUE_F;
+    public Integer CONS_LOAN_GENDER_VALUE_M = 8;
+    public Integer CONS_LOAN_GENDER_VALUE_F = 6;
 
-    public static int EXPERIENCE_CONS_LOAN_VALUE_LESS_1Y;
-    public static int EXPERIENCE_CONS_LOAN_VALUE_MORE_1Y_LESS_3Y;
-    public static int EXPERIENCE_CONS_LOAN_VALUE_MORE_3Y_LESS_10Y;
-    public static int EXPERIENCE_CONS_LOAN_VALUE_MORE_10Y;
+    public Integer EXPERIENCE_CONS_LOAN_VALUE_LESS_1Y = 1;
+    public Integer EXPERIENCE_CONS_LOAN_VALUE_MORE_1Y_LESS_3Y = 5;
+    public Integer EXPERIENCE_CONS_LOAN_VALUE_MORE_3Y_LESS_10Y = 8;
+    public Integer EXPERIENCE_CONS_LOAN_VALUE_MORE_10Y = 10;
 
-    public static int MARITAL_STATUS_CONS_LOAN_VALUE_SINGLE;
-    public static int MARITAL_STATUS_CONS_LOAN_VALUE_MARRIED;
-    public static int MARITAL_STATUS_CONS_LOAN_VALUE_DIVORCED;
+    public Integer MARITAL_STATUS_CONS_LOAN_VALUE_SINGLE = 6;
+    public Integer MARITAL_STATUS_CONS_LOAN_VALUE_MARRIED = 8;
+    public Integer MARITAL_STATUS_CONS_LOAN_VALUE_DIVORCED = 4;
 
-    public static int EDUCATION_CONS_LOAN_VALUE_MAGISTRACY;
-    public static int EDUCATION_CONS_LOAN_VALUE_PHD;
-    public static int EDUCATION_CONS_LOAN_VALUE_SECONDARY;
-    public static int EDUCATION_CONS_LOAN_VALUE_VOCATIONAL;
-    public static int EDUCATION_CONS_LOAN_VALUE_WITHOUT;
+    public Integer EDUCATION_CONS_LOAN_VALUE_MAGISTRACY = 8;
+    public Integer EDUCATION_CONS_LOAN_VALUE_PHD = 10;
+    public Integer EDUCATION_CONS_LOAN_VALUE_SECONDARY = 4;
+    public Integer EDUCATION_CONS_LOAN_VALUE_VOCATIONAL = 7;
+    public Integer EDUCATION_CONS_LOAN_VALUE_WITHOUT = 1;
 
-    public static int CUT_OFF_CONSUMER_LOAN;
+    public Integer CUT_OFF_CONSUMER_LOAN = 16;
 
-    @Override
-    public Integer calculateScore(ApplicantWrapper applicantWrapper) {
+    public synchronized Integer calculateScore(ApplicantWrapper applicantWrapper) {
         int score = CONS_LOAN_INITIAL_SCORE;
 
         switch (applicantWrapper.getApplicant().getSex()){
@@ -73,7 +84,7 @@ public class ScoreCardConsumerLoans implements ScoreCard {
     }
 
     @Override
-    public Integer getDeclinedScore(Integer productCode) {
+    public Integer getDeclinedScore() {
         return CUT_OFF_CONSUMER_LOAN;
     }
 }

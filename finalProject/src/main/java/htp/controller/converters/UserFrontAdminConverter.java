@@ -4,10 +4,11 @@ import htp.controller.request.UserFrontAdmin;
 import htp.domain.model.User;
 import htp.utils.Parsers;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 
-
+@Component
 public class UserFrontAdminConverter extends GenericConverter <UserFrontAdmin, User> {
     private BCryptPasswordEncoder cryptPassword;
 

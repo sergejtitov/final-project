@@ -1,46 +1,48 @@
 package htp.services;
 
-import htp.dao.ProductRepository;
-import htp.dao.hibernate_Impl.ProductHibernateImpl;
+
+import htp.dao.spring_data.ProductDataRepository;
 import htp.domain.model.Product;
 import htp.exceptions.EntityAlreadyExists;
 import htp.exceptions.NoSuchEntityException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Optional;
 
 
 @Service
-public class ProductService implements ProductRepository {
+public class ProductService {
 
-    private ProductRepository productDao;
+    private ProductDataRepository productDao;
 
-    public ProductService(ProductHibernateImpl productDao) {
+    public ProductService(ProductDataRepository productDao) {
         this.productDao = productDao;
     }
 
-    @Override
-    public Product findByProductCode(Integer productCode) {
-        Product product;
-        try {
-            product = productDao.findByProductCode(productCode);
-        } catch (NoSuchEntityException e){
-            throw new NoSuchEntityException(e.getMessage());
+
+    public Product findByProductCode(Integer productCode) throws NoSuchEntityException {
+        Optional<Product> searchedProduct = productDao.findByProductCode(productCode);
+        if (searchedProduct.isPresent()) {
+            return searchedProduct.get();
+        } else {
+            throw new NoSuchEntityException("No such product");
         }
-        return product;
     }
 
-    @Override
-    public List<Product> findAll(int limit, int offset) {
-        return productDao.findAll(limit, offset);
+
+    public Page<Product> findAll(int limit, int offset) {
+        return productDao.findAll(PageRequest.of(offset, limit));
     }
 
-    @Override
+
+    @Transactional(rollbackFor = Exception.class)
     public Product save(Product item) {
-        Product product;
         try {
-            product = productDao.findByProductCode(item.getProductCode());
-            if (product!=null){
+            Optional<Product> product= productDao.findByProductCode(item.getProductCode());
+            if (product.isPresent()){
                 throw new EntityAlreadyExists("Such entity already exists!");
             }
         } catch (NoSuchEntityException e){
@@ -49,21 +51,33 @@ public class ProductService implements ProductRepository {
         return productDao.save(item);
     }
 
-    @Override
-    public Product update(Product item) throws EntityAlreadyExists {
-        if (!item.getProductCode().equals(findByProductCode(item.getProductCode()).getProductCode())){
-            throw new EntityAlreadyExists("Such product already exists");
-        }
-        return productDao.update(item);
+
+    @Transactional(rollbackFor = Exception.class)
+    public Product update(Product item) {
+        Product productToUpdate = findByProductCode(item.getProductCode());
+        if (!item.getProductCode().equals(productToUpdate.getProductCode())) {
+                throw new EntityAlreadyExists("You try to update wrong product");
+            }
+        return productDao.saveAndFlush(item);
     }
 
-    @Override
+
     public void delete(Long id) {
-        productDao.delete(productDao.findById(id).getProductId());
+        Optional<Product> productToDelete = productDao.findById(id);
+        if (productToDelete.isPresent()){
+            productDao.delete(productToDelete.get());
+        } else {
+            throw new NoSuchEntityException("No such Product");
+        }
     }
 
-    @Override
+
     public Product findById(Long id) {
-        return productDao.findById(id);
+        Optional<Product> searchedProduct = productDao.findById(id);
+        if (searchedProduct.isPresent()){
+            return searchedProduct.get();
+        } else {
+            throw new NoSuchEntityException("No such Product");
+        }
     }
 }

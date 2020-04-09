@@ -1,17 +1,16 @@
 package htp.processors;
 
-import htp.dao.CreditInfoRepository;
-import htp.dao.ProductRepository;
+
+import htp.dao.spring_data.CreditInfoDataRepository;
+import htp.dao.spring_data.ProductDataRepository;
 import htp.domain.model.Applicant;
 import htp.domain.model.Application;
 import htp.domain.dictionaries.Decision;
 import htp.domain.dictionaries.Status;
-import htp.domain.model.Product;
 import htp.domain.wrappers.ApplicantWrapper;
 import htp.domain.wrappers.ApplicationWrapper;
 import htp.utils.Functions;
 import lombok.Data;
-import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,14 +24,14 @@ import static htp.domain.dictionaries.TypeOfApplicant.GUARANTOR;
 public class ApplicationProcessor {
     public static final Double DECLINE_AMOUNT = 0D;
 
-    private ProductRepository productService;
-    private CreditInfoRepository creditInfoService;
+    private ProductDataRepository productService;
+    private CreditInfoDataRepository creditInfoService;
     private ApplicationWrapper applicationWrapper;
     private ApplicantProcessor applicantProcessor;
     private CreatorWrappers creatorWrappers;
 
 
-    public ApplicationProcessor(ProductRepository productService, CreditInfoRepository creditInfoService) {
+    public ApplicationProcessor(ProductDataRepository productService, CreditInfoDataRepository creditInfoService) {
         this.productService = productService;
         this.creditInfoService = creditInfoService;
         this.applicantProcessor = new ApplicantProcessor();

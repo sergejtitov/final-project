@@ -14,20 +14,20 @@ import java.util.Set;
 @ConfigurationProperties("validation")
 public class CustomValidation {
     public static final int INITIALIZE_INT = 0;
-    public static int MIN_LOAN_TYPE;
-    public static int MAX_LOAN_TYPE;
-    public static int MIN_TYPE_OF_APPLICANT;
-    public static int MAX_TYPE_OF_APPLICANT;
-    public static int MAIN_APPLICANT;
-    public static int MAX_AMOUNT_APPLICANTS;
-    public static int MIN_EXPERIENCE;
-    public static int MAX_EXPERIENCE;
-    public static int MIN_MARITAL_STATUS;
-    public static int MAX_MARITAL_STATUS;
-    public static int MIN_EDUCATION;
-    public static int MAX_EDUCATION;
+    public Integer MIN_LOAN_TYPE;
+    public Integer MAX_LOAN_TYPE;
+    public Integer MIN_TYPE_OF_APPLICANT;
+    public Integer MAX_TYPE_OF_APPLICANT;
+    public Integer MAIN_APPLICANT;
+    public Integer MAX_AMOUNT_APPLICANTS;
+    public Integer MIN_EXPERIENCE;
+    public Integer MAX_EXPERIENCE;
+    public Integer MIN_MARITAL_STATUS;
+    public Integer MAX_MARITAL_STATUS;
+    public Integer MIN_EDUCATION;
+    public Integer MAX_EDUCATION;
 
-    public static void validate(Application application){
+    public void validate(Application application){
         validateLoanType(application.getLoanType());
         validateAmountApplicants(application.getApplicants());
         for (Applicant applicant : application.getApplicants()){
@@ -37,20 +37,20 @@ public class CustomValidation {
         }
     }
 
-    private static void validateLoanType(Integer loanType){
+    private void validateLoanType(Integer loanType){
         if (loanType < MIN_LOAN_TYPE || loanType > MAX_LOAN_TYPE){
             throw new CustomValidationException("Incorrect Loan Type. It should be from 1 to 4");
         }
     }
 
-    private static void validateAmountApplicants(Set<Applicant> applicants){
+    private void validateAmountApplicants(Set<Applicant> applicants){
         int numberMainApplicants = INITIALIZE_INT;
         int numberApplicants = INITIALIZE_INT;
         for (Applicant applicant : applicants){
             if (applicant.getTypeOfApplicant()<MIN_TYPE_OF_APPLICANT || applicant.getTypeOfApplicant() >MAX_TYPE_OF_APPLICANT){
                 throw new CustomValidationException("Incorrect type of applicant. It should be from 1 to 2");
             }
-            if (applicant.getTypeOfApplicant() == MAIN_APPLICANT){
+            if (applicant.getTypeOfApplicant().equals(MAIN_APPLICANT)){
                 numberMainApplicants++;
             }
             numberApplicants++;
@@ -63,19 +63,19 @@ public class CustomValidation {
         }
     }
 
-    private static void validateExperience (Integer experience){
+    private void validateExperience (Integer experience){
         if (experience < MIN_EXPERIENCE || experience > MAX_EXPERIENCE){
             throw new CustomValidationException("Incorrect experience. It should be from 1 to 5");
         }
     }
 
-   private  static void validateMaritalStatus (Integer maritalStatus){
+   private void validateMaritalStatus (Integer maritalStatus){
         if (maritalStatus < MIN_MARITAL_STATUS || maritalStatus > MAX_MARITAL_STATUS){
             throw new CustomValidationException("Incorrect marital status. It should be from 1 to 3");
         }
     }
 
-    private static void validateEducation (Integer education){
+    private void validateEducation (Integer education){
         if (education < MIN_EDUCATION || education > MAX_EDUCATION){
             throw new CustomValidationException("Incorrect education. It should be from 1 to 6");
         }
