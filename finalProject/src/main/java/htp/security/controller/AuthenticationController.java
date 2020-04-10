@@ -52,10 +52,7 @@ public class AuthenticationController {
     @PostMapping
     public ResponseEntity<AuthResponse> loginUser(@RequestBody @Valid AuthenticationRequest request){
         Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         return ResponseEntity.ok(

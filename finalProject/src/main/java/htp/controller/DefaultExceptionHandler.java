@@ -1,4 +1,3 @@
-/*
 package htp.controller;
 
 import htp.controller.errors.ErrorMessage;
@@ -79,4 +78,3 @@ public class DefaultExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
-*/

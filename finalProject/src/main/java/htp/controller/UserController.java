@@ -3,14 +3,28 @@ package htp.controller;
 
 import htp.domain.model.User;
 import htp.controller.request.UserFront;
-import htp.exceptions.CustomValidationException;
+import htp.security.util.PrincipalUtils;
 import htp.services.UserDetailsServiceImpl;
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RequestBody;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.sql.Timestamp;
 
 
@@ -19,63 +33,72 @@ import java.sql.Timestamp;
 @CrossOrigin
 @RequestMapping(value = "/users")
 public class UserController {
+    public static final String USER_DELETED = "User Successfully deleted";
+
     private UserDetailsServiceImpl userService;
 
     public UserController(UserDetailsServiceImpl userDao) {
         this.userService = userDao;
     }
 
-    @GetMapping(value = "/{id}")
+    @ApiOperation(value = "Show information about user")
+    @ApiResponses({
+            @ApiResponse(code =200, message = "User successfully found"),
+            @ApiResponse(code = 403, message = "Access Denied"),
+            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
-    public ResponseEntity<User> getUserById(@ApiParam("User Path Id") @PathVariable String id) {
-        User user;
-        long userId;
-        try {
-            userId = Long.parseLong(id);
-            user = userService.findUserById(userId);
-        } catch (NumberFormatException e){
-            throw new CustomValidationException("Illegal path!");
-        }
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<User> getUserById(@ApiIgnore Principal principal) {
+        String login = PrincipalUtils.getUsername(principal);
+        User performer = userService.findByLogin(login);
+        return new ResponseEntity<>(performer, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @ApiOperation(value = "Fake delete user")
+    @ApiResponses({
+            @ApiResponse(code =200, message = "User successfully deleted"),
+            @ApiResponse(code = 403, message = "Access Denied"),
+            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
+    @Transactional(rollbackFor = Exception.class)
+    @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Long> deleteUser(@PathVariable("id") String userId) {
-        long userIdLong;
-        try {
-            userIdLong = Long.parseLong(userId);
-            userService.fakeDelete(userIdLong);
-        } catch (NumberFormatException e){
-            throw new CustomValidationException("Illegal path!");
-        }
-        return new ResponseEntity<>(userIdLong, HttpStatus.OK);
+    public ResponseEntity<String> deleteUser(@ApiIgnore Principal principal) {
+        String login = PrincipalUtils.getUsername(principal);
+        User performer = userService.findByLogin(login);
+        userService.fakeDelete(performer.getUserId());
+        return new ResponseEntity<>(USER_DELETED, HttpStatus.OK);
     }
 
 
-    @PutMapping(value = "/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Change password")
+    @ApiResponses({
+            @ApiResponse(code =200, message = "Password successfully changed"),
+            @ApiResponse(code = 403, message = "Access Denied"),
+            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
-    public ResponseEntity<User> updateUser(@PathVariable("id") String userId,
-                                           @RequestBody @Valid UserFront request) {
-        long userIdLong;
-        User user;
-        try {
-            userIdLong = Long.parseLong(userId);
-            user = userService.findUserById(userIdLong);
-            user.setPassword(request.getPassword());
-            user.setChanged(new Timestamp(System.currentTimeMillis()));
-        } catch (NumberFormatException e){
-            throw new CustomValidationException("Illegal path!");
-        }
-        return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
+    @Transactional(rollbackFor = Exception.class)
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<User> updateUser(@RequestBody @Valid UserFront request,
+                                           @ApiIgnore Principal principal) {
+        String login = PrincipalUtils.getUsername(principal);
+        User performer = userService.findByLogin(login);
+        performer.setPassword(request.getPassword());
+        performer.setChanged(new Timestamp(System.currentTimeMillis()));
+        return new ResponseEntity<>(userService.updateUser(performer), HttpStatus.OK);
     }
 
 }

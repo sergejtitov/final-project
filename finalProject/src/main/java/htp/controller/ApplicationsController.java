@@ -58,7 +58,6 @@ public class ApplicationsController {
             @ApiResponse(code =201, message = "Application successfully created"),
             @ApiResponse(code = 400, message = "Invalid application Id supplied"),
             @ApiResponse(code = 403, message = "Access Denied"),
-            @ApiResponse(code = 404, message = "Application not found"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({@ApiImplicitParam(name = "Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")})

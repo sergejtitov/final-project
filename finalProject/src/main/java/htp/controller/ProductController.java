@@ -5,9 +5,11 @@ import htp.controller.request.ProductFront;
 import htp.exceptions.CustomValidationException;
 import htp.services.ProductService;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
@@ -46,6 +48,7 @@ public class ProductController {
             @ApiResponse(code = 403, message = "Access Denied"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
+    @ApiImplicitParams({@ApiImplicitParam(name = "Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")})
     @GetMapping
     public ResponseEntity<Page<Product>> getProducts(@RequestParam String offsetString) {
         int offset;
@@ -63,6 +66,7 @@ public class ProductController {
             @ApiResponse(code = 403, message = "Access Denied"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
+    @ApiImplicitParams({@ApiImplicitParam(name = "Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")})
     @GetMapping(value = "/{id}")
     public ResponseEntity<Product> getUserById(@ApiParam("User Path Id") @PathVariable String id) {
         long productId;
@@ -82,6 +86,7 @@ public class ProductController {
             @ApiResponse(code = 403, message = "Access Denied"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
+    @ApiImplicitParams({@ApiImplicitParam(name = "Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")})
     @PostMapping
     @Transactional(rollbackFor = Exception.class)
     @ResponseStatus(HttpStatus.CREATED)
@@ -99,6 +104,7 @@ public class ProductController {
             @ApiResponse(code = 404, message = "Product not found"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
+    @ApiImplicitParams({@ApiImplicitParam(name = "Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")})
     @Transactional(rollbackFor = Exception.class)
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -125,6 +131,7 @@ public class ProductController {
             @ApiResponse(code = 404, message = "Product not found"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
+    @ApiImplicitParams({@ApiImplicitParam(name = "Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")})
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Long> deleteProduct(@PathVariable("id") String productId) {

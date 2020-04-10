@@ -31,18 +31,6 @@ public class ProductHibernateImpl implements ProductRepository {
     }
 
     @Override
-    public Product findByProductCode(Integer productCode) throws NoSuchEntityException {
-        List<Product> products = (List<Product>) entityManager.createQuery("select mp from Product mp " +
-                "where mp.productCode = :productCode")
-                .setParameter(PRODUCT_CODE, productCode)
-                .getResultList();
-        if (products.size() == 0){
-            throw new NoSuchEntityException("No such Entity");
-        }
-        return products.get(FIRST_ITEM);
-    }
-
-    @Override
     public Product save(Product item) {
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();

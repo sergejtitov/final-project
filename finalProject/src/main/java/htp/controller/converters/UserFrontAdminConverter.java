@@ -12,6 +12,10 @@ import java.sql.Timestamp;
 public class UserFrontAdminConverter extends GenericConverter <UserFrontAdmin, User> {
     private BCryptPasswordEncoder cryptPassword;
 
+    public UserFrontAdminConverter(BCryptPasswordEncoder cryptPassword) {
+        this.cryptPassword = cryptPassword;
+    }
+
     @Override
     public User convert(UserFrontAdmin userFrontAdmin) {
         User user = new User();

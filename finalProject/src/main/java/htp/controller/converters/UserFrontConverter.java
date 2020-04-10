@@ -3,8 +3,6 @@ package htp.controller.converters;
 import htp.controller.request.UserFront;
 import htp.domain.model.Roles;
 import htp.domain.model.User;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
