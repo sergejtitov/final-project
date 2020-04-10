@@ -3,13 +3,14 @@ package htp.dao.hibernate_Impl;
 import htp.dao.ProductRepository;
 import htp.domain.model.Product;
 import htp.exceptions.NoSuchEntityException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.util.List;
 
-
+@Slf4j
 @Repository
 public class ProductHibernateImpl implements ProductRepository {
     public static final Integer PAGE = 1;

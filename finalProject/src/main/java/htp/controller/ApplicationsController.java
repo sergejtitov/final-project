@@ -18,6 +18,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
+@Slf4j
 @AllArgsConstructor
 @RestController
 @CrossOrigin

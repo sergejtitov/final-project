@@ -6,6 +6,7 @@ import htp.domain.dictionaries.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 
 import java.sql.Timestamp;
@@ -26,6 +27,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.JoinColumn;
 import static javax.persistence.EnumType.STRING;
 
+@Slf4j
 @Data
 @AllArgsConstructor
 @ToString(exclude = {"application","phones","addresses"})

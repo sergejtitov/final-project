@@ -1,7 +1,9 @@
 package htp.domain.dictionaries;
 
 import htp.exceptions.NoSuchValueInDictionary;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class LoanType {
     public static final int MORTGAGE = 1;
     public static final int AUTO = 2;

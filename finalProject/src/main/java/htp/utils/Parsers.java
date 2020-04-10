@@ -15,11 +15,13 @@ import htp.domain.model.Applicant;
 import htp.domain.model.Application;
 import htp.domain.model.CreditInfo;
 import htp.domain.model.Product;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 public class Parsers {
 
     public static Set<Roles> getSetOfRoles(List<String> list, User user){

@@ -2,12 +2,14 @@ package htp.utils;
 
 
 import htp.domain.model.Applicant;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.Set;
 
+@Slf4j
 public class Functions {
     public static final Integer SECONDS = 1000;
     public static final Integer MINUTES = 60;

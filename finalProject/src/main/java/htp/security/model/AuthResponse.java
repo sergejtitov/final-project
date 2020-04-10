@@ -2,11 +2,13 @@ package htp.security.model;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+@Slf4j
 @Data
 @Builder
 public class AuthResponse {

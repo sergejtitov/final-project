@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,7 @@ import java.security.Principal;
 import java.sql.Timestamp;
 
 
-
+@Slf4j
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/users")

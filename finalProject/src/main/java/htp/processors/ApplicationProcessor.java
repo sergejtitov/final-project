@@ -11,6 +11,7 @@ import htp.domain.wrappers.ApplicantWrapper;
 import htp.domain.wrappers.ApplicationWrapper;
 import htp.utils.Functions;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,6 +21,7 @@ import java.util.Set;
 import static htp.domain.dictionaries.TypeOfApplicant.APPLICANT;
 import static htp.domain.dictionaries.TypeOfApplicant.GUARANTOR;
 
+@Slf4j
 @Data
 public class ApplicationProcessor {
     public static final Double DECLINE_AMOUNT = 0D;

@@ -3,8 +3,10 @@ package htp.controller.converters;
 import htp.controller.request.ApplicationResult;
 import htp.domain.dictionaries.LoanType;
 import htp.domain.model.Application;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class ApplicationResultConverter extends GenericConverter<Application, ApplicationResult> {
     @Override

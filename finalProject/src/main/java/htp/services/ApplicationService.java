@@ -13,6 +13,7 @@ import htp.exceptions.NoSuchEntityException;
 import htp.processors.ApplicationProcessor;
 import htp.utils.CustomValidation;
 import htp.utils.Parsers;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class ApplicationService {
 

@@ -5,8 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
-
+import lombok.extern.slf4j.Slf4j;
 
 
 import javax.persistence.Entity;
@@ -22,6 +21,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Set;
 
+@Slf4j
 @Getter
 @Setter
 @AllArgsConstructor

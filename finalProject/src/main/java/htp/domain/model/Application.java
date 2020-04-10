@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,6 +26,7 @@ import java.util.Set;
 
 import static javax.persistence.EnumType.STRING;
 
+@Slf4j
 @Getter
 @Setter
 @AllArgsConstructor

@@ -11,6 +11,7 @@ import htp.services.ApplicationService;
 import htp.utils.ApplicationSpecificationBuilder;
 import htp.utils.Parsers;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 @RestController
 @CrossOrigin
 @RequestMapping("/audit/applications")

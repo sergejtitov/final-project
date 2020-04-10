@@ -3,11 +3,13 @@ package htp.controller.converters;
 import htp.controller.request.UserFrontAdmin;
 import htp.domain.model.User;
 import htp.utils.Parsers;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 
+@Slf4j
 @Component
 public class UserFrontAdminConverter extends GenericConverter <UserFrontAdmin, User> {
     private BCryptPasswordEncoder cryptPassword;

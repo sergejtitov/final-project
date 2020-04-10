@@ -4,6 +4,7 @@ import htp.security.ApplicationHeaders;
 import htp.security.util.TokenUtil;
 import htp.services.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +19,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-
+@Slf4j
 @RequiredArgsConstructor
 public class AuthenticationTokenFilter  extends UsernamePasswordAuthenticationFilter {
 

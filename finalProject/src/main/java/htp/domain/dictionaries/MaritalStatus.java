@@ -1,7 +1,9 @@
 package htp.domain.dictionaries;
 
 import htp.exceptions.NoSuchValueInDictionary;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class MaritalStatus {
     public static final int MARITAL_STATUS_SINGLE = 1;
     public static final int MARITAL_STATUS_MARRIED = 2;

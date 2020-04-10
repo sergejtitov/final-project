@@ -5,6 +5,7 @@ import htp.domain.wrappers.ApplicantWrapper;
 import htp.processors.ScoreCard;
 import htp.utils.Functions;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 
@@ -12,7 +13,7 @@ import static htp.domain.dictionaries.LoanType.MORTGAGE;
 import static htp.domain.dictionaries.LoanType.AUTO;
 import static htp.domain.dictionaries.LoanType.CONSUMER_LOANS;
 
-
+@Slf4j
 @Data
 @Component
 public class ScoreCalculatorImpl {

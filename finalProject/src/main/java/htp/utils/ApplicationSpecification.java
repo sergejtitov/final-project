@@ -4,6 +4,7 @@ import htp.controller.request.SearchCriteria;
 import htp.domain.model.Application;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -11,6 +12,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+@Slf4j
 @Data
 @AllArgsConstructor
 public class ApplicationSpecification implements Specification<Application> {

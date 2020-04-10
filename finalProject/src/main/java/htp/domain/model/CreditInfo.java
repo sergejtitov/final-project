@@ -3,6 +3,7 @@ package htp.domain.model;
 
 import lombok.Data;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Column;
 import java.util.Objects;
 
+@Slf4j
 @Data
 @ToString
 @Entity

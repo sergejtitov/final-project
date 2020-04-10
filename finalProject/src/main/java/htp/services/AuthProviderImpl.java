@@ -5,6 +5,7 @@ import htp.dao.UserRepository;
 import htp.dao.hibernate_Impl.UserHibernateImpl;
 import htp.domain.model.Roles;
 import htp.domain.model.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 public class AuthProviderImpl implements AuthenticationProvider {
 

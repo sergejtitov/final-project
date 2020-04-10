@@ -1,7 +1,9 @@
 package htp.domain.dictionaries;
 
 import htp.exceptions.NoSuchValueInDictionary;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Experience {
 
     public static final int EXPERIENCE_LESS_1M = 1;

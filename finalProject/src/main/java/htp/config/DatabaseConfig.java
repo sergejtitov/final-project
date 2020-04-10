@@ -1,6 +1,9 @@
 package htp.config;
 
+import htp.controller.DefaultExceptionHandler;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.log4j.Logger;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +11,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 
 import java.util.Objects;
 
+@Slf4j
 @Data
 @Configuration
 @ConfigurationProperties("database")

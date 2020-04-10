@@ -2,12 +2,14 @@ package htp.utils;
 
 import htp.controller.request.SearchCriteria;
 import htp.domain.model.Application;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class ApplicationSpecificationBuilder {
     public static final int ZERO = 0;
     private List<SearchCriteria> params;

@@ -1,10 +1,12 @@
 package htp.domain.dictionaries;
 
 import htp.exceptions.NoSuchValueInDictionary;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
 import java.util.Set;
 
+@Slf4j
 public enum Gender {
     M("Male"),
     F("Female"),

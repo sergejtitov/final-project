@@ -3,11 +3,13 @@ package htp.services;
 import htp.dao.CreditInfoRepository;
 import htp.dao.hibernate_Impl.CreditInfoHibernateImpl;
 import htp.domain.model.CreditInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class CreditInfoService implements CreditInfoRepository {
 

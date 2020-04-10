@@ -1,7 +1,9 @@
 package htp.domain.dictionaries;
 
 import htp.exceptions.NoSuchValueInDictionary;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Education {
     public static final int EDUCATION_HIGHER = 1;
     public static final int EDUCATION_MAGISTRACY = 2;

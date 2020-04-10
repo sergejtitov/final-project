@@ -2,6 +2,7 @@ package htp.dao.hibernate_Impl;
 
 import htp.dao.RolesRepository;
 import htp.domain.model.Roles;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +11,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import java.util.List;
 
-
+@Slf4j
 @Repository
 @Qualifier("hibernateRoleDao")
 public class RolesHibernateImpl implements RolesRepository {

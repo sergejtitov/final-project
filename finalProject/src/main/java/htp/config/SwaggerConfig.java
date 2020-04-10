@@ -1,5 +1,6 @@
 package htp.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -13,6 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.sql.Timestamp;
 
+@Slf4j
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {

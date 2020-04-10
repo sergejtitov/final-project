@@ -1,8 +1,11 @@
 package htp.domain.dictionaries;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Collections;
 import java.util.Set;
 
+@Slf4j
 public enum Decision {
     ACCEPT("Accept"),
     DECLINE("Decline"),

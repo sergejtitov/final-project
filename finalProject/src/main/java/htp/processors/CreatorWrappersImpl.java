@@ -9,11 +9,13 @@ import htp.domain.model.Product;
 import htp.domain.wrappers.ApplicantWrapper;
 import htp.domain.wrappers.ApplicationWrapper;
 import htp.exceptions.NoSuchEntityException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 public class CreatorWrappersImpl implements CreatorWrappers {
     @Override
     public ApplicantWrapper createApplicantWrapper(Applicant applicant, List<CreditInfo> creditInfos) {

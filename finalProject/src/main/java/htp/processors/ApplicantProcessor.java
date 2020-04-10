@@ -7,12 +7,13 @@ import htp.domain.wrappers.ApplicantWrapper;
 import htp.processors.scorecards.ScoreCalculatorImpl;
 import htp.utils.Functions;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 
 import java.util.List;
 
 
-
+@Slf4j
 @Data
 public class ApplicantProcessor {
     public static final Integer MAX_AGE = 840;

@@ -3,6 +3,7 @@ package htp.processors.scorecards;
 import htp.domain.wrappers.ApplicantWrapper;
 import htp.processors.ScoreCard;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,6 +24,7 @@ import static htp.domain.dictionaries.MaritalStatus.MARITAL_STATUS_MARRIED;
 import static htp.domain.dictionaries.MaritalStatus.MARITAL_STATUS_SINGLE;
 import static htp.domain.dictionaries.MaritalStatus.MARITAL_STATUS_DIVORCED;
 
+@Slf4j
 @Data
 /*@Configuration
 @ConfigurationProperties("autoscoring")*/

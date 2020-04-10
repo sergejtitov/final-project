@@ -4,6 +4,7 @@ package htp.processors.scorecards;
 import htp.domain.wrappers.ApplicantWrapper;
 import htp.processors.ScoreCard;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,6 +28,7 @@ import static htp.domain.dictionaries.MaritalStatus.MARITAL_STATUS_DIVORCED;
 @Data
 /*@Configuration
 @ConfigurationProperties("mortgagescoring")*/
+@Slf4j
 public class ScoreCardMortgage implements ScoreCard {
     public static final int YEAR = 12;
     public static final int AGE_25 = 25;

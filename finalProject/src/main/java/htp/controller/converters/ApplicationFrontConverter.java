@@ -3,10 +3,12 @@ package htp.controller.converters;
 import htp.controller.request.ApplicationFront;
 import htp.domain.model.Application;
 import htp.utils.Parsers;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 
+@Slf4j
 @Component
 public class ApplicationFrontConverter extends GenericConverter<ApplicationFront, Application> {
 

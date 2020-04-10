@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,7 @@ import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-
+@Slf4j
 @RestController
 @CrossOrigin
 @AllArgsConstructor

@@ -5,6 +5,7 @@ import htp.dao.ApplicationRepository;
 import htp.domain.model.Application;
 import htp.domain.model.CreditInfo;
 import htp.exceptions.NoSuchEntityException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 
@@ -12,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.util.List;
 
+@Slf4j
 @Repository
 public class ApplicationHibernateImpl implements ApplicationRepository {
     public static final String USER_ID = "userId";

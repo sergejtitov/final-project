@@ -2,6 +2,7 @@ package htp.processors.scorecards;
 
 import htp.domain.wrappers.ApplicantWrapper;
 import htp.processors.ScoreCard;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,6 +25,7 @@ import static htp.domain.dictionaries.MaritalStatus.MARITAL_STATUS_DIVORCED;
 
 /*@Configuration
 @ConfigurationProperties("creditcardsscoring")*/
+@Slf4j
 public class ScoreCardCreditCard implements ScoreCard{
     public Integer CREDIT_CARD_INITIAL_SCORE = 0;
 

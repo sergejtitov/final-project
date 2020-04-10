@@ -2,8 +2,10 @@ package htp.controller.converters;
 
 import htp.controller.request.ProductFront;
 import htp.domain.model.Product;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class ProductFrontConverter extends GenericConverter<ProductFront, Product> {
 

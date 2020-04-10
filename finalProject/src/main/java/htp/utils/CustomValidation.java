@@ -4,11 +4,13 @@ import htp.domain.model.Applicant;
 import htp.domain.model.Application;
 import htp.exceptions.CustomValidationException;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Set;
 
+@Slf4j
 @Data
 @Configuration
 @ConfigurationProperties("validation")
