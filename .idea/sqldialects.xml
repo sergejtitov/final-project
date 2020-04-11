@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/finalProject/common/src/main/java/com/htp/repository/spring_impl/AddressRepSpringImpl.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/finalProject/common/src/main/java/com/htp/repository/spring_impl/ApplicantRepSpringImpl.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/finalProject/common/src/main/java/com/htp/repository/spring_impl/ApplicationRepSpringImpl.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/finalProject/common/src/main/java/com/htp/repository/spring_impl/CreditInfoRepSpringImpl.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/finalProject/common/src/main/java/com/htp/repository/spring_impl/PhoneRepSpringImpl.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/finalProject/common/src/main/java/com/htp/repository/spring_impl/UserRepSpringImp.java" dialect="GenericSQL" />
+  </component>
+</project>
