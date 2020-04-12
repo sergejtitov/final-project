@@ -1,0 +1,59 @@
+package com.htp.processors.scorecards;
+
+
+
+import com.htp.domain.wrappers.ApplicantWrapper;
+import com.htp.processors.ScoreCard;
+import com.htp.utils.Functions;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import static com.htp.domain.dictionaries.LoanType.MORTGAGE;
+import static com.htp.domain.dictionaries.LoanType.AUTO;
+import static com.htp.domain.dictionaries.LoanType.CONSUMER_LOANS;
+
+
+@Slf4j
+@Data
+@Component
+public class ScoreCalculatorImpl {
+
+
+    public static Integer getScore(ApplicantWrapper applicantWrapper, Integer productCode) {
+        ScoreCard scoreCard;
+        if (Functions.getTypeFromCode(productCode) == MORTGAGE){
+            scoreCard = new ScoreCardMortgage();
+            return scoreCard.calculateScore(applicantWrapper);
+            }
+        if (Functions.getTypeFromCode(productCode) == AUTO){
+            scoreCard = new ScoreCardAuto();
+            return scoreCard.calculateScore(applicantWrapper);
+            }
+        if (Functions.getTypeFromCode(productCode) == CONSUMER_LOANS){
+            scoreCard = new ScoreCardConsumerLoans();
+            return scoreCard.calculateScore(applicantWrapper);
+        }
+        scoreCard = new ScoreCardCreditCard();
+        return scoreCard.calculateScore(applicantWrapper);
+    }
+
+
+    public static Integer getDeclinedScore(Integer productCode) {
+        ScoreCard  scoreCard;
+        if (productCode == MORTGAGE){
+            scoreCard =new ScoreCardMortgage();
+            return scoreCard.getDeclinedScore();
+        }
+        if (productCode == AUTO){
+            scoreCard = new ScoreCardAuto();
+            return scoreCard.getDeclinedScore();
+        }
+        if (productCode == CONSUMER_LOANS){
+            scoreCard =new ScoreCardConsumerLoans();
+            return scoreCard.getDeclinedScore();
+        }
+        scoreCard =new ScoreCardCreditCard();
+        return scoreCard.getDeclinedScore();
+    }
+}
