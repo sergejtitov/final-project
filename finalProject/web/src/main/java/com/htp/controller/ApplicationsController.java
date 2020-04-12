@@ -108,7 +108,7 @@ public class ApplicationsController {
 
     @ApiOperation(value = "Get all user's applications")
     @ApiResponses({
-            @ApiResponse(code =200, message = "Application successfully got"),
+            @ApiResponse(code =200, message = "Application successfully found"),
             @ApiResponse(code = 403, message = "Access Denied"),
             @ApiResponse(code = 404, message = "Applications not found"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
@@ -149,6 +149,6 @@ public class ApplicationsController {
         }
         String login = PrincipalUtils.getUsername(principal);
         User performer = userService.findByLogin(login);
-        return new ResponseEntity<>(applicationService.findById(applicationId, performer.getUserId()), HttpStatus.OK);
+        return new ResponseEntity<>(applicationService.findByIdAndUserId(applicationId, performer.getUserId()), HttpStatus.OK);
     }
 }

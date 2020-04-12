@@ -15,6 +15,8 @@ import com.htp.utils.CustomValidation;
 
 import com.htp.utils.Parser;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.stereotype.Service;
@@ -42,9 +44,9 @@ public class ApplicationService {
     }
 
 
-    /*public List<Application> findAll(int limit, int offset) {
-        return applicationDataRepository.findAll(limit,offset);
-    }*/
+    public Page<Application> findAll(int limit, int offset) {
+        return applicationDataRepository.findAll(PageRequest.of(offset, limit));
+    }
 
     public List<Application> findAll(Specification<Application> specification){
         return applicationDataRepository.findAll(specification);
@@ -101,8 +103,17 @@ public class ApplicationService {
         }
     }
 
-    public Application findById(Long id, Long userId) {
-        Optional<Application> application = applicationDataRepository.findById(id);
+    public Application findById(Long applicationId){
+        Optional<Application> application = applicationDataRepository.findById(applicationId);
+        if (application.isPresent()){
+                return  application.get();
+        } else {
+            throw new NoSuchEntityException("No such Application");
+        }
+    }
+
+    public Application findByIdAndUserId(Long applicationId, Long userId) {
+        Optional<Application> application = applicationDataRepository.findById(applicationId);
         if (application.isPresent()){
             if (application.get().getUserId().equals(userId)){
                 return  application.get();
