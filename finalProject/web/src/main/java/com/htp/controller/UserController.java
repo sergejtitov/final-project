@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,9 +37,11 @@ public class UserController {
     public static final String USER_DELETED = "User Successfully deleted";
 
     private UserDetailsServiceImpl userService;
+    private BCryptPasswordEncoder cryptPassword;
 
-    public UserController(UserDetailsServiceImpl userDao) {
-        this.userService = userDao;
+    public UserController(UserDetailsServiceImpl userService, BCryptPasswordEncoder cryptPassword) {
+        this.userService = userService;
+        this.cryptPassword = cryptPassword;
     }
 
     @ApiOperation(value = "Show information about user")
@@ -96,7 +99,7 @@ public class UserController {
                                            @ApiIgnore Principal principal) {
         String login = PrincipalUtils.getUsername(principal);
         User performer = userService.findByLogin(login);
-        performer.setPassword(request.getPassword());
+        performer.setPassword(cryptPassword.encode(request.getPassword()));
         performer.setChanged(new Timestamp(System.currentTimeMillis()));
         return new ResponseEntity<>(userService.updateUser(performer), HttpStatus.OK);
     }

@@ -13,6 +13,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 @Slf4j
 @Configuration
@@ -28,8 +29,8 @@ public class SwaggerConfig {
     }
 
     private ApiInfo generateApiInfo() {
-        return new ApiInfo("demo", "demo.", "Version 1.0", "urn:tos", "test", "Apache 2.0",
-                "http://www.apache.org/licenses/LICENSE-2.0");
+        return new ApiInfo(                "demo", "demo.", "Version 1.0", "urn:tos", ApiInfo.DEFAULT_CONTACT, "Apache 2.0",
+                "http://www.apache.org/licenses/LICENSE-2.0", new ArrayList<>());
     }
 
     private ApiInfo apiEndPointsInfo() {

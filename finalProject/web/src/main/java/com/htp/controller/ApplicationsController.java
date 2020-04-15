@@ -6,11 +6,11 @@ import com.htp.controller.request.ApplicationFront;
 import com.htp.controller.request.ApplicationResult;
 import com.htp.domain.model.Application;
 import com.htp.domain.model.User;
-import com.htp.exceptions.CustomValidationException;
 import com.htp.security.util.PrincipalUtils;
 import com.htp.services.ApplicationService;
 import com.htp.services.UserDetailsServiceImpl;
 
+import com.htp.utils.CustomUtils;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -89,20 +89,12 @@ public class ApplicationsController {
     @ApiImplicitParams({@ApiImplicitParam(name = "Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")})
     public ResponseEntity<ApplicationResult> confirmApplication(@PathVariable("id") String applicationId,
                                                           @RequestBody @Valid Confirmation request, @ApiIgnore Principal principal) {
-        double confirmAmount;
-        long updatedApplicationId;
-        Application updatedApplication;
-        ApplicationResult applicationResult;
-        try{
-            confirmAmount = Double.parseDouble(request.getFinalAmount());
-            updatedApplicationId = Long.parseLong(applicationId);
-            String login = PrincipalUtils.getUsername(principal);
-            User performer = userService.findByLogin(login);
-            updatedApplication = applicationService.update(updatedApplicationId, confirmAmount, performer.getUserId());
-            applicationResult = conversionService.convert(updatedApplication, ApplicationResult.class);
-        } catch (NumberFormatException e){
-            throw new CustomValidationException("Illegal path!");
-        }
+        double confirmAmount = CustomUtils.validateFinalAmount(request.getFinalAmount());
+        long updatedApplicationId = CustomUtils.validatePath(applicationId);
+        String login = PrincipalUtils.getUsername(principal);
+        User performer = userService.findByLogin(login);
+        Application updatedApplication = applicationService.update(updatedApplicationId, confirmAmount, performer.getUserId());
+        ApplicationResult applicationResult = conversionService.convert(updatedApplication, ApplicationResult.class);
         return new ResponseEntity<>(applicationResult, HttpStatus.OK);
     }
 
@@ -141,12 +133,7 @@ public class ApplicationsController {
     @GetMapping(value = "/{id}")
     @ApiImplicitParams({@ApiImplicitParam(name = "Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")})
     public ResponseEntity<Application> getApplicationById(@ApiParam("Application Path Id") @PathVariable String id, @ApiIgnore Principal principal){
-        long applicationId;
-        try {
-            applicationId = Long.parseLong(id);
-        } catch (NumberFormatException e){
-            throw new CustomValidationException("Illegal path!");
-        }
+        long applicationId = CustomUtils.validatePath(id);
         String login = PrincipalUtils.getUsername(principal);
         User performer = userService.findByLogin(login);
         return new ResponseEntity<>(applicationService.findByIdAndUserId(applicationId, performer.getUserId()), HttpStatus.OK);

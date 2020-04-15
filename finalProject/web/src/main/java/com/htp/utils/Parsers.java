@@ -1,6 +1,4 @@
-package com.htp.Utils;
-
-
+package com.htp.utils;
 
 import com.htp.controller.request.AddressFront;
 import com.htp.controller.request.ApplicantFront;
@@ -11,11 +9,9 @@ import com.htp.domain.model.User;
 import com.htp.domain.model.Phone;
 import com.htp.domain.model.Address;
 import com.htp.domain.model.Applicant;
-import com.htp.domain.model.CreditInfo;
 import com.htp.domain.model.Application;
-import com.htp.domain.model.Product;
 
-import com.htp.utils.Functions;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
@@ -23,7 +19,10 @@ import java.util.List;
 import java.util.Set;
 
 @Slf4j
+@Data
 public class Parsers {
+
+
 
     public static Set<Roles> getSetOfRoles(List<String> list, User user){
         Set<Roles> roles = new HashSet<>();
@@ -40,8 +39,8 @@ public class Parsers {
         Set<Phone> phones = new HashSet<>();
         for (PhoneFront phoneFront: phoneFronts){
             Phone phone = new Phone();
+            phone.setPhoneNumber(phoneFront.getPhoneNumber());
             phone.setPhoneType(phoneFront.getPhoneType());
-            phone.setPhoneNumber((phoneFront.getPhoneNumber()));
             phone.setApplicant(applicant);
             phones.add(phone);
         }

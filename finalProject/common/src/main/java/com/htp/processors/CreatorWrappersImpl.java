@@ -11,12 +11,14 @@ import com.htp.repository.spring_data.ProductDataRepository;
 
 import com.htp.exceptions.NoSuchEntityException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
+@Service
 public class CreatorWrappersImpl implements CreatorWrappers {
     @Override
     public ApplicantWrapper createApplicantWrapper(Applicant applicant, List<CreditInfo> creditInfos) {

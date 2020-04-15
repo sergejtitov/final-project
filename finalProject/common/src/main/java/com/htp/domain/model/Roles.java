@@ -1,9 +1,7 @@
 package com.htp.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -19,8 +17,8 @@ import javax.persistence.JoinColumn;
 import java.util.Objects;
 
 @Slf4j
-@Getter
-@Setter
+@Data
+@Builder
 @AllArgsConstructor
 @Entity
 @Table(name = "m_roles")

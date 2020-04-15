@@ -26,11 +26,7 @@ public class ProductService {
 
     public Product findByProductCode(Integer productCode) throws NoSuchEntityException {
         Optional<Product> searchedProduct = productDao.findByProductCode(productCode);
-        if (searchedProduct.isPresent()) {
-            return searchedProduct.get();
-        } else {
-            throw new NoSuchEntityException("No such product");
-        }
+        return searchedProduct.orElseThrow(()-> new NoSuchEntityException("No such product"));
     }
 
 
@@ -75,10 +71,6 @@ public class ProductService {
 
     public Product findById(Long id) {
         Optional<Product> searchedProduct = productDao.findById(id);
-        if (searchedProduct.isPresent()){
-            return searchedProduct.get();
-        } else {
-            throw new NoSuchEntityException("No such Product");
-        }
+        return searchedProduct.orElseThrow(()-> new NoSuchEntityException("No such Product"));
     }
 }

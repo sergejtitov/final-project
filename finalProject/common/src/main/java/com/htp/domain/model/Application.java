@@ -5,9 +5,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import com.htp.domain.dictionaries.Decision;
 import com.htp.domain.dictionaries.Status;
+import lombok.Data;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,8 +27,7 @@ import java.util.Set;
 import static javax.persistence.EnumType.STRING;
 
 @Slf4j
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @ToString(exclude = {"applicants"})
 @Entity

@@ -29,7 +29,7 @@ public class UserHibernateImpl implements UserRepository {
 
     @Override
     public List<User> findAll(int limit, int offset) {
-        return entityManager.createQuery("select mu from User mu")
+        return entityManager.createQuery("select mu from User mu", User.class)
                 .setFirstResult(limit*offset)
                 .setMaxResults(limit*(offset+NEXT_PAGE))
                 .getResultList();
