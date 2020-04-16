@@ -15,8 +15,6 @@ import java.util.List;
 @Repository
 public class ProductHibernateImpl implements ProductRepository {
     public static final Integer PAGE = 1;
-    public static final String PRODUCT_CODE = "productCode";
-    public static final Integer FIRST_ITEM = 0;
 
     EntityManager entityManager;
 
@@ -26,7 +24,7 @@ public class ProductHibernateImpl implements ProductRepository {
 
     @Override
     public List<Product> findAll(int limit, int offset) {
-        return entityManager.createQuery("select mp from Product mp")
+        return entityManager.createQuery("select mp from Product mp", Product.class)
                 .setFirstResult(limit*offset)
                 .setMaxResults(limit*(offset+PAGE))
                 .getResultList();

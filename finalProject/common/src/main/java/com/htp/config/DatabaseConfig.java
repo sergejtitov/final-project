@@ -26,8 +26,6 @@ public class DatabaseConfig {
 
     private String maxActive;
 
-
-
     @Bean(value = "dataSource", destroyMethod = "close")
     public BasicDataSource getDatasource() {
         BasicDataSource dataSource = new BasicDataSource();
@@ -38,6 +36,5 @@ public class DatabaseConfig {
         dataSource.setMaxActive(Integer.parseInt(Objects.requireNonNull(maxActive)));
         return dataSource;
     }
-
 
 }

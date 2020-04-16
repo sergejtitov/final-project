@@ -33,16 +33,15 @@ public class ApplicationService {
     private final CreditInfoDataRepository creditInfoDataRepository;
     private final ApplicationDataRepository applicationDataRepository;
     private final CustomValidation customValidation;
-    private ApplicationProcessor processor;
+    private final ApplicationProcessor processor;
 
-    public ApplicationService(ProductDataRepository productDao,  ApplicationDataRepository applicationDataRepository, CustomValidation customValidation, CreditInfoDataRepository creditInfoDataRepository) {
+    public ApplicationService(ProductDataRepository productDao, CreditInfoDataRepository creditInfoDataRepository, ApplicationDataRepository applicationDataRepository, CustomValidation customValidation, ApplicationProcessor processor) {
         this.productDao = productDao;
-        this.creditInfoDataRepository= creditInfoDataRepository;
+        this.creditInfoDataRepository = creditInfoDataRepository;
         this.applicationDataRepository = applicationDataRepository;
         this.customValidation = customValidation;
-        processor = new ApplicationProcessor(productDao, creditInfoDataRepository);
+        this.processor = processor;
     }
-
 
     public Page<Application> findAll(int limit, int offset) {
         return applicationDataRepository.findAll(PageRequest.of(offset, limit));
@@ -76,16 +75,7 @@ public class ApplicationService {
         if (optionalUpdatedApplication.isPresent()) {
             Application updatedApplication = optionalUpdatedApplication.get();
             if (updatedApplication.getUserId().equals(userId)) {
-                if (updatedApplication.getDecision().equals(Decision.ACCEPT) && updatedApplication.getStatus().equals(Status.ACCEPT)) {
-                    updatedApplication = processor.confirm(updatedApplication, finalAmount);
-                    if (updatedApplication.getStatus().equals(Status.ISSUED)) {
-                        updatedApplication = applicationDataRepository.saveAndFlush(updatedApplication);
-                    }
-                    if (updatedApplication.getStatus().equals(Status.CUSTOMER_FAILURE)) {
-                        updatedApplication = applicationDataRepository.saveAndFlush(updatedApplication);
-                        creditInfoDataRepository.delete(creditInfoDataRepository.findCreditInfoByApplicationId(updatedApplication.getApplicationId()));
-                    }
-                }
+                updatedApplication = methodToSaveApplication(finalAmount, updatedApplication);
                 return updatedApplication;
             } else {
                 throw new AuthenticationServiceException("Access is denied");
@@ -93,6 +83,20 @@ public class ApplicationService {
         } else {
             throw new NoSuchEntityException("No such Application");
         }
+    }
+
+    private Application methodToSaveApplication(Double finalAmount, Application updatedApplication) {
+        if (updatedApplication.getDecision().equals(Decision.ACCEPT) && updatedApplication.getStatus().equals(Status.ACCEPT)) {
+            updatedApplication = processor.confirm(updatedApplication, finalAmount);
+            if (updatedApplication.getStatus().equals(Status.ISSUED)) {
+                updatedApplication = applicationDataRepository.saveAndFlush(updatedApplication);
+            }
+            if (updatedApplication.getStatus().equals(Status.CUSTOMER_FAILURE)) {
+                updatedApplication = applicationDataRepository.saveAndFlush(updatedApplication);
+                creditInfoDataRepository.delete(creditInfoDataRepository.findCreditInfoByApplicationId(updatedApplication.getApplicationId()));
+            }
+        }
+        return updatedApplication;
     }
 
     public void delete(Long id) {
@@ -105,11 +109,7 @@ public class ApplicationService {
 
     public Application findById(Long applicationId){
         Optional<Application> application = applicationDataRepository.findById(applicationId);
-        if (application.isPresent()){
-                return  application.get();
-        } else {
-            throw new NoSuchEntityException("No such Application");
-        }
+        return application.orElseThrow(()->  new NoSuchEntityException("No such Application"));
     }
 
     public Application findByIdAndUserId(Long applicationId, Long userId) {

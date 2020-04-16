@@ -25,7 +25,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 @Slf4j
-@Data
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity

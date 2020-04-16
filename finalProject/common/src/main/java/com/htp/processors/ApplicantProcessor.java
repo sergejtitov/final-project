@@ -9,6 +9,7 @@ import com.htp.processors.scorecards.ScoreCalculatorImpl;
 import com.htp.utils.Functions;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 
 import java.util.List;
@@ -16,11 +17,18 @@ import java.util.List;
 
 @Slf4j
 @Data
+@Service
 public class ApplicantProcessor {
     public static final Integer MAX_AGE = 840;
     public static final int AGE_18 = 216;
     public static final int AGE_70 = 840;
     public static final Double ZERO = 0D;
+
+    private final ScoreCalculatorImpl scoreCalculator;
+
+    public ApplicantProcessor(ScoreCalculatorImpl scoreCalculator) {
+        this.scoreCalculator = scoreCalculator;
+    }
 
     public ApplicantWrapper definiteTerm(ApplicantWrapper applicantWrapper, Product product){
         applicantWrapper.setAgeMonths(Functions.calculateAge(applicantWrapper.getApplicant().getBirthdayDate()));
@@ -45,7 +53,7 @@ public class ApplicantProcessor {
 
     public List<ApplicantWrapper> setApplicantsScore(List<ApplicantWrapper> applicantsWrapper, Integer productCode) {
         for (ApplicantWrapper applicantWrapper : applicantsWrapper){
-            applicantWrapper.setScore(ScoreCalculatorImpl.getScore(applicantWrapper, productCode));
+            applicantWrapper.setScore(scoreCalculator.getScore(applicantWrapper, productCode));
         }
         return applicantsWrapper;
     }
@@ -55,7 +63,7 @@ public class ApplicantProcessor {
                 || applicantWrapper.getAgeMonths() < AGE_18
                 || applicantWrapper.getAgeMonths() > AGE_70
                 || !applicantWrapper.getLoanTerm().equals(product.getLoanTerm())
-                || applicantWrapper.getScore() < ScoreCalculatorImpl.getDeclinedScore(product.getProductCode())){
+                || applicantWrapper.getScore() < scoreCalculator.getDeclinedScore(product.getProductCode())){
             return Decision.DECLINE;
         }
         return Decision.ACCEPT;

@@ -13,6 +13,7 @@ import com.htp.repository.spring_data.ProductDataRepository;
 import com.htp.utils.Functions;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,55 +26,54 @@ import static com.htp.domain.dictionaries.TypeOfApplicant.GUARANTOR;
 
 @Slf4j
 @Data
+@Service
 public class ApplicationProcessor {
     public static final Double DECLINE_AMOUNT = 0D;
 
-    private ProductDataRepository productService;
-    private CreditInfoDataRepository creditInfoService;
-    private ApplicationWrapper applicationWrapper;
-    private ApplicantProcessor applicantProcessor;
-    private CreatorWrappers creatorWrappers;
+    private final ProductDataRepository productService;
+    private final CreditInfoDataRepository creditInfoService;
+    private final ApplicantProcessor applicantProcessor;
+    private final CreatorWrappers creatorWrappers;
 
-
-    public ApplicationProcessor(ProductDataRepository productService, CreditInfoDataRepository creditInfoService) {
+    public ApplicationProcessor(ProductDataRepository productService, CreditInfoDataRepository creditInfoService, ApplicantProcessor applicantProcessor, CreatorWrappers creatorWrappers) {
         this.productService = productService;
         this.creditInfoService = creditInfoService;
-        this.applicantProcessor = new ApplicantProcessor();
-        creatorWrappers = new CreatorWrappersImpl();
+        this.applicantProcessor = applicantProcessor;
+        this.creatorWrappers = creatorWrappers;
     }
 
     public Application start(Application application){
-        this.applicationWrapper = creatorWrappers.createApplicationWrapper(application,creditInfoService, productService);
-        this.applicationWrapper.setLoanTerm(calculateLoanTerm(applicationWrapper.getApplicantsWrapper()));
-        setMaxAmounts(applicationWrapper.getApplicantsWrapper());
-        this.applicationWrapper.setFinalAmount(setFinalAmount());
-        this.applicationWrapper.setPayment(Functions.calculatePayment(this.applicationWrapper.getFinalAmount(), applicationWrapper.getProduct().getLoanTerm(), applicationWrapper.getProduct().getInterestRate()));
+        ApplicationWrapper applicationWrapper = creatorWrappers.createApplicationWrapper(application,creditInfoService, productService);
+        applicationWrapper.setLoanTerm(calculateLoanTerm(applicationWrapper));
+        setMaxAmounts(applicationWrapper);
+        applicationWrapper.setFinalAmount(setFinalAmount(applicationWrapper));
+        applicationWrapper.setPayment(Functions.calculatePayment(applicationWrapper.getFinalAmount(), applicationWrapper.getProduct().getLoanTerm(), applicationWrapper.getProduct().getInterestRate()));
         applicationWrapper.setApplicantsWrapper(applicantProcessor.setApplicantsScore(applicationWrapper.getApplicantsWrapper(), applicationWrapper.getProductCode()));
         applicationWrapper.setDecision(makeDecision(applicationWrapper));
         if (applicationWrapper.getDecision().equals(Decision.DECLINE)){
             applicationWrapper.setStatus(Status.FAILURE);
         } else {applicationWrapper.setStatus(Status.ACCEPT);}
-        return returnApplication(this.applicationWrapper);
+        return returnApplication(applicationWrapper);
     }
 
-    private Integer calculateLoanTerm(List<ApplicantWrapper> applicants){
-        List<Integer> applicantTerms = getListTerms(applicants);
+    private Integer calculateLoanTerm(ApplicationWrapper applicationWrapper){
+        List<Integer> applicantTerms = getListTerms(applicationWrapper);
         Integer minTerm = applicantTerms.stream().reduce(Integer::min).get();
         return Functions.positiveOrZeroInt(minTerm);
     }
 
-    private List<Integer> getListTerms(List<ApplicantWrapper> applicants) {
+    private List<Integer> getListTerms(ApplicationWrapper applicationWrapper) {
         List<Integer> applicantTerms = new ArrayList<>();
-        for (ApplicantWrapper applicantWrapper : applicants){
+        for (ApplicantWrapper applicantWrapper : applicationWrapper.getApplicantsWrapper()){
             applicantWrapper = applicantProcessor.definiteTerm(applicantWrapper, applicationWrapper.getProduct());
             applicantTerms.add(applicantWrapper.getLoanTerm());
         }
         return applicantTerms;
     }
 
-    private void setMaxAmounts(List<ApplicantWrapper> applicants){
+    private void setMaxAmounts(ApplicationWrapper applicationWrapper){
         boolean hasGuarantors = false;
-        for (ApplicantWrapper applicantWrapper : applicants){
+        for (ApplicantWrapper applicantWrapper : applicationWrapper.getApplicantsWrapper()){
             applicantWrapper = applicantProcessor.definiteMaxAmount(applicantWrapper, applicationWrapper.getProduct());
             if (applicantWrapper.getApplicant().getTypeOfApplicant().equals(APPLICANT)){
                 applicationWrapper.setMaxApplicantAmount(applicantWrapper.getMaxAmount());
@@ -92,7 +92,7 @@ public class ApplicationProcessor {
         applicationWrapper.setMaxApplicationAmount(maxApplAmount);
     }
 
-    private Double setFinalAmount(){
+    private Double setFinalAmount(ApplicationWrapper applicationWrapper){
         double finalAmount = Math.min(applicationWrapper.getLoanAmount(), applicationWrapper.getProduct().getMaxAmount());
         finalAmount = Math.min(finalAmount, applicationWrapper.getMaxApplicationAmount());
         if (finalAmount < applicationWrapper.getProduct().getMinAmount()){

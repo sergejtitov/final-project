@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.htp.domain.dictionaries.Gender;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ import static javax.persistence.EnumType.STRING;
 
 @Slf4j
 @Data
+@Builder
 @AllArgsConstructor
 @ToString(exclude = {"application","phones","addresses"})
 @Entity

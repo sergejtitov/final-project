@@ -1,8 +1,7 @@
 package com.htp.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -19,6 +18,7 @@ import java.util.Objects;
 
 @Slf4j
 @Data
+@AllArgsConstructor
 @ToString(exclude = {"applicant"})
 @Entity
 @Table(name = "m_phone")

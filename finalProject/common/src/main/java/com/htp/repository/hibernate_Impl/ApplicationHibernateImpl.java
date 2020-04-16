@@ -27,7 +27,7 @@ public class ApplicationHibernateImpl implements ApplicationRepository {
 
     @Override
     public List<Application> findAll(int limit, int offset) {
-        return entityManager.createQuery("select man from Application man")
+        return entityManager.createQuery("select man from Application man", Application.class)
                 .setFirstResult(limit*offset)
                 .setMaxResults(limit*(offset+NEXT_PAGE))
                 .getResultList();
@@ -35,14 +35,14 @@ public class ApplicationHibernateImpl implements ApplicationRepository {
 
     @Override
     public List<Application> findApplicationByUserId(Long userId) {
-        return entityManager.createQuery("select man from Application man where man.userId = :userId")
+        return entityManager.createQuery("select man from Application man where man.userId = :userId", Application.class)
                 .setParameter(USER_ID, userId)
                 .getResultList();
     }
 
     @Override
     public List<Application> findApplicationByUserId(Long userId, int limit, int offset) {
-        return entityManager.createQuery("select man from Application man where man.userId = :userId")
+        return entityManager.createQuery("select man from Application man where man.userId = :userId", Application.class)
                 .setParameter(USER_ID, userId)
                 .setFirstResult(limit*offset)
                 .setMaxResults(limit*(offset+NEXT_PAGE))

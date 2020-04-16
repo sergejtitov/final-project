@@ -58,8 +58,8 @@ public class CustomValidation {
             }
             numberApplicants++;
         }
-        if (numberMainApplicants > MAIN_APPLICANT){
-            throw new CustomValidationException("Main applicant shouldbe only one.");
+        if (numberMainApplicants != MAIN_APPLICANT){
+            throw new CustomValidationException("Main applicant should be only one.");
         }
         if (numberApplicants > MAX_AMOUNT_APPLICANTS){
             throw new CustomValidationException("Total amount of applicants should be less than 6");

@@ -4,16 +4,28 @@ package com.htp.controller;
 import com.htp.controller.request.ApplicationResult;
 
 import com.htp.domain.model.Application;
-import com.htp.exceptions.CustomValidationException;
 import com.htp.services.ApplicationService;
 import com.htp.services.search_criteria.ApplicationSpecification;
 import com.htp.services.search_criteria.SearchCriteria;
-import io.swagger.annotations.*;
+
+import com.htp.utils.CustomUtils;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,14 +57,8 @@ public class AuditController {
     @ApiImplicitParams({@ApiImplicitParam(name = "Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")})
     @GetMapping(value = "/{id}")
     public ResponseEntity<Application> getApplicationById(@ApiParam("Application Path Id") @PathVariable String id) {
-        long applicationId;
-        Application application;
-        try {
-            applicationId = Long.parseLong(id);
-            application = applicationService.findById(applicationId);
-        } catch (NumberFormatException e){
-            throw new CustomValidationException("Illegal path!");
-        }
+        long applicationId = CustomUtils.validatePath(id);
+        Application application = applicationService.findById(applicationId);
         return new ResponseEntity<>(application, HttpStatus.OK);
     }
 

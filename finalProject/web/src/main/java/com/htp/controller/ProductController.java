@@ -3,8 +3,8 @@ package com.htp.controller;
 
 import com.htp.controller.request.ProductFront;
 import com.htp.domain.model.Product;
-import com.htp.exceptions.CustomValidationException;
 import com.htp.services.ProductService;
+import com.htp.utils.CustomUtils;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -54,12 +54,7 @@ public class ProductController {
     @ApiImplicitParams({@ApiImplicitParam(name = "Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")})
     @GetMapping
     public ResponseEntity<Page<Product>> getProducts(@RequestParam String offsetString) {
-        int offset;
-        try {
-            offset = Integer.parseInt(offsetString);
-        }catch (NumberFormatException e){
-            throw new CustomValidationException("Illegal path!");
-        }
+        int offset = CustomUtils.validateOffset(offsetString);
         return new ResponseEntity<>(productService.findAll(LIMIT,offset), HttpStatus.OK);
     }
 
@@ -72,14 +67,8 @@ public class ProductController {
     @ApiImplicitParams({@ApiImplicitParam(name = "Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")})
     @GetMapping(value = "/{id}")
     public ResponseEntity<Product> getUserById(@ApiParam("User Path Id") @PathVariable String id) {
-        long productId;
-        Product product;
-        try {
-            productId = Long.parseLong(id);
-            product = productService.findById(productId);
-        } catch (NumberFormatException e){
-            throw new CustomValidationException("Illegal path!");
-        }
+        Long productId = CustomUtils.validatePath(id);
+        Product product = productService.findById(productId);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
@@ -112,16 +101,10 @@ public class ProductController {
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Product> updateProduct(@PathVariable("id") String productId,
-                                           @RequestBody ProductFront request) {
-        long productIdLong;
-        Product updatedProduct;
-        try {
-            productIdLong = Long.parseLong(productId);
-            updatedProduct = conversionService.convert(request, Product.class);
-            Objects.requireNonNull(updatedProduct).setProductId(productIdLong);
-        } catch (NumberFormatException e){
-            throw new CustomValidationException("Illegal path!");
-        }
+                                           @RequestBody @Valid ProductFront request) {
+        long productIdLong = CustomUtils.validatePath(productId);
+        Product updatedProduct = conversionService.convert(request, Product.class);
+        Objects.requireNonNull(updatedProduct).setProductId(productIdLong);
         return new ResponseEntity<>(productService.update(updatedProduct), HttpStatus.OK);
     }
 
@@ -138,13 +121,8 @@ public class ProductController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Long> deleteProduct(@PathVariable("id") String productId) {
-        long productIdLong;
-        try {
-            productIdLong = Long.parseLong(productId);
-            productService.delete(productIdLong);
-        }catch (NumberFormatException e){
-            throw new CustomValidationException("Illegal path!");
-        }
+        long productIdLong = CustomUtils.validatePath(productId);
+        productService.delete(productIdLong);
         return new ResponseEntity<>(productIdLong, HttpStatus.OK);
     }
 

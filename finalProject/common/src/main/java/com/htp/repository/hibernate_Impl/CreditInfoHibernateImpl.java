@@ -25,7 +25,7 @@ public class CreditInfoHibernateImpl implements CreditInfoRepository {
     @Override
     public List<CreditInfo> findCreditInfosByPersonalNumber(String personalNumber) {
        return entityManager.createQuery("select mci from CreditInfo mci " +
-                "where mci.personalNumber = :personalNumber")
+                "where mci.personalNumber = :personalNumber", CreditInfo.class)
                 .setParameter(PERSONAL_NUMBER, personalNumber)
                 .getResultList();
     }

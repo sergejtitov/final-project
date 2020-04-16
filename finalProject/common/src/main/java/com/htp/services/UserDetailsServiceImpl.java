@@ -55,11 +55,7 @@ public class UserDetailsServiceImpl implements UserDetailsService  {
 
     public User findByLogin(String login){
         Optional<User> user = userDao.findByLogin(login);
-        if (user.isPresent()) {
-            return user.get();
-        } else {
-            throw new NoSuchEntityException("No such User");
-        }
+        return user.orElseThrow(() -> new NoSuchEntityException("No such User"));
     }
 
     public Page<User> findAll(int limit, int offset){
@@ -73,7 +69,7 @@ public class UserDetailsServiceImpl implements UserDetailsService  {
             throw new EntityAlreadyExists("Such user already exists!");
         }
         entity.setPassword(entity.getPassword());
-            return userDao.saveAndFlush(entity);
+        return userDao.saveAndFlush(entity);
     }
 
     @Transactional(rollbackFor = Exception.class)
