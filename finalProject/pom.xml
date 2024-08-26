@@ -19,7 +19,7 @@
         <log4j>1.2.17</log4j>
         <postgresql.version>42.2.10</postgresql.version>
         <spring.version>5.1.5.RELEASE</spring.version>
-        <swagger.version>2.9.2</swagger.version>
+        <swagger.version>2.10.0</swagger.version>
         <flyway.version>6.3.3</flyway.version>
         <commons.lang.version>3.8.1</commons.lang.version>
         <lombok.version>1.18.12</lombok.version>
